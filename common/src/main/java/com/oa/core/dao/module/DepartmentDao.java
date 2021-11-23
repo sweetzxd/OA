@@ -18,7 +18,7 @@ public interface DepartmentDao {
 
     Department selectById(@Param("deptId") String deptId);
 
-    List<Department> selectByIds(List<String> deptIds);
+    List<Department> selectByIds(@Param("deptIds") List<String> deptIds);
 
     Department selectTerms(Department department);
 

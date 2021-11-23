@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <script type='text/javascript' src='/views/common/css.js' charset='utf-8'></script>
+    <script type='text/javascript' src='/views/common/up-js.js' charset='utf-8'></script>
+    <title>我的页面</title>
+</head>
+<body>
+<!-- 头部begin -->
+<div class="header-bar box-bar">
+    <a href="javascript:oa.htmlgoback();" class="header-bar-left cell"><i class="iconfont">&#xe606;</i></a>
+    <div class="header-bar-title">表单填写</div>
+</div>
+<!-- 头部end -->
+<!-- 底部begin -->
+<div class="footer-oper-bar box-bar">
+    <div class="box-bar-list mar-r">
+        <a href="javascript:void(0);" onclick="formsave(this);" class="footer-oper-save">保存</a>
+    </div>
+    <div class="box-bar-list">
+        <a href="javascript:oa.htmlgoback();" class="footer-oper-cancel">取消</a>
+    </div>
+</div>
+<!-- 底部end -->
+<div class="marin-wrap">
+    <div class="my-wrap">
+        <div class="my-mission pad-tb mar-b">
+            <div class="task-body-title" id="formtitle"></div>
+            <div class="my-wrap">
+                <form id="formtable" action="" method="POST" novalidate="novalidate"></form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="template"></div>
+<div id="alert-template" hidden></div>
+
+</body>
+<script type='text/javascript' src='/views/common/down-js.js' charset='utf-8'></script>
+<script>
+    $(document).ready(function () {
+        $("#template").load("/views/template/formInfo.html", function (content) {
+            $("#template").html(content);
+            getFieldHtml();
+        });
+    });
+</script>
+<script>
+    var tysave = true;
+
+    function formsave(obj) {
+        var urlval = manyValues();
+        if (tysave) {
+            $("#formtable").attr("action", "/weixin/userpage/formsave/" + urlval.pageid + ".do?userid=" + urlval.userid + "&formid=" + urlval.formid + "&status=" + urlval.status);
+            $("#formtable").ajaxSubmit(function (data) {
+                oa.htmlgoback();
+            });
+            tysave = false;
+        }
+        return false;
+    }
+
+</script>
+</html>

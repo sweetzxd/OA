@@ -25,6 +25,11 @@ public class ConfParseUtil {
         return setProPerties("config/path.properties", key, value);
     }
 
+    public static String getoa(String key){
+        ConfParseUtil cpu = new ConfParseUtil();
+        return cpu.getPoa(key);
+    }
+
     public String getPoa(String key) {
         try {
             ResourceBundle bundle = ResourceBundle.getBundle("config.oa");

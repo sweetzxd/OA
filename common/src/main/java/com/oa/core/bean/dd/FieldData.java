@@ -244,11 +244,7 @@ public class FieldData implements Serializable {
         setFieldName((String)json.get("fieldName"));
         setFieldTitle((String)json.get("fieldTitle"));
         setFieldType((String)json.get("fieldType"));
-        if (json.get("fieldNum").equals(null)){
-            setFieldNum(200);
-        }else {
-            setFieldNum((int)json.get("fieldNum"));
-        }
+        setFieldNum((int)json.get("fieldNum"));
         setFieldDigit((int)json.get("fieldDigit"));
         setOptionVal((String)json.get("optionVal"));
         setDefaultVal((String)json.get("defaultVal"));

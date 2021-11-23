@@ -9,12 +9,18 @@ import com.oa.core.bean.module.Employees;
 import com.oa.core.bean.system.RoleDefines;
 import com.oa.core.bean.user.UserManager;
 import com.oa.core.bean.util.PageUtil;
+import com.oa.core.scada.common.Common;
+import com.oa.core.scada.system.LoginAuth;
+import com.oa.core.scada.util.URIEncoder;
+import com.oa.core.scada.websocket.MyWebSocketClient;
 import com.oa.core.service.ListenerService;
 
 import com.oa.core.service.module.DepartmentService;
 import com.oa.core.service.module.EmployeesService;
 import com.oa.core.service.util.TableService;
 import com.oa.core.util.*;
+import org.apache.http.client.CookieStore;
+import org.java_websocket.WebSocket;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.InitializingBean;
@@ -23,6 +29,7 @@ import org.springframework.web.context.ServletContextAware;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import java.net.URISyntaxException;
 import java.util.*;
 
 /**

@@ -14,9 +14,13 @@ import java.util.List;
 public class Menu implements Serializable {
 
     private String id;
+    private String pid;
+    private String fid;
     private String title;
     private String url;
     private String img;
+    private int type;
+    private int num;
     private List<Menu> menus;
 
     public void setDataForm(String id,String title,String url,String img){
@@ -37,6 +41,22 @@ public class Menu implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getPid() {
+        return pid;
+    }
+
+    public void setPid(String pid) {
+        this.pid = pid;
+    }
+
+    public String getFid() {
+        return fid;
+    }
+
+    public void setFid(String fid) {
+        this.fid = fid;
     }
 
     public String getTitle() {
@@ -61,6 +81,22 @@ public class Menu implements Serializable {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getNum() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
     }
 
     public List<Menu> getMenus() {

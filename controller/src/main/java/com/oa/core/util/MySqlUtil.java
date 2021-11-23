@@ -3,6 +3,7 @@ package com.oa.core.util;
 import com.oa.core.bean.dd.FieldData;
 import com.oa.core.helper.DateHelper;
 import com.oa.core.helper.StringHelper;
+import com.oa.core.listener.InitDataListener;
 import com.oa.core.service.dd.DictionaryService;
 import com.oa.core.service.util.TableService;
 import org.junit.Test;
@@ -157,9 +158,9 @@ public class MySqlUtil {
         String limit;
         int startRow = 0;
         if (page != null) {
-            if(page.equals("")){
-                limit="";
-            }else {
+            if (page.equals("")) {
+                limit = "";
+            } else {
                 startRow = Integer.parseInt(page) * 10;
                 limit = " limit " + startRow + " , " + 10;
             }
@@ -184,27 +185,6 @@ public class MySqlUtil {
         return sql;
     }
 
-
-    public static String getSqllimit(List<String> field, String table, List<String> where, String order,int page, int limit) {
-        int startRow = (page-1) * 10;
-        String slimit = " limit " + startRow + " , " + limit;
-
-        String fields = "";
-        if (field != null) {
-            for (String f : field) {
-                fields += "ifnull(" + f + ",'') AS " + f + "" + ",";
-            }
-        }
-        String wheres = "";
-        if (where != null) {
-            for (String w : where) {
-                wheres += " and " + w + " ";
-            }
-        }
-        String sql = "select (@i:=@i+1) num,recorderNO, " + fields + " reserveField,linkRecorderNO,recordName,recordTime,modifyName,modifyTime from " + table + ",(SELECT @i:=" + startRow + ") as i where curStatus=2 " + wheres + " " + order + " " + slimit;
-        LogUtil.sysLog("SQL:" + sql);
-        return sql;
-    }
     public static String getUpdateSql(String table, Map<String, Object> field, List<String> where) {
         return getUpdateSql(table, null, field, where);
     }
@@ -226,7 +206,11 @@ public class MySqlUtil {
                 Map.Entry entry = (Map.Entry) entries.next();
                 String key = (String) entry.getKey();
                 Object value = entry.getValue();
-                fields += key + "='" + value + "',";
+                if (value == null || value.equals("")) {
+                    fields += key + " = null,";
+                } else {
+                    fields += key + "='" + value + "',";
+                }
             }
         }
         String wheres = "";
@@ -261,7 +245,11 @@ public class MySqlUtil {
                 Object value = entry.getValue();
                 if (value != null && value != "") {
                     fields += key + ",";
-                    values += "'" + value + "',";
+                    if(value==null || value.equals("")){
+                        values += " null ,";
+                    }else {
+                        values += "'" + value + "',";
+                    }
                 }
             }
             if (fields.length() > 1) {
@@ -272,6 +260,49 @@ public class MySqlUtil {
             }
         }
         String sql = "INSERT INTO " + table + "(" + fields + ") VALUES (" + values + ")";
+        LogUtil.sysLog("sql:" + sql);
+        return sql;
+    }
+
+    /**
+     * 生成 执行修改的sql语句
+     *
+     * @param table 表名
+     * @param field 字段
+     * @return sql 生成的sql语句
+     */
+    public static String getUpdateSql(String table, Map<String, Object> field) {
+       /* String fields = "";
+        String values = "";*/
+        String workflowProcID = "";
+        String sql = "update " + table + " set ";
+        if (field != null) {
+            Iterator entries = field.entrySet().iterator();
+            while (entries.hasNext()) {
+                Map.Entry entry = (Map.Entry) entries.next();
+                String key = (String) entry.getKey();
+                Object value = entry.getValue();
+                if (value != null && value != "") {
+                    /*fields += key + ",";
+                    values += "'" + value + "',";*/
+                    if ("workflowProcID".equals(key)) {
+                        workflowProcID = "" + value;
+                    }
+                    if ("recorderNO".equals(key)) {
+                        continue;
+                    } else {
+                        if (value == null || value.equals("")) {
+                            sql += " " + key + " = null,";
+                        } else {
+                            sql += " " + key + " = '" + value + "',";
+                        }
+                        //sql += " " + key + " = '" + value + "', ";
+                    }
+                }
+            }
+        }
+        sql += "modifyTime='" + DateHelper.now() + "'";
+        sql += " where workflowProcID=" + "'" + workflowProcID + "'";
         LogUtil.sysLog("sql:" + sql);
         return sql;
     }
@@ -340,8 +371,8 @@ public class MySqlUtil {
         if (field != null && field.size() > 0) {
 
             fields = StringHelper.vector2SqlField(field, ",");
-            if(!field.contains("recordName")){
-                fields = "recordName,recordTime"+fields;
+            if (!field.contains("recordName")) {
+                fields = "recordName,recordTime" + fields;
             }
         }
         return getFieldSql(fields, table, where, order);
@@ -362,24 +393,24 @@ public class MySqlUtil {
         return sql;
     }
 
-    public static String getFieldSql2(Vector<String> field, String table, List<String> where, String orders,String page) {
+    public static String getFieldSql2(Vector<String> field, String table, List<String> where, String orders, String page) {
 
         String limit;
         int startRow = 0;
         if (page != null) {
-            if(page.equals("")){
-                limit="";
-            }else {
+            if (page.equals("")) {
+                limit = "";
+            } else {
                 startRow = Integer.parseInt(page) * 10;
                 limit = " limit " + startRow + " , " + 10;
             }
         } else {
             limit = " limit " + 0 + " , " + 10;
         }
-        return getFieldSql3(field, table, where, orders,limit);
+        return getFieldSql3(field, table, where, orders, limit);
     }
 
-    public static String getFieldSql3(Vector<String> field, String table, List<String> where, String orders,String limit) {
+    public static String getFieldSql3(Vector<String> field, String table, List<String> where, String orders, String limit) {
         String fields = "";
         if (field != null && field.size() > 0) {
             for (String f : field) {
@@ -393,19 +424,11 @@ public class MySqlUtil {
             }
         }
 
-        String sql = "select (@i:=@i+1) num ,recorderNO," + fields + " reserveField,linkRecorderNO,recordName,recordTime,modifyName,modifyTime from " + table + ",(SELECT @i:=0) as i where curStatus=2 " + wheres + " " + orders +" "+limit;
+        String sql = "select (@i:=@i+1) num ,recorderNO," + fields + " reserveField,linkRecorderNO,recordName,recordTime,modifyName,modifyTime from " + table + ",(SELECT @i:=0) as i where curStatus=2 " + wheres + " " + orders + " " + limit;
         return sql;
     }
 
-    /**
-     * 生成 根据条件进行查询的sql语句
-     *
-     * @param field    字段名
-     * @param table    表名
-     * @param where    查询条件
-     * @return sql 生成的sql语句
-     */
-    public static String getFieldSql(Vector<String> field, String table, List<String> where) {
+    public static String getFieldSql3(String pkid, Vector<String> field, String table, List<String> where, String orders, String limit) {
         String fields = "";
         if (field != null && field.size() > 0) {
             for (String f : field) {
@@ -418,8 +441,13 @@ public class MySqlUtil {
                 wheres += " and " + w + " ";
             }
         }
-        return "select recorderNO, " + fields + " reserveField,linkRecorderNO,workflowProcID,workflowNodeID,recordName,recordTime,modifyName,modifyTime from " + table + " where curStatus=2 " + wheres;
+        if (pkid != null && !pkid.equals("")) {
+            pkid = pkid + " , ";
+        }
+        String sql = "select (@i:=@i+1) num ," + pkid + fields + " reserveField,linkRecorderNO,recordName,recordTime,modifyName,modifyTime from " + table + ",(SELECT @i:=0) as i where curStatus=2 " + wheres + " " + orders + " " + limit;
+        return sql;
     }
+
     /**
      * 生成 根据条件进行查询的sql语句
      *
@@ -486,8 +514,8 @@ public class MySqlUtil {
             }
         }
         String wheres = "";
-        System.out.println(where+"3333");
-        if (where != null||!where.equals("")) {
+        System.out.println(where + "3333");
+        if (where != null || !where.equals("")) {
             for (String w : where) {
                 wheres += " and " + w + " ";
             }
@@ -513,13 +541,13 @@ public class MySqlUtil {
         String item = null;
         switch (type) {
             case "等于":
-                item = field + " = '" + value + "'";
+                item = DDUtil.getTypeWhere(field, value, "=");
                 break;
             case "不等于":
                 item = field + " != '" + value + "'";
                 break;
             case "包含":
-                item = field + " like ('%" + value + "%')";
+                item = DDUtil.getTypeWhere(field, value);
                 break;
             case "大于":
                 item = field + " > '" + value + "'";
@@ -565,7 +593,7 @@ public class MySqlUtil {
                     if (value != null && value != "") {
                         value1 += "'" + value + "',";
                     } else {
-                        value1 += "'',";
+                        value1 += " null ,";
                     }
                 }
                 value2 = "(" + value1.substring(0, value1.length() - 1) + "),";

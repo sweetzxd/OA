@@ -3,8 +3,8 @@
 
 <mapper namespace="com.oa.core.dao.module.UpdatePackageDao">
     <insert id="insert">
-        INSERT INTO UpdatePackage (packId,packName,packType,packRely,packUpTime,packUpFile,packUpName,packVersion,updateType,curStatus,recordName,recordTime,modifyName,modifyTime,deleteName,deleteTime)
-        VALUES(#{packId},#{packName},#{packType},#{packRely},#{packUpTime},#{packUpFile},#{packUpName},#{packVersion},0,2,#{recordName},#{recordTime},#{modifyName},#{modifyTime},#{deleteName},#{deleteTime})
+        INSERT INTO UpdatePackage (packId,packName,packType,packRely,packUpTime,packUpFile,packUpName_Value,packVersion,updateType,curStatus,recordName,recordTime,modifyName,modifyTime,deleteName,deleteTime)
+        VALUES(#{packId},#{packName},#{packType},#{packRely},#{packUpTime},#{packUpFile},#{packUpName_Value},#{packVersion},0,2,#{recordName},#{recordTime},#{modifyName},#{modifyTime},#{deleteName},#{deleteTime})
     </insert>
     <delete id="delete">
         UPDATE UpdatePackage SET curStatus=0,deleteName=#{deleteName},deleteTime=#{deleteTime} WHERE packId=#{packId} AND curStatus=2
@@ -25,7 +25,7 @@
             <if test="packRely!=null and packRely!=''">packRely =#{packRely},</if>
             <if test="packUpTime!=null and packUpTime!=''">packUpTime =#{packUpTime},</if>
             <if test="packUpFile!=null and packUpFile!=''">packUpFile =#{packUpFile},</if>
-            <if test="packUpName!=null and packUpName!=''">packUpName =#{packUpName},</if>
+            <if test="packUpName_Value!=null and packUpName_Value!=''">packUpName_Value =#{packUpName_Value},</if>
             <if test="packVersion!=null and packVersion!=''">packVersion =#{packVersion},</if>
             <if test="modifyName!=null and modifyName!=''">modifyName =#{modifyName},</if>
             <if test="modifyTime!=null and modifyTime!=''">modifyTime =#{modifyTime},</if>

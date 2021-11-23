@@ -1,0 +1,225 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" type="text/css" href="/resources/css/font/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="/resources/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/resources/css/public.css"/>
+    <link rel="stylesheet" type="text/css" href="/resources/css/custom.css"/>
+    <link rel="stylesheet" type="text/css" href="/resources/css/input.css"/>
+    <script type='text/javascript' src='/resources/js/jquery.min.js' charset='utf-8'></script>
+    <script type='text/javascript' src='/resources/js/util/login.js' charset='utf-8'></script>
+    <script type='text/javascript' src='/resources/js/flexible.js' charset='utf-8'></script>
+    <title>华腾OA系统</title>
+</head>
+<body>
+<!-- 头部begin -->
+<div class="header-wrap">
+    <div class="header-index">华腾OA系统</div>
+    <!-- 打卡 -->
+    <div class="head-clock-bar">
+        <img src="/resources/images/dk.png">
+    </div>
+</div>
+<!-- 头部end -->
+<!-- 底部begin -->
+<div class="footer-bar box-bar">
+    <a href="/views/index.html" class="footer-list box-bar-list on">
+        <p class="footer-list-imgbox li1"></p>
+        <p class="footer-list-infor">首页</p>
+    </a>
+    <a href="/views/module/MenuPages.html" class="footer-list box-bar-list">
+        <p class="footer-list-imgbox li2"></p>
+        <p class="footer-list-infor">功能</p>
+    </a>
+    <a href="/views/module/AddressList.html" class="footer-list box-bar-list">
+        <p class="footer-list-imgbox li3"></p>
+        <p class="footer-list-infor">通讯</p>
+    </a>
+    <a href="/views/module/MySettings.html" class="footer-list box-bar-list">
+        <p class="footer-list-imgbox li4"></p>
+        <p class="footer-list-infor">我的</p>
+    </a>
+</div>
+<!-- 底部end -->
+<div class="marin-wrap">
+    <!-- 菜单begin -->
+    <div class="menu-wrap mar-b">
+        <a href="/views/module/FileList.html" class="menu-list">
+            <div class="menu-list-imgbox"><img src="/resources/images/m2.png"></div>
+            <div class="menu-list-infor">常用文档</div>
+        </a>
+        <a href="/views/attence/attence.html" class="menu-list">
+            <div class="menu-list-imgbox"><img src="/resources/images/m4.png"></div>
+            <div class="menu-list-infor">考勤记录</div>
+        </a>
+        <a href="/views/module/worklog/worklog.html" class="menu-list">
+            <div class="menu-list-imgbox"><img src="/resources/images/m1.png"><span class="menu-icon-span"></span></div>
+            <div class="menu-list-infor">工作日志</div>
+        </a>
+        <a href="javascript:;" class="menu-list">
+            <div class="menu-list-imgbox"><img src="/resources/images/m3.png"></div>
+            <div class="menu-list-infor">个人评分</div>
+        </a>
+        <!--<a href="javascript:;" class="menuskip-list">
+            <div class="menuskip-list-imgbox"><img src="/resources/images/m5.png"></div>
+            <div class="menuskip-list-infor">请假申请</div>
+        </a>
+        <a href="javascript:;" class="menuskip-list">
+            <div class="menuskip-list-imgbox"><img src="/resources/images/m6.png"></div>
+            <div class="menuskip-list-infor">外出申请</div>
+        </a>
+        <a href="javascript:;" class="menuskip-list">
+            <div class="menuskip-list-imgbox"><img src="/resources/images/m7.png"></div>
+            <div class="menuskip-list-infor">报销申请</div>
+        </a>-->
+        <a href="javascript:;" class="menu-list">
+            <div class="menu-list-imgbox"><img src="/resources/images/m8.png"></div>
+            <div class="menu-list-infor">添加链接</div>
+        </a>
+    </div>
+    <a class="my-bg-line box-bar no-border mar-b" href="/views/task/taskList.html">
+        <div class="pending-icon cell"><img src="/resources/images/ren.png"></div>
+        <div class="box-bar-list">
+            <span class="mar-r"></span>
+            <span class="corhui font-12"></span>
+        </div>
+        <div class="cell corhui"><i class="iconfont">&#xe603;</i></div>
+    </a>
+    <!-- 菜单begin -->
+    <div class="menu-wrap no-border mar-b">
+        <a href="/views/task/taskList.html" class="menu-list">
+            <div class="menu-list-imgbox" id="task"><img src="/resources/images/m9.png"></div>
+            <div class="menu-list-infor">任务</div>
+        </a>
+        <a href="/views/message/messageList.html" class="menu-list">
+            <div class="menu-list-imgbox" id="message"><img src="/resources/images/m10.png"></div>
+            <div class="menu-list-infor">消息</div>
+        </a>
+        <a href="/views/notice/noticeList.html?type=1" class="menu-list">
+            <div class="menu-list-imgbox" id="tz"><img src="/resources/images/m11.png"></div>
+            <div class="menu-list-infor">通知</div>
+        </a>
+        <a href="/views/notice/announceList.html?type=2" class="menu-list">
+            <div class="menu-list-imgbox" id="gg"><img src="/resources/images/m12.png"></div>
+            <div class="menu-list-infor">公告</div>
+        </a>
+    </div>
+    <div class="my-bg-line schedule-line box-bar">
+        <div class="schedule-title box-bar-list">工作安排</div>
+        <a href="/views/attence/schedule.html">
+            <div class="cell corhui">
+                <i class="iconfont">&#xe603;</i>
+            </div>
+        </a>
+    </div>
+    <div class="schedule-panel">
+        <!--<a href="javascript:;" class="schedule-list my-bg-line no-border box-bar">
+            <div class="box-bar-list corh">1.制作华腾项目标书</div>
+            <div class="cell"><span class="schedule-icon-span"></span></div>
+        </a>-->
+    </div>
+</div>
+<!-- 弹框 -->
+<div class="out-eject-wrap">
+    <div class="inner-eject-wrap">
+        <div class="inner-eject-imgbox"><img src="/resources/images/dk1.png"></div>
+        <div class="eject-date-panel">
+            <p class="font-12 corh">2018年12月21日</p>
+            <p class="font-bold font-18 corh">08 ：24 ：05</p>
+            <p class=""><span class="corb font-16 mar-r">晴</span><span class="eject-temperature">1°~5°</span></p>
+        </div>
+        <div class="eject-date-close" onclick="closeLayer(this)"></div>
+    </div>
+</div>
+</body>
+<script type='text/javascript' src='/resources/js/bootstrap.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='/resources/js/layer.js' charset='utf-8'></script>
+<script>
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var date = year + "-" + month + "-" + day;
+    $.ajax({
+        type: "POST",
+        url: "/weixin/home.do?date=" + date,
+        dataType: "json",
+        success: function (d) {
+            if (d.success==1) {
+                var data = d.data;
+                //代办任务数量
+                var taskNum = data.taskNum;
+                var time = data.time;
+                var msg = "您有" + taskNum + "条任务待处理"
+                $(".box-bar-list>.mar-r").html(msg);
+                $(".box-bar-list>.corhui.font-12").html(time);
+                //如何有代办任务、消息、通知和通告  添加span
+                var span = "<span class=\"menu-icon-span\"></span>";
+                if (taskNum > 0) {
+                    $("#task").append(span);
+                }
+                //未读消息消息数量
+                var msgNum = data.msgNum;
+                if (msgNum > 0) {
+                    $("#message").append(span);
+                }
+                //通知
+                var tz = data.tzNum;
+                if (tz > 0) {
+                    $("#tz").append(span);
+                }
+                //公告
+                var gg = data.ggNum;
+                if (gg > 0) {
+                    $("#gg").append(span);
+                }
+                var taskList = data.taskList;
+                for (var i = 0; i < taskList.length; i++) {
+                    $(".schedule-panel").append("<a href=\"javascript:;\" class=\"schedule-list my-bg-line no-border box-bar\">\n" +
+                        "           <div class='box-bar-list corh'>" + taskList[i].scheduletTitle + "</div>\n" +
+                        "           <div class='cell'><span class='schedule-icon-span'></span></div>\n" +
+                        "       </a>");
+                }
+            } else {
+
+            }
+        }, error: function (d) {
+
+        }
+    });
+
+
+    //打卡
+    $(".head-clock-bar").on("click", function () {
+        $.ajax({
+            type: "POST",
+            url: "/weixin/attence.do",
+            dataType: "json",
+            success: function (d) {
+                if (d.success==1) {
+                    layer.open({
+                        content: $(".out-eject-wrap").html()
+                    });
+                } else {
+
+                }
+            }, error: function (d) {
+
+            }
+        });
+    })
+
+    function closeLayer(index) {
+        var index = layer.open()
+        layer.close(index);
+    }
+</script>
+<!-- 首页弹框 -->
+<link rel="stylesheet" type="text/css" href="/resources/css/index.css"/>
+</html>

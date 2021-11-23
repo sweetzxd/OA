@@ -6,7 +6,7 @@
     <insert id="insertUser" parameterType="UserManager">
         INSERT INTO UserManager(userName,name,password,computerIP,staffId,accountStatus,userStatus,startDate,endDate,curStatus,recordName,recordTime,modifyName,modifyTime)
         VALUES
-        (#{userName},#{name},#{password},#{computerIP},#{staffId},1,1,#{startDate},#{endDate},2,#{recordName},#{recordTime},#{modifyName},#{modifyTime})
+        (#{userName},#{name},#{password},#{computerIP},#{staffId},#{accountStatus},#{userStatus},#{startDate},#{endDate},2,#{recordName},#{recordTime},#{modifyName},#{modifyTime})
     </insert>
     <delete id="delete">
         UPDATE UserManager SET modifyName = #{deleteName},deleteTime = #{deleteTime},curStatus=0 WHERE userName = #{userName}
@@ -142,6 +142,7 @@
                 deptId in (select deptId from  department WHERE FIND_IN_SET(deptId,getChildrenOfDept(#{deptId})) AND deptId not in ('organize') AND curStatus=2)
             </if>
         </where>
+        ORDER BY deptName desc
         <if test="startRow>=0 and endRow>0"> limit #{startRow},#{endRow}</if>
     </select>
     <select id="selectUserByDeptCount" resultType="int">

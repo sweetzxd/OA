@@ -16,20 +16,20 @@ import java.util.Map;
  */
 public class RestrictUtil {
 
-    private JSONObject restrict;
+    private static JSONObject restrict;
 
-    public JSONObject getRestrict() {
+    public static JSONObject getRestrict() {
         if(restrict==null){
             restrict = selectTable();
         }
         return restrict;
     }
 
-    public void setRestrict(JSONObject restrict) {
-        this.restrict = restrict;
+    public static void setRestrict(JSONObject restrict) {
+        RestrictUtil.restrict = restrict;
     }
 
-    public JSONObject selectTable(){
+    public static JSONObject selectTable(){
         JSONObject jsonObject = new JSONObject();
         TableService tableService = (TableService) SpringContextUtil.getBean("tableService");
         String xq = DateHelper.getWeekOfDate(null);
@@ -58,6 +58,7 @@ public class RestrictUtil {
 
         jsonObject.put("data",json);
         setRestrict(jsonObject);
+        restrict = jsonObject;
         return jsonObject;
     }
 }

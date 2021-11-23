@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName:JoblogServiceImpl
@@ -56,4 +57,45 @@ public class JoblogServiceImpl implements  JoblogService{
     public void deletes(String joblogId, String deleteName, Timestamp deleteTime) {
         joblogDao.deletes(joblogId,deleteName,deleteTime);
     }
+
+    @Override
+    public List<Joblog> selectAllJobLog() {
+        return joblogDao.selectAllJobLog();
+    }
+
+    @Override
+    public List<Map<String, Object>> selectJobLogByMonth(Map<String, Object> map) {
+        return joblogDao.selectJobLogByMonth(map);
+    }
+
+    @Override
+    public List<Map<String, Object>> selectJoblogByDay(Map<String, Object> map) {
+        return joblogDao.selectJoblogByDay(map);
+    }
+
+    @Override
+    public List<Map<String, Object>> selectJobLogByCsuser(Map<String, Object> map) {
+        return joblogDao.selectJobLogByCsuser(map);
+    }
+
+    @Override
+    public List<Map<String, Object>> selectJoblogByCsuserMonth(Map<String, Object> map) {
+        return joblogDao.selectJoblogByCsuserMonth(map);
+    }
+
+    @Override
+    public List<Map<String, Object>> selectJobLogByLeader(Map<String, Object> map) {
+        return joblogDao.selectJobLogByLeader(map);
+    }
+
+    @Override
+    public List<Map<String, Object>> selectJobLogByLeaderMonth(Map<String, Object> map) {
+        return joblogDao.selectJobLogByLeaderMonth(map);
+    }
+
+    @Override
+    public List<Map<String, Object>> selectJoblogByLeaderDay(Map<String, Object> map) {
+        return joblogDao.selectJoblogByLeaderDay(map);
+    }
+
 }

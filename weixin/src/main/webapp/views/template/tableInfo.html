@@ -1,0 +1,20 @@
+<script type="text/html" id="table-thead">
+    <tr class="my-page-tr">
+        <td class="text-center td-num">序号</td>
+        <td class="text-left td-text" id="{{thead[0].name}}">{{thead[0].title}}</td>
+        <td class="text-left td-text" id="{{thead[1].name}}">{{thead[1].title}}</td>
+        <td class="text-right corb"><i class="iconfont">&#xe64d;</i></td>
+    </tr>
+</script>
+
+
+<script type="text/html" id="table-tbody">
+    {{each tbody as value i}}
+    <tr class="my-page-tr" id="{{value.recorderNO}}" >
+        <td class="text-center td-num">{{value['num']}}</td>
+        <td class="text-left td-text">{{getidtoname field[0].type value[field[0].name value[field[0].id]}}</td>
+        <td class="text-left td-text">{{getidtoname field[1].type value[field[1].name value[field[1].id]}}</td>
+        <td class="text-right corb" onclick="updateForm('{{value.recorderNO}}')"><i class="iconfont mar-r20\">&#xe7a1;</i></td>
+    </tr>
+    {{/each}}
+</script>

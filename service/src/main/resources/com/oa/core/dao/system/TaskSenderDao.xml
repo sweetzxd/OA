@@ -53,6 +53,10 @@
         UPDATE TaskSender SET msgStatus=0 WHERE wkflwId =#{wkflwId} AND procId =#{procId} AND wkfNode =#{wkfNode} AND workOrderNO != #{workOrderNO}
     </update>
 
+    <update id="endTask" parameterType="java.lang.String">
+        UPDATE TaskSender SET msgStatus=4 WHERE wkflwId =#{wkflwId} AND procId =#{procId} AND msgStatus &gt; 0 AND msgStatus &lt; 4
+    </update>
+
     <select id="selectAll" resultType="TaskSender">
         SELECT * FROM TaskSender WHERE curStatus=2 order by recordTime desc
     </select>

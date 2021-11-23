@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <script type='text/javascript' src='/views/common/css.js' charset='utf-8'></script>
+    <script type='text/javascript' src='/views/common/up-js.js' charset='utf-8'></script>
+    <title>日志列表</title>
+</head>
+<body>
+<!-- 头部begin -->
+<div class="header-bar box-bar">
+    <a href="javascript:navigationPoP();" class="header-bar-left cell"><i class="iconfont">&#xe606;</i></a>
+    <div class="header-bar-title">日志列表</div>
+    <a href="javascript:;" class="header-bar-right cell" onclick="gotoForm()"><i class="iconfont">&#xe613;</i></a>
+</div>
+<!-- 头部end -->
+<p id="show"></p>
+<div id="wrapper">
+    <div id="scroller">
+        <div id="pullDown">
+            <span class="pullDownIcon"></span><span class="pullDownLabel">下拉刷新...</span>
+        </div>
+        <div class="marin-wrap mar-t">
+            <table class="my-panel my-page-table" id="tablelist">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div id="table-down"></div>
+        <div id="pullUp" style="display:none;">
+            <span class="pullUpIcon"></span><span class="pullUpLabel">加载下一页</span>
+        </div>
+
+    </div>
+</div>
+
+<div id="template"></div>
+</body>
+<script type='text/javascript' src='/views/common/down-js.js' charset='utf-8'></script>
+<script>
+    $(document).ready(function () {
+        $("#template").load("/views/template/tableInfo.html", function (content) {
+            $(this).html(content);
+        });
+        template.helper("getidtoname", function (type,value) {
+            return oa.decipher(type,value);
+        });
+        var urlval = manyValues();
+        $.getJSON("/weixin/tableform/tablefield.do?userid="+urlval.userid+"&formid=gzrz2019040900001", function (data) {
+            console.log(data)
+            var thead = template("table-thead", data);
+            if(data.thead==null || data.thead==""){
+                thead = "";
+            }
+            var tbody = template("table-tbody", data);
+            if(tbody==null || tbody==""){
+                tbody = "<tr class=\"my-page-tr\"><td colspan='4'>没有数据</td></tr>";
+            }
+            $('.header-bar-title').html(data.title);
+            $('#tablelist thead').html(thead);
+            $('#tablelist tbody').html(tbody);
+            var thm = $("#tablelist").height();
+            $('#wrapper').height(thm);
+            console.log(1,thm)
+            $('#scroller').height(thm+60);
+        });
+    });
+    function gotoForm() {
+        var urlval = manyValues();
+        window.location.href = "/views/module/WorkDiaty_Form.html?userid="+urlval.userid+"&status=insert";
+    }
+    function updateForm(id){
+        var urlval = manyValues();
+        window.location.href = "/views/module/WorkDiaty_Form.html?userid="+urlval.userid+"&status=update&recno="+id;
+    }
+</script>
+</html>

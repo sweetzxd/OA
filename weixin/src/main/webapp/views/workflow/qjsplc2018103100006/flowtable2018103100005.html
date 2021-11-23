@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <script type='text/javascript' src='/views/common/css.js' charset='utf-8'></script>
+    <script type='text/javascript' src='/views/common/up-js.js' charset='utf-8'></script>
+
+    <title>任务详情</title>
+</head>
+<body>
+<!-- 头部begin -->
+<div class="header-bar box-bar">
+    <a href="javascript:history.go(-1);" class="header-bar-left cell"><i class="iconfont">&#xe606;</i></a>
+    <div class="header-bar-title">销假</div>
+    <a href="javascript:;" class="header-bar-right cell">查看流程图</a>
+</div>
+<!-- 底部begin -->
+<div class="footer-oper-bar box-bar">
+    <div class="box-bar-list mar-r">
+        <a href="javascript:;" class="footer-oper-save" onclick="flowformsave(this,'flowtable2018103100005')">保存</a>
+    </div>
+    <div class="box-bar-list">
+        <a href="javascript:history.go(-1);" class="footer-oper-cancel">取消</a>
+    </div>
+</div>
+<!-- 头部end -->
+<div class="marin-wrap">
+    <div class="my-wrap">
+        <div class="pad-tb my-mission">
+
+            <form class="layui-form layui-form-pane" id="flowtable2018103100005" action="/weixin/flowpage/flowaddsave/flowtable2018103100005.do" method="POST" novalidate="novalidate">
+                <div class="layui-container">
+
+                    <div class="layui-row">
+                        <div class="layui-col-xs12">
+                            <div class="detail-bg-line box-bar">
+                                <div class="circumstance-title cell"　 id="xj18103100001_sjqjt18103101_Title" >实际请假：</div>
+                                <div class="objection-right box-bar-list">
+                                    <input type="number" id="xj18103100001_sjqjt18103101_Value" name="xj18103100001_sjqjt18103101_Value"　readonly required="" formula="Z2018120600001,Z2018120600002,Z2018120600003"
+                                           autocomplete="off" class="input-style pull-left" value="1.0" maxlength="20" decimal="1" aria-invalid="false">
+                                </div>
+                                <p class="layui-form-mid layui-word-aux" id="xj18103100001_sjqjt18103101_Explain"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-row">
+                        <div class="layui-col-xs12">
+                            <div class="detail-bg-line box-bar">
+                                <div class="circumstance-title cell" id="xj18103100001_kssj181031002_Title" data-type="datetime">开始时间：</div>
+                                <!--<span class="layui-form-mid required" style="display:none;">*</span>-->
+                                <div class="objection-right box-bar-list">
+                                    <input type="text" id="xj18103100001_kssj181031002_Value" name="xj18103100001_kssj181031002_Value" autocomplete="off" class="input-style pull-left" value=""
+                                           maxlength="19" lay-key="1" aria-invalid="false">
+                                </div>
+                                <p class="layui-form-mid layui-word-aux" id="xj18103100001_kssj181031002_Explain"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row">
+                        <div class="layui-col-xs12">
+                            <div class="detail-bg-line box-bar">
+                                <div class="circumstance-title cell" id="xj18103100001_jssj181031002_Title" data-type="datetime">结束时间：</div>
+                                <!--<span class="layui-form-mid required" style="display:none;">*</span>-->
+                                <div class="objection-right box-bar-list">
+                                    <input type="text" id="xj18103100001_jssj181031002_Value" name="xj18103100001_jssj181031002_Value" autocomplete="off" class="input-style pull-left" value="" maxlength="19" lay-key="2">
+                                </div>
+                                <p class="layui-form-mid layui-word-aux" id="xj18103100001_jssj181031002_Explain"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row">
+                        <div class="layui-col-xs12">
+                            <div class="detail-bg-line box-bar">
+                                <div class="circumstance-title cell" id="xj18103100001_bz18103100002_Title" data-type="textarea">备注：</div>
+                                <!--<span class="layui-form-mid required" style="display:none;">*</span>-->
+                                <div class="objection-right box-bar-list">
+                                    <textarea id="xj18103100001_bz18103100002_Value" name="xj18103100001_bz18103100002_Value" maxlength="1024" class="input-style pull-left"></textarea>
+                                </div>
+                                <p class="layui-form-mid layui-word-aux" id="xj18103100001_bz18103100002_Explain"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-row" style="display:none"><div class="layui-col-xs12" style="display:none"><div class="layui-form-item component" data-method="offset"><label class="layui-form-label title" id="xj18103100001_recorderNO_Title" data-type="text">表单主键</label><span class="layui-form-mid required" style="display:none;">*</span><div class="layui-input-block"><input type="text" id="xj18103100001_recorderNO_Value" name="xj18103100001_recorderNO_Value" maxlength="30" autocomplete="off" class="layui-input" value="Z2019021200001"></div><p class="layui-form-mid layui-word-aux" id="xj18103100001_recorderNO_Explain"></p></div></div></div>
+
+                    <!--<div class="layui-row">
+                        <div class="layui-col-xs12">
+                            <div style="float:left; width:33%;text-align:center;"><a class="layui-btn layui-btn-radius" herf="javascript:void(0)" onclick="flowformsave(this,'flowtable2018103100005')">保存</a></div>
+                            <div style="float:left; width:34%;text-align:center;"><a class="layui-btn layui-btn-radius" herf="javascript:void(0)" onclick="flowformreset(this,'flowtable2018103100005')">重置</a></div>
+                            <div style="float:right;width:33%;text-align:center;"><a class="layui-btn layui-btn-radius" herf="javascript:void(0)" onclick="flowformcancel(this,'flowtable2018103100005','qjsplc2018103100006')">取消</a></div>
+                        </div>
+                    </div>-->
+
+                </div>
+                <input type="hidden" id="xj18103100001_workflowProcID" name="xj18103100001_workflowProcID" autocomplete="off" value="FlowTask2019020200011" class="layui-input">
+                <input type="hidden" id="xj18103100001_workflowNodeID" name="xj18103100001_workflowNodeID" autocomplete="off" value="xj2018103100001" class="layui-input">
+                <input type="hidden" id="workOrderNO" name="workOrderNO" autocomplete="off" value="Z2019020200038" class="layui-input">
+                <input type="hidden" id="wkflwId" name="wkflwId" autocomplete="off" value="qjsplc2018103100006" class="layui-input">
+                <input type="hidden" id="formid" name="formid" autocomplete="off" value="flowtable2018103100005" class="layui-input">
+            </form>
+
+        </div>
+    </div>
+</div>
+</body>
+<script type='text/javascript' src='/resources/js/bootstrap.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='/resources/js/layer.js' charset='utf-8'></script>
+<!-- 日期控件 -->
+<script src="/resources/js/mobiscroll_date.js" charset="gb2312"></script>
+<script src="/resources/js/mobiscroll.js"></script>
+<script type="text/javascript">
+    $(function () {
+        // 日期控件
+        var currYear = (new Date()).getFullYear();
+        var opt={};
+        opt.date = {preset : 'date'};
+        opt.datetime = {preset : 'datetime'};
+        opt.time = {preset : 'time'};
+        opt.default = {
+            theme: 'android-ics light', //皮肤样式
+            display: 'modal', //显示方式
+            mode: 'scroller', //日期选择模式
+            dateFormat: 'yyyy-mm-dd',
+            lang: 'zh',
+            showNow: true,
+            nowText: "今天",
+            startYear: currYear - 50, //开始年份
+            endYear: currYear + 10 //结束年份
+        };
+        var optDateTime = $.extend(opt['datetime'], opt['default']);
+        $("#xj18103100001_kssj181031002_Value").mobiscroll(optDateTime).datetime(optDateTime);
+        $("#xj18103100001_jssj181031002_Value").mobiscroll(optDateTime).datetime(optDateTime);
+    });
+</script>
+</html>

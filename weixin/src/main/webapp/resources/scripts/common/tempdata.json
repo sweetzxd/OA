@@ -1,0 +1,31 @@
+{
+  "id":"table_name",
+  "data": [
+    {"department": "办公室",
+      "station": [
+        {"imgpath": "/resources/images/tx.png","userid": "uid1","username": "章旭1", "job": "技术总监"},
+        {"imgpath": "/resources/images/tx.png","userid": "uid2","username": "章旭2", "job": "技术总监"},
+        {"imgpath": "/resources/images/tx.png","userid": "uid3","username": "章旭3", "job": "技术总监"}
+      ]
+    },
+    {"department": "人事部门",
+      "station": [
+        {"imgpath": "/resources/images/tx.png","userid": "uid4","username": "章旭4", "job": "技术总监"},
+        {"imgpath": "/resources/images/tx.png","userid": "uid5","username": "章旭6", "job": "技术总监"}
+      ]
+    },
+    {"department": "研发部门",
+      "station": [
+        {"imgpath": "/resources/images/tx.png","userid": "uid6","username": "章旭6", "job": "技术总监"},
+        {"imgpath": "/resources/images/tx.png","userid": "uid7","username": "章旭7", "job": "技术总监"},
+        {"imgpath": "/resources/images/tx.png","userid": "uid8","username": "章旭8", "job": "技术总监"}
+      ]
+    },
+    {"department": "航天技术",
+      "station": [
+        {"imgpath": "/resources/images/tx.png","userid": "uid9","username": "章旭9", "job": "技术总监"},
+        {"imgpath": "/resources/images/tx.png","userid": "uid10","username": "章旭10", "job": "技术总监"}
+      ]
+    }
+  ]
+}

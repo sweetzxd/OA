@@ -1,0 +1,83 @@
+.rl-table {
+    width: 800px;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px dotted #999;
+    padding: 5px;
+}
+
+.rl-week > td {
+    height: 40px;
+    background-color: #DDD;
+    text-align: center;
+}
+
+.rl-tbody > tr > td > div {
+    height: 93px;
+    position: relative;
+}
+
+.td-day {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+}
+
+.td-val-exp {
+    position: absolute;
+    right: 5px;
+    top: 4px;
+    font-size: 13px;
+}
+
+.td-val-am {
+    width: 100%;
+    font-size: 13px;
+    float:right;
+    margin-top: 30px;
+    text-align: center;
+}
+.td-val-pm {
+    width: 100%;
+    font-size: 13px;
+    float:right;
+    margin-top: 5px;
+    text-align: center;
+}
+
+.special {
+    background-color: #AAA;
+}
+
+/*今天*/
+.calendar-today {
+    background-color: #5CC7E5;
+}
+
+/*工作*/
+.calendar-work {
+    background-color: #DDFEF4;
+}
+
+/*休息*/
+.calendar-rest {
+    background-color: #EC915E;
+}
+
+/*请假*/
+.calendar-leave {
+    background-color: #EDE1A9;
+}
+
+/*外出*/
+.calendar-out {
+    background-color: #8FEDA8;
+}
+
+/*空*/
+.calendar-empty {
+    background-color: #EDEDED;
+}

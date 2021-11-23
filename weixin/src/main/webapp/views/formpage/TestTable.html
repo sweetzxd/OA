@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>我的页面</title>
+    <link rel="stylesheet" type="text/css" href="/resources/css/font/iconfont.css"/>
+
+    <link href="/views/formpage/formselect/css/public.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/views/formpage/formselect/css/mui.min.css">
+    <link href="/views/formpage/formselect/css/mobiscroll_date.css" rel="stylesheet"/>
+    <!-- 上拉加载 -->
+    <link href="/views/formpage/formselect/css/pull.css" rel="stylesheet"/>
+</head>
+<body>
+<!-- 头部begin -->
+<div class="header-bar box-bar">
+    <a href="javascript:oa.htmlgoback();" class="header-bar-left cell"><i class="iconfont">&#xe606;</i></a>
+    <div class="header-bar-title"></div>
+    <a href="javascript:;" class="header-bar-right cell" onclick="gotoForm()"><i class="iconfont">&#xe613;</i></a>
+</div>
+<!-- 头部end -->
+<!--侧滑菜单容器-->
+<div id="offCanvasWrapper" class="mui-off-canvas-wrap mui-draggable mui-slide-in">
+    <!--侧滑菜单部分-->
+    <aside id="offCanvasSide" class="mui-off-canvas-right">
+        <div id="offCanvasSideScroll" class="mui-scroll-wrapper">
+            <div class="title">
+                <div>搜索</div>
+                <div class="search"><input type="text" name="" id="testt" value="" placeholder="请输入你想查找的文档"/></div>
+                <div>选择时间段</div>
+                <div class="time"><input type="text" id="txtdate" name="txtdate" placeholder="请选择日期" value=""/>
+                    至
+                    <input type="text" id="txtdate2" name="txtdate2" placeholder="请选择日期" value=""/>
+                </div>
+            </div>
+            <div class="side-footer">
+                <button class="side-search-btn" id="searchBtn">搜索</button>
+            </div>
+        </div>
+    </aside>
+    <!--侧滑菜单部分结束-->
+    <div class="mui-inner-wrap">
+        <div id="offCanvasContentScroll" class="mui-content mui-scroll-wrapper">
+            <div id="scroller">
+                <div id="pullDown">
+                    <span class="pullDownIcon"></span><span class="pullDownLabel"></span>
+                </div>
+                <div id="content"></div>
+                <div id="pullUp" style="display:none;">
+                    <span class="pullUpIcon"></span><span class="pullUpLabel"></span>
+                </div>
+            </div>
+        </div>
+        <!-- off-canvas backdrop -->
+        <div class="mui-off-canvas-backdrop"></div>
+    </div>
+    <script type="text/html" id="main">
+        <div class="wrapmain divbox">
+            <div style="width: 35px">序号</div>
+            {{each field}}
+            <div  style="width: 50%">{{$value}}</div>
+            {{/each}}
+            <div style="width: 35px"><a href="#offCanvasSide" id="offCanvasBtn">查询</a></div>
+        </div>
+        <ul class="eval divbox-tbody" id="thelist-ul">
+            {{each tbody}}
+            <li style="display:flex">
+                {{each $value}}
+                {{if $index == 0}}
+                <div style="width: 35px">
+                    {{$value}}
+                </div>
+                {{/if}}
+                {{if $index == 1}}
+                <div style="width: 50%;overflow: hidden;text-overflow:ellipsis; white-space: nowrap;">
+                    {{$value}}
+                </div>
+                {{/if}}
+                {{if $index == 2}}
+                <div style="width: 50%;overflow: hidden;text-overflow:ellipsis; white-space: nowrap;">
+                    {{$value}}
+                </div>
+                {{/if}}
+                {{if $index == tbody[0].length - 1}}
+                <div style="width: 35px" onclick="updateForm('{{$value}}')"><i class="iconfont mar-r20\">&#xe7a1;</i></div>
+                {{/if}}
+                {{/each}}
+            </li>
+            {{/each}}
+        </ul>
+    </script>
+</div>
+
+<script src="/resources/js/util/system.js"></script>
+
+<script src="/resources/js/jquery.min.js"></script>
+<script src="/resources/js/layer.js"></script>
+<script src="/resources/js/template.min.js"></script>
+<script src="/resources/js/myCustomPage.js"></script>
+<script src="/resources/js/axios-loader.js"></script>
+<script src="/views/formpage/formselect/js/mui.min.js"></script>
+<script src="/views/formpage/formselect/js/mobiscroll_date.js" charset="gb2312"></script>
+<script src="/views/formpage/formselect/js/mobiscroll.js"></script>
+<script src="/resources/scripts/system/TestTable.js"></script>
+<!-- 上拉加载 -->
+<script type="text/javascript" src="/views/formpage/formselect/js/iscroll.js"></script>
+<script type="text/javascript" src="/views/formpage/formselect/js/iscroll-pull.js"></script>
+<script>
+    function gotoForm() {
+        window.location.href = "/views/formpage/TestForm.html?userid="+OA.operation.getQueryString('userid')+"&status=insert&pageid="+OA.operation.getQueryString('pageid');
+    }
+    function updateForm(id){
+        console.log("id",id);
+        window.location.href = "/views/formpage/TestForm.html?userid="+OA.operation.getQueryString('userid')+"&status=update&pageid="+OA.operation.getQueryString('pageid')+"&recno="+id;
+    }
+</script>
+</body>
+</html>

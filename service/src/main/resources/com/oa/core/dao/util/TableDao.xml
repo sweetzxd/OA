@@ -45,6 +45,22 @@
     </insert>
 
     <select id="selectCheckList" parameterType="map" resultType="map">
+        select d.days as num ,#{userId} as xm,c.*,c.num as datas from (SELECT ADDDATE(y.first, x.d - 1) as d,x.d as days
+        FROM
+        (
+        SELECT @xi:=@xi+1 as d from
+        (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5) xc1,
+        (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7) xc2,
+        (SELECT 1 ) xc3,
+        (SELECT @xi:=0) xc0
+        ) X,
+        (
+        SELECT '${year}-${month}-01' - INTERVAL DAY('${year}-${month}-01') - 1 DAY AS first,
+        DAY(LAST_DAY('${year}-${month}-01')) AS last) Y
+        WHERE x.d &lt;= y.last) d LEFT JOIN (select * from attendancesum where year = #{year} and month = #{month} and user =#{userId} ) as c on d.days=c.day
+    </select>
+
+    <select id="selectCheckListold" parameterType="map" resultType="map">
         select d.days as num ,#{userId} as xm,c.recorderNO,c.* from (SELECT ADDDATE(y.first, x.d - 1) as d,x.d as days
         FROM
         (

@@ -1,0 +1,54 @@
+<script type="text/html" id="sel-Contacts">
+    <div class="inner-eject-wrap1" id="{{id}}_iew">
+        <div class="inner-eject-title">选择人员</div>
+        <div class="inner-eject-content1">
+            <div class="my-panel">
+                {{each data}}
+                <div class="out-contacts-line">
+                    <div class="my-contacts-line box-bar">
+                        <div class="cell" onclick="selectboxAll(this,'one')"></div>
+                        <div class="box-bar-list {{if $index > 0}}collapsed{{/if}}" data-toggle="collapse" href="#collapseOne-{{$index}}">{{$value.department}}</div>
+                    </div>
+                    <div id="collapseOne-{{$index}}" class="personnel-body-content collapse {{if $index == 0}}show{{/if}}" data-parent="#accordion">
+                        {{each $value.station}}
+                        <div class="personnel-bar box-bar box-one" onclick="selectbox($(this).find('.contacts-selectbox')[0],'one')">
+                            <div class="contacts-selectbox cell" onclick="selectbox(this,'one')" data-value="{{$value.userid}}" data-name="{{$value.username}}">
+                            </div>
+                            <div class="contacts-imgbox cell mar-r"><img src="{{$value.imgpath}}"/></div>
+                            <div class="contacts-name cell font-16 mar-r">{{$value.username}}</div>
+                            <div class="box-bar-list font-12">{{$value.job}}</div>
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+        <div class="contacts-btn-bar">
+            <a href="javascript:;" class="enclosure-download-btn" onclick="selectconfirm(this,'{{id}}')">确定</a>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="sel-custom">
+    <div class="my-panel">
+        {{each data}}
+        <div class="out-contacts-line">
+            <div class="my-contacts-line box-bar">
+                <div class="all-selectbox cell" onclick="selectboxAll(this,'many')"></div>
+                <div class="box-bar-list my-contacts-right {{if $index > 0}}collapsed{{/if}}" data-toggle="collapse" href="#collapseTow-{{$index}}">{{$value.department}}</div>
+            </div>
+            <div id="collapseTow-{{$index}}" class="personnel-body-content collapse {{if $index == 0}}show{{/if}}" data-parent="#accordion2">
+                {{each $value.station}}
+                <div class="personnel-bar box-bar box-one" onclick="selectbox($(this).find('.contacts-selectbox')[0],'many')">
+                    <div class="contacts-selectbox cell" onclick="selectbox(this,'many')" data-value="{{$value.userid}}" data-name="{{$value.username}}"></div>
+                    <div class="contacts-imgbox cell mar-r"><img src="{{$value.imgpath}}"/></div>
+                    <div class="contacts-name cell font-16 mar-r">{{$value.username}}</div>
+                    <div class="box-bar-list font-12">{{$value.job}}</div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</script>

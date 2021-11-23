@@ -55,7 +55,7 @@
             <if test="procId!=null and procId!=''">and procId =#{procId}</if>
             <if test="wkflwID!=null and wkflwID!=''">and wkflwID =#{wkflwID}</if>
             <if test="startNodeID!=null and startNodeID!=''">and startNodeID =#{startNodeID}</if>
-            <if test="originator!=null and originator!=''">and originator =#{originator}</if>
+            <if test="originator!=null and originator!=''">and ( originator like (select userName from userInfo where staffName like CONCAT('%',#{originator},'%')) or originator like CONCAT('%',#{originator},'%') )</if>
             <if test="flowpeoples!=null and flowpeoples!=''">and flowpeoples like CONCAT('%',#{flowpeoples},';','%')</if>
             <if test="curNodeID!=null and curNodeID!=''">and curNodeID =#{curNodeID}</if>
             <if test="wkfResult!=null">and wkfResult =#{wkfResult}</if>
@@ -92,7 +92,7 @@
             <if test="procId!=null and procId!=''">and procId =#{procId}</if>
             <if test="wkflwID!=null and wkflwID!=''">and wkflwID =#{wkflwID}</if>
             <if test="startNodeID!=null and startNodeID!=''">and startNodeID =#{startNodeID}</if>
-            <if test="originator!=null and originator!=''">and originator =#{originator}</if>
+            <if test="originator!=null and originator!=''">and ( originator like (select userName from userInfo where staffName like CONCAT('%',#{originator},'%')) or originator like CONCAT('%',#{originator},'%') )</if>
             <if test="flowpeoples!=null and flowpeoples!=''">and flowpeoples like CONCAT('%',#{flowpeoples},';','%')</if>
             <if test="curNodeID!=null and curNodeID!=''">and curNodeID =#{curNodeID}</if>
             <if test="wkfResult!=null">and wkfResult =#{wkfResult}</if>

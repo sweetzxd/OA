@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <script type='text/javascript' src='/views/common/css.js' charset='utf-8'></script>
+    <script type='text/javascript' src='/views/common/up-js.js' charset='utf-8'></script>
+    <title>填写工作安排</title>
+</head>
+<body>
+<!-- 头部begin -->
+<div class="header-bar box-bar">
+    <a href="javascript:oa.htmlgoback();" class="header-bar-left cell"><i class="iconfont">&#xe606;</i></a>
+    <div class="header-bar-title">填写工作安排</div>
+</div>
+<!-- 头部end -->
+<!-- 底部begin -->
+<div class="footer-oper-bar box-bar">
+    <div class="box-bar-list mar-r">
+        <a href="javascript:;" class="footer-oper-save" onclick="formsaveanpai();">保存</a>
+    </div>
+    <div class="box-bar-list">
+        <a href="javascript:oa.htmlgoback();" class="footer-oper-cancel">取消</a>
+    </div>
+</div>
+<!-- 底部end -->
+<div class="marin-wrap">
+    <div class="my-wrap">
+        <div class="my-mission pad-tb mar-b">
+            <div class="task-body-title" id="formtitle"></div>
+            <div class="my-wrap">
+                <form id="scheduleForm">
+                    <input type="hidden" id="scheduleId" name="scheduleId" value="">
+                    <input type="hidden" id="user" name="user" value="">
+
+                    <div class="circumstance-bar box-bar">
+                        <div class="circumstance-title cell">标题</div>
+                        <div class="objection-right box-bar-list">
+                            <input type="text" id="scheduletTitle" name="scheduletTitle"
+                                   class="input-style pull-left" maxlength="40" placeholder="" value="">
+                        </div>
+                    </div>
+                    <div class="circumstance-bar box-bar">
+                        <div class="circumstance-title cell">内容</div>
+                        <div class="objection-right box-bar-list">
+                            <textarea class="quit-textarea" id="content"
+                                      name="content" maxlength="40" placeholder=""
+                                      style="resize: none; height: 21px; overflow-y: hidden;"></textarea>
+                        </div>
+                    </div>
+                    <div class="circumstance-bar box-bar">
+                        <div class="circumstance-title cell">开始时间</div>
+                        <div class="objection-right box-bar-list">
+                            <input type="text" id="startTime" name="startTime"
+                                   class="input-style pull-left" maxlength="30" placeholder="" value="">
+                        </div>
+                    </div>
+                    <div class="circumstance-bar box-bar">
+                        <div class="circumstance-title cell">结束时间</div>
+                        <div class="objection-right box-bar-list">
+                            <input type="text" id="endTime" name="endTime"
+                                   class="input-style pull-left" maxlength="30" placeholder="" value="">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+<script type='text/javascript' src='/views/common/down-js.js' charset='utf-8'></script>
+<script>
+    $(document).ready(function () {
+        var urlval = manyValues();
+        $('#user').val(urlval.userid);
+        autoTextarea(document.getElementById("content"));
+        fielddatetime("startTime");
+        fielddatetime("endTime");
+        fielduserselect("user");
+    });
+</script>
+<script>
+
+
+    function closeLayer(index) {
+        var index = layer.open()
+        layer.close(index);
+    }
+
+    function formsaveanpai() {
+        var urlval = manyValues();
+        var saveurl = "/schedule/insert.do?userid="+urlval.userid;
+        if (urlval.status == "update") {
+            saveurl = "/schedule/update.do?userid="+urlval.userid;
+        }
+        $.ajax({
+            type: "POST",
+            url: saveurl,
+            data: $('#scheduleForm').serializeArray(),
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            cache: false,
+            dataType: "json",
+            success: function (data) {
+                if (data.success == "1") {
+                    //alert(data.message);
+                    oa.htmlgoback();
+                }else if(data.success == "0"){
+                    alert(data.message);
+                }
+            },
+            error: function (message) {
+                console.log(message);
+            }
+        });
+    }
+</script>
+</html>

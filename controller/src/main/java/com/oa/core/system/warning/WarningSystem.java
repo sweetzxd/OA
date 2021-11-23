@@ -4,12 +4,12 @@ import com.oa.core.bean.system.Warning;
 import com.oa.core.helper.DateHelper;
 import com.oa.core.service.system.WarningService;
 import com.oa.core.util.ConfParseUtil;
-import com.oa.core.util.LogUtil;
 import org.apache.log4j.Logger;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -45,11 +45,12 @@ public class WarningSystem {
                         .withSchedule(CronScheduleBuilder.cronSchedule(w.getWarningTime())).startNow().build();
                 scheduler.scheduleJob(jobDetail, trigger);
                 scheduler.start();
+                Robot r   =   new   Robot();
+                r.delay(   1000   );
                 log.info("添加定时任务[name] -  " + w.getWarningName() + " [class] - " + className);
             }
         }catch (Exception e){
             e.getLocalizedMessage();
-            LogUtil.sysLog(e.getMessage());
         }
     }
 
@@ -64,23 +65,6 @@ public class WarningSystem {
             w.setWarningTime("0 0/1 * * * ?");
             addJob(w);
         }
-    }
-
-    /**
-    * @method: 
-    * @param: 
-    * @return: 
-    * @author: zxd
-    * @date: 2019/06/12
-    * @description: 天气接口
-    */
-    public void sysremWeather() {
-        Warning w = new Warning();
-        w.setWarningName("sysremWeather");
-        w.setWarningType("every");
-        w.setWarningClass("SysremWeather");
-        w.setWarningTime("0 0 0/1 * * ?");
-        addJob(w);
     }
 
     /**

@@ -23,10 +23,8 @@ public class OrgInfo {
             prop.load(inputStream);
         } catch (IOException e) {
             logger.error(e.getMessage());
-        }
-        ORG_NAME = prop.getProperty("ORG_NAME");
-        APP_NAME = prop.getProperty("APP_NAME");*/
-        ORG_NAME = EasemobAPI.ORG_NAME;
-        APP_NAME = EasemobAPI.APP_NAME;
+        }*/
+        ORG_NAME = "1108190521107741";
+        APP_NAME = "tzoa";
     }
 }

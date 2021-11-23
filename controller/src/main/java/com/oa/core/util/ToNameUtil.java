@@ -36,6 +36,13 @@ public class ToNameUtil {
                 String[] values = ((String) value).split("\\|");
                 value1 = values[0];
                 value2 = values[1];
+                /*if(value1 != null && value1 != ""){
+                    if(value2 != null && value2 != ""){
+                        if("khmc190112001".equals(value1)){
+
+                        }
+                    }
+                }*/
             }
         }
         return getName(type, value1, value2);
@@ -160,7 +167,7 @@ public class ToNameUtil {
                 if(dt1!=null && !dt1.equals("")) {
                     return DDUtil.selectIdToName(dt1, (String) value);
                 }else{
-                    return "";
+                    return (String) value;
                 }
             } else if ("upload".equals(type)) {
                 String val = (String) value;

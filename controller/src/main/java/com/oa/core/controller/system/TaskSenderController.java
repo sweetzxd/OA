@@ -41,19 +41,11 @@ public class TaskSenderController {
 
     @RequestMapping(value = "/tasksendpage", method = RequestMethod.GET)
     public ModelAndView taskSendPage(HttpServletRequest request, String nodeId, String procId, String wkflwId, String workOrderNO) {
-        List<String> wkflw = new ArrayList<>();
-        wkflw.add("swlc2019050900001");
-        wkflw.add("fwlc2019050900001");
         ModelAndView mode = new ModelAndView("manage/tasksendpage");
         mode.addObject("nodeId", nodeId);
         mode.addObject("procId", procId);
         mode.addObject("wkflwId", wkflwId);
         mode.addObject("workOrderNO", workOrderNO);
-        if(wkflw.contains(wkflwId)) {
-            mode.addObject("leftpage", true);
-        }else{
-            mode.addObject("leftpage", false);
-        }
         return mode;
     }
 

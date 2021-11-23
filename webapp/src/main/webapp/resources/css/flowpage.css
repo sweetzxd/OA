@@ -1,0 +1,55 @@
+.layui-form-label {
+    min-width: 180px !important;
+    height: auto !important;
+}
+.actor{
+    min-width: 180px !important;
+    min-height: 100px !important;
+}
+.layui-input-block {
+    margin-left: 180px !important;
+}
+.actor a {
+    height:80px;
+    line-height: 80px;
+    text-decoration: none !important;
+    color:#1E9FFF;
+}
+.actor-p {
+    padding-left:20px;
+    text-align:left;
+}
+.actor-p a {
+    text-decoration: none !important;
+    float:right;
+    padding-right:20px;
+    text-align: left;
+    color:#1E9FFF;
+}
+.actor-div-outer{
+    border:1px #e6e6e6 solid !important;
+    min-width: 300px;
+    height:100px;
+}
+.actor-div-in{
+    width:100%;
+    height:100%;
+    overflow-y:scroll;
+    text-align:left;
+ }
+
+.line-div-outer{
+    border:1px #e6e6e6 solid !important;
+    min-width: 300px;
+    min-height:400px;
+}
+
+.actor-div-in{
+    width:100%;
+    height:100%;
+    overflow-y:scroll;
+    text-align:left;
+}
+.layui-form-select dl {
+    z-index: 9999 !important;
+}

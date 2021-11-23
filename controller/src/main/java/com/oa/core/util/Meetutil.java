@@ -35,7 +35,7 @@ public class Meetutil {
 
     public static JSONArray meetcdate(HttpServletRequest request, String date, String type, List<String> wheres) {
         String where = "";
-        if (wheres != null && wheres.size() > 0) {
+        if (where != null) {
             for (int i = 0, len = wheres.size(); i < len; i++) {
                 where += wheres.get(i) + " AND ";
             }
@@ -43,28 +43,27 @@ public class Meetutil {
         List<Map<String, Object>> tableList = tableService.selectSqlMapList("SELECT b.recorderNO as recorderNO, b.hymc190418003 AS meetname,b.sqr1904180001 AS meetpeople,DATE_FORMAT(b.kssj1904180026,'%Y-%m-%d %H:%i') AS begintime,a.hysmc19041501 as meetnum,DATE_FORMAT(b.jssj1904180026,'%Y-%m-%d %H:%i') AS endtime,a.hysdz19041501 AS meetaddress,b.sywp190418003 AS meetwp,b.dwjsc19041805 AS fujian,b.chrs190418003 AS numpeople FROM hysgl19041501 AS a,hystz19041801 AS b WHERE a.recorderNO = b.hysbh19041801 AND b.curStatus = 2 AND " + where + " DATE_FORMAT(b.kssj1904180026, '" + type + "') = '" + date + "'");
         JSONArray json = new JSONArray();
         int i = 0;
-        if (tableList != null) {
-            for (Map<String, Object> sp : tableList) {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("id", sp.get("recorderNO"));
-                String title = sp.get("meetname") + "【" + sp.get("meetnum") + "" + "】";
-                jsonObject.put("title", title);
-                jsonObject.put("start", sp.get("begintime"));
-                jsonObject.put("starts", sp.get("begintime"));
-                jsonObject.put("end", sp.get("endtime"));
-                jsonObject.put("ends", sp.get("begintime"));
-                jsonObject.put("meetpeople", ToNameUtil.getName("user", sp.get("meetpeople")));
-                jsonObject.put("meetaddress", sp.get("meetaddress"));
-                jsonObject.put("meetwp", sp.get("meetwp"));
-                jsonObject.put("fujian", sp.get("fujian"));
-                jsonObject.put("meetpersonnel", sp.get("numpeople"));
-                i = i + 1;
-                if (i > 3) {
-                    i = 1;
-                }
-                jsonObject.put("type", i);
-                json.put(jsonObject);
+
+        for (Map<String, Object> sp : tableList) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", sp.get("recorderNO"));
+            String title = sp.get("meetname") + "【" + sp.get("meetnum") + "" + "】";
+            jsonObject.put("title", title);
+            jsonObject.put("start", sp.get("begintime"));
+            jsonObject.put("starts", sp.get("begintime"));
+            jsonObject.put("end", sp.get("endtime"));
+            jsonObject.put("ends", sp.get("begintime"));
+            jsonObject.put("meetpeople", ToNameUtil.getName("user", sp.get("meetpeople")));
+            jsonObject.put("meetaddress", sp.get("meetaddress"));
+            jsonObject.put("meetwp", sp.get("meetwp"));
+            jsonObject.put("fujian", sp.get("fujian"));
+            jsonObject.put("meetpersonnel",  sp.get("numpeople"));
+            i = i + 1;
+            if (i > 3) {
+                i = 1;
             }
+            jsonObject.put("type", i);
+            json.put(jsonObject);
         }
         return json;
     }

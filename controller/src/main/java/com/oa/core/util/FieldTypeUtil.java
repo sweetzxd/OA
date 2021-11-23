@@ -25,7 +25,11 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.activation.DataHandler;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.channels.FileChannel;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.*;
@@ -34,7 +38,7 @@ public class FieldTypeUtil {
     /**
      * 字段类型
      */
-    static String[] fieldType = new String[]{"text", "textarea", "select", "selects", "date", "datetime", "int", "decimal", "user", "users", "dept", "depts", "form", "forms", "upload", "uploads", "child", "editor", "selectcity"};
+    static String[] fieldType = new String[]{"text", "textarea", "select", "selects", "date", "datetime", "int", "decimal", "user", "users", "dept", "depts", "form", "forms", "upload", "uploads", "child", "editor"};
 
     public static List<String> fieldType() {
         List<String> type = new ArrayList<>();
@@ -274,8 +278,6 @@ public class FieldTypeUtil {
         String value = "";
         if (fieldValue != null && !fieldValue.equals("")) {
             value = DateHelper.getDateString(fieldValue, "yyyy-MM-dd");
-        }else{
-            value = ht.get("input");
         }
         String fieldName = fieldData.getFieldName();
         String fieldTitle = fieldData.getFieldTitle();
@@ -289,6 +291,8 @@ public class FieldTypeUtil {
             validate = " laterTo='" + tableId + "_" + ht.get("laterTo") + "_Value' ";
         } else if (ht.get("toLater") != null && !(ht.get("toLater")).equals("")) {
             validate = " toLater='" + tableId + "_" + ht.get("toLater") + "_Value' ";
+        } else if (special != null && special.equals("[thisdate]")){
+            validate = " thisdate ";
         }
         String fieldHtml = "";
         fieldHtml += "<div class='layui-form-item component' data-method='offset'>";
@@ -337,6 +341,8 @@ public class FieldTypeUtil {
             validate = " laterTo='" + tableId + "_" + ht.get("laterTo") + "_Value' ";
         } else if (ht.get("toLater") != null && !(ht.get("toLater")).equals("")) {
             validate = " toLater='" + tableId + "_" + ht.get("toLater") + "_Value' ";
+        }else if (special != null && special.equals("[thisdate]")){
+            validate = " thisdate='newdate' ";
         }
 
         String fieldHtml = "";
@@ -461,12 +467,7 @@ public class FieldTypeUtil {
     public static String fieldUser(String tableId, FieldData fieldData, String fieldValue) {
         String special = fieldData.getSpecial();
         Hashtable ht = getSpecial(special);
-        if(fieldValue !=null && !fieldValue.equals("")) {
-            fieldValue = valueOf(fieldValue);
-        }else{
-            fieldValue = (String)ht.get("input");
-            fieldValue = fieldValue==null?"":fieldValue;
-        }
+        fieldValue = valueOf(fieldValue);
         String fieldName = fieldData.getFieldName();
         String fieldTitle = fieldData.getFieldTitle();
         int fieldNum = fieldData.getFieldNum();
@@ -521,12 +522,7 @@ public class FieldTypeUtil {
     public static String fieldUsers(String tableId, FieldData fieldData, String fieldValue) {
         String special = fieldData.getSpecial();
         Hashtable ht = getSpecial(special);
-        if(fieldValue !=null && !fieldValue.equals("")) {
-            fieldValue = valueOf(fieldValue);
-        }else{
-            fieldValue = (String)ht.get("input");
-            fieldValue = fieldValue==null?"":fieldValue;
-        }
+        fieldValue = valueOf(fieldValue);
         String fieldName = fieldData.getFieldName();
         String fieldTitle = fieldData.getFieldTitle();
         int fieldNum = fieldData.getFieldNum();
@@ -538,7 +534,7 @@ public class FieldTypeUtil {
 
         String fieldHtml = "";
         fieldHtml += "<div class='layui-form-item component' data-method='offset'>";
-        fieldHtml += "<label class='layui-form-label title' id='" + id + "_Title' data-type='users'>" + fieldTitle + "</label>";
+        fieldHtml += "<label class='layui-form-label title' id='" + id + "_Title' data-type='user'>" + fieldTitle + "</label>";
         if (required == 1) {
             fieldHtml += "<span class='layui-form-mid required' style='display:block;'>*</span>";
         } else {
@@ -574,12 +570,7 @@ public class FieldTypeUtil {
     public static String fieldDept(String tableId, FieldData fieldData, String fieldValue) {
         String special = fieldData.getSpecial();
         Hashtable ht = getSpecial(special);
-        if(fieldValue !=null && !fieldValue.equals("")) {
-            fieldValue = valueOf(fieldValue);
-        }else{
-            fieldValue = (String)ht.get("input");
-            fieldValue = fieldValue==null?"":fieldValue;
-        }
+        fieldValue = valueOf(fieldValue);
         String fieldName = fieldData.getFieldName();
         String fieldTitle = fieldData.getFieldTitle();
         int fieldNum = fieldData.getFieldNum();
@@ -591,7 +582,7 @@ public class FieldTypeUtil {
 
         String fieldHtml = "";
         fieldHtml += "<div class='layui-form-item component' data-method='offset'>";
-        fieldHtml += "<label class='layui-form-label title' id='" + id + "_Title' data-type='dept'>" + fieldTitle + "</label>";
+        fieldHtml += "<label class='layui-form-label title' id='" + id + "_Title' data-type='user'>" + fieldTitle + "</label>";
         if (required == 1) {
             fieldHtml += "<span class='layui-form-mid required' style='display:block;'>*</span>";
         } else {
@@ -627,12 +618,7 @@ public class FieldTypeUtil {
     public static String fieldDepts(String tableId, FieldData fieldData, String fieldValue) {
         String special = fieldData.getSpecial();
         Hashtable ht = getSpecial(special);
-        if(fieldValue !=null && !fieldValue.equals("")) {
-            fieldValue = valueOf(fieldValue);
-        }else{
-            fieldValue = (String)ht.get("input");
-            fieldValue = fieldValue==null?"":fieldValue;
-        }
+        fieldValue = valueOf(fieldValue);
         String fieldName = fieldData.getFieldName();
         String fieldTitle = fieldData.getFieldTitle();
         int fieldNum = fieldData.getFieldNum();
@@ -644,7 +630,7 @@ public class FieldTypeUtil {
 
         String fieldHtml = "";
         fieldHtml += "<div class='layui-form-item component' data-method='offset'>";
-        fieldHtml += "<label class='layui-form-label title' id='" + id + "_Title' data-type='depts'>" + fieldTitle + "</label>";
+        fieldHtml += "<label class='layui-form-label title' id='" + id + "_Title' data-type='user'>" + fieldTitle + "</label>";
         if (required == 1) {
             fieldHtml += "<span class='layui-form-mid required' style='display:block;'>*</span>";
         } else {
@@ -789,16 +775,25 @@ public class FieldTypeUtil {
 
         String fieldHtml = "";
         fieldHtml += "<div class='layui-upload upload component'>";
-        File file = new File(fieldValue);
         fieldHtml += "<button type='button' id='" + id + "' class='layui-btn title' data-type='upload'>" + fieldTitle + "</button>" + StringHelper.Space("k1");
         if (required == 1) {
             fieldHtml += "<span class='layui-form-mid required' style='display:block;'>*</span>";
         } else {
             fieldHtml += "<span class='layui-form-mid required' style='display:none;'>*</span>";
         }
+        File file = new File(fieldValue);
         String fileName = file.getName();
         fileName = fileName.substring(fileName.indexOf("-") + 1);
-        fieldHtml += StringHelper.Space("k1") + "<a href='/" + fieldValue + "' data-value='" + fieldValue + "' download='" + fileName + "' title='点击下载 " + fileName + "'>" + fileName + "</a>";
+        String ext = ext(fileName);
+        fieldHtml += StringHelper.Space("k1");
+        if(ext.equals("DOC") || ext.equals("DOCX") || ext.equals("XLS") || ext.equals("XLSX")){
+            fieldHtml += "<a onclick=\"openseeoffice('" + fieldValue + "')\" title='点击查看 " + fileName + "'>"+ fileName + "</a>";
+        }else if(ext.equals("PDF")){
+            fieldHtml += "<a onclick=\"openseepdf('" + fieldValue + "')\" title='点击查看 " + fileName + "'>"+ fileName + "</a>";
+        }else{
+            fieldHtml += "<a href='/" + fieldValue + "' data-value='" + fieldValue + "' download='" + fileName + "' title='点击下载 " + fileName + "'>" + fileName + "</a>";
+        }
+
         fieldHtml += "<div class='layui-upload-list'>";
         fieldHtml += "<input type='hidden' class='form-upload-ins' id='" + val + "' name='" + val + "' value='" + fieldValue + "' maxlength='" + fieldNum + "'>";
         fieldHtml += "<p class='upload-text'></p></div>";
@@ -840,13 +835,33 @@ public class FieldTypeUtil {
         fieldHtml += "<tbody class='uploadFildList'>";
         if (fieldValue != null && fieldValue.contains("|")) {
             String[] files = fieldValue.split("\\|");
+            ConfParseUtil cp = new ConfParseUtil();
+            String catPath = cp.getProperty("upload_file");
             for (int i = 0; i < files.length; i++) {
                 File file = new File(files[0]);
+                long size = 0L;
+                try {
+                    FileInputStream fis = new FileInputStream(catPath+file);
+                    FileChannel fc = fis.getChannel();
+                    size = fc.size();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 String fileName = file.getName();
                 fileName = fileName.substring(fileName.indexOf("-") + 1);
+                String ext = ext(file.getName());
                 fieldHtml += "<tr id='upload-" + i + "'><td>";
+                if(ext.equals("DOC") || ext.equals("DOCX") || ext.equals("XLS") || ext.equals("XLSX")){
+                    fieldHtml += "<a onclick=\"openseeoffice('" + val + "')\" title='点击查看 " + fileName + "'>"+ fileName + "</a>";
+                }else if(ext.equals("PDF")){
+                    fieldHtml += "<a onclick=\"openseepdf('" + val + "')\" title='点击查看 " + fileName + "'>"+ fileName + "</a>";
+                }else{
+                    fieldHtml += "<a href='/" + files[0] + "' data-value='" + files[0] + "' download='" + fileName + "' title='点击下载 " + fileName + "'>" + fileName + "</a>";
+                }
                 fieldHtml += "<a href='/" + files[0] + "' data-value='" + files[0] + "' download='" + fileName + "' title='点击下载 " + fileName + "'>" + fileName + "</a></td>";
-                fieldHtml += "<td>" + FileHelper.getPrintSize(file.length()) + "</td>";
+                fieldHtml += "<td>" + FileHelper.getPrintSize(size) + "</td>";
                 fieldHtml += "<td></td><td><a class='layui-btn layui-btn-xs layui-btn-danger upload-delete' herf='javascript:void(0)' onclick=\"removefile('upload-" + i + "','" + id + "')\">删除</a></td></tr>";
             }
         }
@@ -884,50 +899,11 @@ public class FieldTypeUtil {
         fieldHtml += "</div>";
         fieldHtml += "<textarea id='" + id + "_Value' name='" + id + "_Value' maxlength='" + fieldNum + "'";
         fieldHtml += fieldVerify(required);
-        fieldHtml += " class='layui-textarea' style='display: none;'>" + fieldValue + "</textarea>";
+        fieldHtml += " class='layui-textarea' style='display:none;'>" + fieldValue + "</textarea>";
         fieldHtml += "</div>";
         return fieldHtml;
     }
-//    三级联动
 
-    public static String fieldSelectCity(String tableId, FieldData fieldData, String fieldValue) {
-        String special = fieldData.getSpecial();
-        Hashtable ht = getSpecial(special);
-        fieldValue = valueOf(fieldValue);
-        String fieldName = fieldData.getFieldName();
-        String fieldTitle = fieldData.getFieldTitle();
-        int fieldNum = fieldData.getFieldNum();
-        String id = tableId + "_" + fieldName;
-        String show = "";
-        int required = fieldData.getRequired();
-
-        String fieldHtml = "";
-        fieldHtml += "<div class='layui-form-item component' data-method='offset'>";
-        fieldHtml += "<label class='layui-form-label title' id='" + id + "_Title' data-type='selectcity'>" + fieldTitle + "</label>";
-
-        if (required == 1) {
-            fieldHtml += "<span class='layui-form-mid required' style='display:block;'>*</span>";
-        } else {
-            fieldHtml += "<span class='layui-form-mid required' style='display:none;'>*</span>";
-        }
-        fieldHtml += "<div class='layui-upload-list'>";
-        fieldHtml += " <div class='layui-col-md3'>";
-        fieldHtml += "<select class='ap' lay-filter='ap' id='ap' name='province'></select>";
-        fieldHtml +="</div>";
-
-        fieldHtml += " <div class='layui-col-md3'>";
-        fieldHtml += "<select class='ac' lay-filter='ac' id='ac' name='city'></select>";
-        fieldHtml +="</div>";
-
-        fieldHtml += " <div class='layui-col-md3'>";
-        fieldHtml += "<select class='aa' lay-filter='aa' id='aa' name='area'></select>";
-        fieldHtml +="</div>";
-        fieldHtml +="</div>";
-        fieldHtml += "<p class='layui-form-mid layui-word-aux' id='" + id + "_Explain'>" + show + "</p>";
-        fieldHtml +="<input type='hidden' class='form-upload-ins' id='" + id + "_Value' name='" + id + "_Value' maxlength='"+fieldNum+"' value='" + fieldValue + "'>";
-        fieldHtml += "</div>";
-        return fieldHtml;
-    }
     /**
      * 子表
      */
@@ -954,7 +930,7 @@ public class FieldTypeUtil {
         fieldHtml += "<div class='layui-input-block'>";
         String value = fieldInfo(fieldData, fieldValue, type);
         if ("upload".equals(type) || "uploads".equals(type)) {
-            fieldHtml += "<label id="+id+">"+value+"</label>";
+            fieldHtml += value;
         } else {
             fieldHtml += "<input type='text' id='" + id + "' name='" + id + "' autocomplete='off' class='layui-input' value='" + value + "' readonly unselectable='on'>";
         }
@@ -1014,11 +990,21 @@ public class FieldTypeUtil {
                 if (val != null && !val.equals("")) {
                     File file = new File((String) fieldValue);
                     String ext = ext(file.getName());
-                    value = "<a href='/" + value + "' download='" + file.getName() + "' title='点击下载 " + file.getName() + "'>";
+                    String name = file.getName();
+                    name = name.substring(name.indexOf("-") + 1);
+                    if(ext.equals("DOC") || ext.equals("DOCX") || ext.equals("XLS") || ext.equals("XLSX")){
+                        value += "<a onclick=\"openseeoffice('" + val + "')\" title='点击查看 " + file.getName() + "'>";
+                    }else if(ext.equals("PDF")){
+                        value += "<a onclick=\"openseepdf('" + val + "')\" title='点击查看 " + file.getName() + "'>";
+                    }else{
+                        value = "<a href='/" + value + "' download='" + file.getName() + "' title='点击下载 " + file.getName() + "'>";
+                    }
                     value += "<div class='oa-file'>";
                     value += "<i class='layui-icon layui-icon-file'></i>";
                     value += "<p>" + ext + "</p>";
-                    value += "</div></a>";
+                    value += "</div>";
+                    value += "<label>" + name + "</label><a class='layui-btn layui-btn-xs layui-btn-normal' style='margin-left: 10px;' href='/" + val + "' download='" + file.getName() + "'>下载</a>";
+                    value += "</a>";
                 }
             } else if ("uploads".equals(type)) {
                 String val = (String) fieldValue;
@@ -1027,11 +1013,21 @@ public class FieldTypeUtil {
                     for (int i = 0; i < files.length; i++) {
                         File file = new File(files[i]);
                         String ext = ext(file.getName());
-                        value += "<a href='/" + files[i] + "' download='" + file.getName() + "' title='点击下载 " + file.getName() + "'>";
+                        String name = file.getName();
+                        name = name.substring(name.indexOf("-") + 1);
+                        if(ext.equals("DOC") || ext.equals("DOCX") || ext.equals("XLS") || ext.equals("XLSX")){
+                            value += "<a onclick=\"openseeoffice('" + files[i] + "')\" title='点击查看 " + file.getName() + "'>";
+                        }else if(ext.equals("PDF")){
+                            value += "<a onclick=\"openseepdf('" + files[i] + "')\" title='点击查看 " + file.getName() + "'>";
+                        }else{
+                            value += "<a href='/" + files[i] + "' download='" + file.getName() + "' title='点击下载 " + file.getName() + "'>";
+                        }
                         value += "<div class='oa-file'>";
                         value += "<i class='layui-icon layui-icon-file'></i>";
                         value += "<p>" + ext + "</p>";
-                        value += "</div></a>";
+                        value += "</div>";
+                        value += "<label>" + name + "</label><a class='layui-btn layui-btn-xs layui-btn-normal' style='margin-left: 10px;' href='/" + files[i] + "' download='" + file.getName() + "'>下载</a>";
+                        value += "</a></br>";
                     }
                 }
             } else if ("textarea".equals(type)) {
@@ -1047,24 +1043,35 @@ public class FieldTypeUtil {
      * 字段特殊定义处理
      */
     public static Hashtable getSpecial(String special) {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        Loginer loginer = (Loginer) request.getSession().getAttribute("loginer");
+        if(loginer == null){
+            try {
+                String userid = request.getParameter("userid");
+                return getSpecial(userid, special);
+            }catch (Exception e){
+                return new Hashtable();
+            }
+        }else{
+            return getSpecial(loginer.getId(),special);
+        }
+
+    }
+    public static Hashtable getSpecial(String userid,String special) {
         Hashtable val = new Hashtable();
         if (special != null) {
             try {
-                HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
                 List<String> speList = StringHelper.getMsg(special);
                 if (speList != null && speList.size() > 0) {
                     for (String sp : speList) {
                         if (sp.equals("loginName")) {
-                            Loginer loginer = (Loginer) request.getSession().getAttribute("loginer");
-                            val.put("input", loginer.getId());
+                            val.put("input", userid);
                         } else if (sp.equals("currentDate")) {
                             val.put("input", DateHelper.getDate());
                         } else if (sp.equals("currentDateTime")) {
                             val.put("input", DateHelper.now());
                         } else if (sp.equals("currentDept")) {
-                            Loginer loginer = (Loginer) request.getSession().getAttribute("loginer");
-                            String loginId = loginer.getId();
-                            val.put("input", DeptDict.getUserDept(loginId));
+                            val.put("input", DeptDict.getUserDept(userid));
                         } else if (sp.contains("carryform-")) {
                             val.put("carryform", sp.split("-")[1]);
                         } else if (sp.contains("laterTo-")) {

@@ -6,7 +6,6 @@ import com.oa.core.bean.module.Employees;
 import com.oa.core.bean.util.PageUtil;
 import com.oa.core.helper.DateHelper;
 import com.oa.core.interceptor.Logined;
-import com.oa.core.listener.InitDataListener;
 import com.oa.core.service.module.DepartmentService;
 import com.oa.core.service.module.EmployeesService;
 import com.oa.core.service.util.TableService;
@@ -55,16 +54,11 @@ public class DepartmentController {
     @RequestMapping(value = "/depttree", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String gotoAccessTree(HttpServletRequest request,String spread) {
-        String dept = (String)InitDataListener.getObjData("dept");
-        if(dept==null && dept.equals("")) {
-            List<Department> myurllist = departmentService.selectAll();
-            if (spread != null && spread.equals("false")) {
-                return DeptUtil.getMenu(myurllist, false);
-            } else {
-                return DeptUtil.getMenu(myurllist, true);
-            }
+        List<Department> myurllist = departmentService.selectAll();
+        if(spread!=null && spread.equals("false")) {
+            return DeptUtil.getMenu(myurllist,false);
         }else{
-            return dept;
+            return DeptUtil.getMenu(myurllist,true);
         }
     }
 
@@ -146,22 +140,6 @@ public class DepartmentController {
         return mav;
     }
 
-//添加主管院长
-    @RequestMapping(value = "/deptdeanadd", method = RequestMethod.GET)
-    public ModelAndView gotoDeptdeanAdd(HttpServletRequest request, String pid) {
-        Department parent = departmentService.selectById(pid);
-        if (parent == null) {
-            parent = new Department();
-            parent.setDeptId(pid);
-            parent.setDeptName("综合办公管理系统");
-        }
-        ModelAndView mav = new ModelAndView("module/department");
-        mav.addObject("dept", new Department());
-        mav.addObject("parent", parent);
-        mav.addObject("type", "add");
-        return mav;
-    }
-
     @RequestMapping(value = "/deptmodi/{deptId}", method = RequestMethod.GET)
     public ModelAndView gotoDeptModi(HttpServletRequest request, @PathVariable String deptId, String pid) {
         ModelAndView mav = new ModelAndView("module/department");
@@ -209,6 +187,7 @@ public class DepartmentController {
                 Collections.addAll(staffIds, deptstaff.split(";"));
             }
             departmentService.updateEmp(deptId,staffIds,userId,DateHelper.now());
+            tableService.updateSqlMap("update afxtx19062101 set bm19062100001='"+deptId+"' where curStatus=2 xm19062100001='"+userId+"'");
             return "1";
         } catch (Exception e) {
             return "0";
@@ -232,6 +211,7 @@ public class DepartmentController {
             if(deptstaff!=null && deptstaff!="") {
                 Collections.addAll(staffIds, deptstaff.split(";"));
                 departmentService.updateEmp(deptId,staffIds,userId,DateHelper.now());
+                tableService.updateSqlMap("update afxtx19062101 set bm19062100001='"+deptId+"' where curStatus=2 xm19062100001='"+userId+"'");
             }
             return "1";
         } catch (Exception e) {

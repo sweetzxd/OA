@@ -27,7 +27,9 @@ public class NodeUtil {
         for(int i=0;i<linelist.size();i++){
             WorkFlowLine line = linelist.get(i);
             if(lineUtil.getNextNode(line,currentNode,procId,workOrderNO)) {
-                tonodeid.add(line.getToNode());
+                if(!tonodeid.contains(line.getToNode())) {
+                    tonodeid.add(line.getToNode());
+                }
             }
         }
         return tonodeid;

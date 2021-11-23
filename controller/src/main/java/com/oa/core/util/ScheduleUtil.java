@@ -104,6 +104,29 @@ public class ScheduleUtil {
         return list;
     }
 
+    public static JSONArray getNewValue(){
+        JSONArray json = new JSONArray();
+        int num = 1;
+        for(int i=0;i<31;i++,num++){
+            String day = String.valueOf(num);
+            if(num<10){
+                day = "0"+num;
+            }
+            JSONObject j1 = new JSONObject(true);
+            j1.put("exp","未");
+            j1.put("type","");
+            j1.put("am","");
+            j1.put("amx", "");
+            j1.put("pm","");
+            j1.put("pmx", "");
+            JSONObject j2 = new JSONObject(true);
+            j2.put("key",day);
+            j2.put("data",j1);
+            json.put(i,j2);
+        }
+        return json;
+    }
+
 
     public static JSONObject getjson( JSONObject json,Hashtable<String,String> date,String type){
         for(Iterator<Map.Entry<String, String>> iterator = date.entrySet().iterator(); iterator.hasNext();){
@@ -114,7 +137,9 @@ public class ScheduleUtil {
             JSONObject j1 = new JSONObject(true);
             j1.put("exp",value);
             j1.put("am","");
+            j1.put("amx", "");
             j1.put("pm","");
+            j1.put("pmx", "");
             JSONObject j2 = new JSONObject(true);
             j2.put("type",type);
             j2.put("value",j1);
@@ -122,22 +147,42 @@ public class ScheduleUtil {
         }
         return json;
     }
-
-    public static JSONArray getwxjson( JSONArray jsonArray,Hashtable<String,String> date,String type){
+    public static JSONArray getgrwxjson( JSONArray jsonArray,Hashtable<String,String[]> date,String type){
+        JSONObject jsonObject = new JSONObject();
+        for(Iterator<Map.Entry<String, String[]>> iterator = date.entrySet().iterator(); iterator.hasNext();){
+            Map.Entry<String,String[]> entry=iterator.next();
+            String key = entry.getKey();
+            String[] value = entry.getValue();
+            String day = key.substring(8,10);
+            int num = Integer.parseInt(day)-1;
+            JSONObject json = jsonArray.getJSONObject(num);
+            JSONObject j2 = json.getJSONObject("data");
+            j2.put("exp","班");
+            j2.put("am",value[0]);
+            j2.put("amx", value[1]);
+            j2.put("pm",value[2]);
+            j2.put("pmx", value[3]);
+            j2.put("type",type);
+            json.put("key",day);
+            json.put("data",j2);
+            jsonArray.put(num,json);
+        }
+        return jsonArray;
+    }
+    public static JSONArray getwxjson( JSONArray jsonArray,Hashtable<String,String> date,String type,JSONObject jsonObject){
         for(Iterator<Map.Entry<String, String>> iterator = date.entrySet().iterator(); iterator.hasNext();){
-            JSONObject json = new JSONObject();
             Map.Entry<String,String> entry=iterator.next();
             String key = entry.getKey();
             String value = entry.getValue();
             String day = key.substring(8,10);
-            JSONObject j2 = new JSONObject(true);
+            int num = Integer.parseInt(day)-1;
+            JSONObject json = jsonArray.getJSONObject(num);
+            JSONObject j2 = json.getJSONObject("data");
             j2.put("exp",value);
-            j2.put("am","");
-            j2.put("pm","");
             j2.put("type",type);
             json.put("key",day);
             json.put("data",j2);
-            jsonArray.put(json);
+            jsonArray.put(num,json);
         }
         return jsonArray;
     }

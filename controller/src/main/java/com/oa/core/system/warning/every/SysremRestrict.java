@@ -2,7 +2,6 @@ package com.oa.core.system.warning.every;
 
 import com.oa.core.util.LogUtil;
 import com.oa.core.util.RestrictUtil;
-import com.oa.core.util.WeatherUtil;
 import org.json.JSONObject;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;

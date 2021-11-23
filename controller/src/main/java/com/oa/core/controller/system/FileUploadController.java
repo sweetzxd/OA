@@ -279,6 +279,8 @@ public class FileUploadController {
                 tableService.updateSqlMap("update employees set photo='"+url+"' where curStatus=2 and userName='"+userid+"'");
                 loginer.setPhoto(url);
                 request.getSession().setAttribute("loginer", loginer);
+                json.put("msg","附件上传成功!");
+                json.put("success",1);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch(Exception e){

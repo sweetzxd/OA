@@ -1,0 +1,215 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+span{
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.5);
+}
+#particles {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#particles canvas {
+    opacity: 0.3;
+}
+
+.intro {
+    position: absolute;
+    left: 0;
+    top: 16%;
+    padding: 0 20px;
+    width: 100%;
+    text-align: center;
+}
+
+body {
+    background: url("/images/bj.jpg") no-repeat;
+    background-size: 100% 100%;
+    font-family: 'Montserrat', sans-serif;
+    color: #fff;
+}
+
+input {
+    outline-style: none;
+    border: 0;
+    background: none;
+}
+
+ul li input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 18px;
+}
+
+ul li input:-moz-placeholder, textarea:-moz-placeholder {
+    color:rgba(255, 255, 255, 0.5);
+    font-size: 18px;
+}
+
+img {
+    border: 0;
+    vertical-align: middle;
+}
+
+.intro .header {
+    width: 445px;
+    margin: auto;
+    color: #fff;
+}
+
+.intro .header img {
+    width: 445px;
+}
+
+.intro ul {
+    width: 400px;
+    margin: 135px auto 0;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+}
+
+.intro ul li {
+    width: 345px;
+    height: 80px;
+    margin: auto;
+    line-height: 80px;
+    font-size: 16px;
+    color: #fff;
+    border-bottom: 1px solid #fff;
+    text-align: left;
+    overflow: hidden;
+}
+
+.intro ul li:last-child {
+    border-bottom: 0;
+}
+
+.intro ul li .lt {
+    width: 32px;
+    float: left;
+}
+
+.intro ul li .lt img {
+    width: 18px;
+}
+
+.intro ul li .rt {
+    width: 280px;
+    height: 80px;
+    line-height: 80px;
+    float: left;
+}
+
+.intro ul li .rt input {
+    width: 180px;
+    height: 80px;
+    line-height: 80px;
+    font-size: 16px;
+    color: #fff;
+}
+
+.intro .xuan {
+    width: 400px;
+    padding: 10px 3px;
+    margin: 20px auto;
+    text-align: left;
+    font-size: 16px;
+    color: #fff;
+}
+
+.intro .xuan .sp {
+    margin-right: 30px;
+}
+
+.intro .xuan img {
+    width: 16px;
+    margin-right: 3px;
+}
+
+.intro .deng {
+    width: 400px;
+    height: 50px;
+    margin: auto;
+    background: #3363db;
+    background-size: 100% 100%;
+    font-size: 18px;
+    color: #fff;
+    text-align: center;
+    border-radius:5px
+}
+
+.intro .deng input {
+    width: 100%;
+    height: 50px;
+    background: none;
+    font-size: 18px;
+    color: #fff;
+    border-radius: 5px;
+}
+
+:-webkit-autofill {
+    -webkit-text-fill-color: #fff !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+#rmbUser + label {
+    margin-top: 5px;
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+#rmbUser:checked + label::before {
+    display: block;
+    content: "\2714";
+    text-align: center;
+    font-size: 9px;
+    color: rgba(255, 255, 255, 1);
+}
+
+#subUser + label {
+    margin-top: 5px;
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+#subUser:checked + label::before {
+    display: block;
+    content: "\2714";
+    text-align: center;
+    font-size: 9px;
+    color: rgba(255, 255, 255, 1);
+}
+
+input[type=checkbox] {
+    display: none;
+}

@@ -22,10 +22,11 @@ import cn.jpush.api.push.model.notification.AndroidNotification;
 import cn.jpush.api.push.model.notification.IosNotification;
 import cn.jpush.api.push.model.notification.Notification;
 import com.google.gson.JsonObject;
+import com.oa.core.util.ConfParseUtil;
 import org.json.JSONObject;
+import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * @param: type:1.普通推送，2.跳转页面，3.跳转原生页面
@@ -34,11 +35,13 @@ import java.util.HashMap;
  * @description: 方法说明
  */
 public class JPushAllService {
+    private static String key = "bb007199fece9fd9d0316a45";
+    private static String secret = "0355577ba2145a6dd10d55de";
 
-    public static void jpushAll(String user, String msg, String url) {
-        ArrayList<String> users = new ArrayList<>();
+    public static void jpush(String user, String msg, String url) {
+        Vector<String> users = new Vector<>();
         users.add(user);
-        jpushAll(users, msg, url);
+        jpush(users, msg, url);
     }
 
     /**
@@ -51,40 +54,42 @@ public class JPushAllService {
      * @date: 2019/04/23
      * @description: 方法说明
      */
-    public static void jpushAll(ArrayList<String> user, String msg, String url) {
+    public static void jpush(Vector<String> user, String msg, String url) {
         JsonObject json = new JsonObject();
-        if(url!=null) {
+        if (url != null) {
             json.addProperty("type", 2);
             json.addProperty("url", url);
-        }else{
+        } else {
             json.addProperty("type", 1);
         }
-        jpushAll(user,msg,json);
+        jpushAll(user, msg, json);
     }
-
-    public static void jpushAll(ArrayList<String> user, String msg, JsonObject json) {
-        jpushIOS(user, msg, json);
-        jpushAndroid(user, msg, json);
-    }
-
-    public static void jpushAndroid(ArrayList<String> user, String msg, JsonObject json) {
-        String appKey = "ad52daffa166185c010ad493";
-        String masterSecret = "835e785a1760b508a2817a91";
-        JPushClient jpushClient = new JPushClient(masterSecret, appKey);
-        PushPayload payload = PushPayload.newBuilder()
-                .setPlatform(Platform.android())
-                .setAudience(Audience.alias(user))
-                .setNotification(Notification.newBuilder()
-                        .addPlatformNotification(AndroidNotification.newBuilder()
-                                .setAlert(msg)
-                                .addExtra("param", json)
-                                .build())
-                        .build())
-                .setOptions(Options.newBuilder().setApnsProduction(false).build())
-                .setMessage(Message.content(msg))
-                .build();
+    public static void jpushAll(Vector<String> user, String msg, JsonObject json) {
+        ConfParseUtil cpu = new ConfParseUtil();
+        boolean srvicemsg = true;
         try {
+            JPushClient jpushClient = new JPushClient(secret, key);
+            PushPayload payload = PushPayload.newBuilder()
+                    .setPlatform(Platform.all())
+                    .setAudience(Audience.alias(user))
+                    .setNotification(Notification.newBuilder()
+                            .addPlatformNotification(AndroidNotification.newBuilder()
+                                    .setAlert(msg)
+                                    .addExtra("param", json)
+                                    .build())
+                            .addPlatformNotification(IosNotification.newBuilder()
+                                    .setAlert(msg)
+                                    .setBadge(+1)
+                                    .setSound("happy")
+                                    .addExtra("param", json)
+                                    .build())
+                            .build())
+                    .setOptions(Options.newBuilder().setApnsProduction(srvicemsg).build())
+                    .setMessage(Message.content(msg))
+                    .build();
+
             PushResult pu = jpushClient.sendPush(payload);
+            System.out.println(pu);
         } catch (APIConnectionException e) {
             e.printStackTrace();
         } catch (APIRequestException e) {
@@ -92,31 +97,12 @@ public class JPushAllService {
         }
     }
 
-    public static void jpushIOS(ArrayList<String> user, String msg, JsonObject json) {
-        String appKey = "ad52daffa166185c010ad493";
-        String masterSecret = "835e785a1760b508a2817a91";
-        JPushClient jpushClient = new JPushClient(masterSecret, appKey);
-        PushPayload payload = PushPayload.newBuilder()
-                .setPlatform(Platform.ios())
-                .setAudience(Audience.alias(user))
-                .setNotification(Notification.newBuilder()
-                        .addPlatformNotification(IosNotification.newBuilder()
-                                .setAlert(msg)
-                                .setBadge(+1)
-                                .setSound("happy")
-                                .addExtra("param", json)
-                                .build())
-                        .build())
-                .setOptions(Options.newBuilder().setApnsProduction(false).build())
-                .setMessage(Message.content(msg))
-                .build();
-
-        try {
-            PushResult pu = jpushClient.sendPush(payload);
-        } catch (APIConnectionException e) {
-            e.printStackTrace();
-        } catch (APIRequestException e) {
-            e.printStackTrace();
-        }
+    @Test
+    public void test(){
+        Vector<String> l = new Vector<>();
+        l.add("yangning");
+        l.add("zhenxudong");
+        jpush(l,"11111111",null);
+        //jpush("yangning","11111111111111",null);
     }
 }

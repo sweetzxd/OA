@@ -1,10 +1,14 @@
 package com.oa.core.util;
 
-import com.oa.core.bean.module.File;
 import com.oa.core.bean.module.Filetype;
 import com.oa.core.service.module.FiletypeService;
 import org.json.JSONArray;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -73,4 +77,6 @@ public class FileUtil {
         }
         return lmap;
     }
+
+
 }

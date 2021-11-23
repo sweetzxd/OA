@@ -1,7 +1,6 @@
 package com.easemob.server.example.test;
 
 import com.easemob.server.example.api.impl.EasemobChatGroup;
-import com.easemob.server.example.comm.TokenUtil;
 import com.oa.core.helper.StringHelper;
 import io.swagger.client.model.*;
 import org.junit.Test;
@@ -35,7 +34,6 @@ public class ChatGroupTest {
 
     @Test
     public void createGroup() {
-        TokenUtil.initTokenByProp();
         Group group = new Group();
         group.groupname("groupA").desc("a new group")._public(true).maxusers(50).approval(false).owner("admin");
         Object result = easemobChatGroup.createChatGroup(group);

@@ -18,6 +18,10 @@ public class Joblog implements Serializable {
      * */
     private String joblogId;
     /**
+     * 日志标题
+     */
+    private String joblogTitle;
+    /**
      * 填写人
      * */
     private String user;
@@ -30,13 +34,13 @@ public class Joblog implements Serializable {
      * */
     private String leader;
     /**
-     * 开始时间
-     * */
-    private String startTime;
+     * 抄送人
+     */
+    private String csUser;
     /**
-     * 结束时间
-     * */
-    private String endTime;
+     * 日志类型
+     */
+    private String joblogType;
     /**
      * 工作内容
      * */
@@ -45,6 +49,14 @@ public class Joblog implements Serializable {
      * 完成情况
      * */
     private String finish;
+    /**
+     * 开始时间
+     * */
+    private String startTime;
+    /**
+     * 结束时间
+     * */
+    private String endTime;
     /**
      * 附件
      * */
@@ -82,11 +94,35 @@ public class Joblog implements Serializable {
     private String deptStr;
     private String leaderStr;
     private String userStr;
+    private String csUserStr;
 
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
 
     public String getJoblogId() {return joblogId;}
 
     public void setJoblogId(String joblogId) { this.joblogId = joblogId; }
+
+    public String getJoblogTitle() {
+        return joblogTitle;
+    }
+
+    public void setJoblogTitle(String joblogTitle) {
+        this.joblogTitle = joblogTitle;
+    }
 
     public String getUser() {
         return user;
@@ -108,20 +144,20 @@ public class Joblog implements Serializable {
         this.leader = leader;
     }
 
-    public String getStartTime() {
-        return startTime;
+    public String getCsUser() {
+        return csUser;
     }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
+    public void setCsUser(String csUser) {
+        this.csUser = csUser;
     }
 
-    public String getEndTime() {
-        return endTime;
+    public String getJoblogType() {
+        return joblogType;
     }
 
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
+    public void setJoblogType(String joblogType) {
+        this.joblogType = joblogType;
     }
 
     public String getContent() {
@@ -286,4 +322,46 @@ public class Joblog implements Serializable {
         this.userStr = userStr;
     }
 
+    public String getCsUserStr() {
+        return csUserStr;
+    }
+
+    public void setCsUserStr(String csUserStr) {
+        this.csUserStr = csUserStr;
+    }
+
+    @Override
+    public String toString() {
+        return "Joblog{" +
+                "joblogId='" + joblogId + '\'' +
+                ", joblogTitle='" + joblogTitle + '\'' +
+                ", user='" + user + '\'' +
+                ", deptId='" + deptId + '\'' +
+                ", leader='" + leader + '\'' +
+                ", csUser='" + csUser + '\'' +
+                ", joblogType='" + joblogType + '\'' +
+                ", content='" + content + '\'' +
+                ", finish='" + finish + '\'' +
+                ", file='" + file + '\'' +
+                ", remark='" + remark + '\'' +
+                ", state=" + state +
+                ", status=" + status +
+                ", reason='" + reason + '\'' +
+                ", curStatus=" + curStatus +
+                ", linkRecorderNO='" + linkRecorderNO + '\'' +
+                ", reserveField='" + reserveField + '\'' +
+                ", recordName='" + recordName + '\'' +
+                ", recordTime=" + recordTime +
+                ", modifyName='" + modifyName + '\'' +
+                ", modifyTime=" + modifyTime +
+                ", deleteName='" + deleteName + '\'' +
+                ", deleteTime=" + deleteTime +
+                ", startRow=" + startRow +
+                ", endRow=" + endRow +
+                ", deptStr='" + deptStr + '\'' +
+                ", leaderStr='" + leaderStr + '\'' +
+                ", userStr='" + userStr + '\'' +
+                ", csUserStr='" + csUserStr + '\'' +
+                '}';
+    }
 }

@@ -13,6 +13,7 @@ public interface TaskSenderDao {
     void deletes(String workOrderNO);
     void update(TaskSender taskSender);
     void cleanTask(Map<String, String> map);
+    void endTask(@Param("wkflwId") String wkflwId,@Param("procId")String procid);
     List<TaskSender> selectAll();
     List<TaskSender> selectMsgStatus(int msgStatus);
     List<TaskSender> selectUser(String users);

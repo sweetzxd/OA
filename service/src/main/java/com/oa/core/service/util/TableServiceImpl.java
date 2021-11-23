@@ -64,4 +64,9 @@ public class TableServiceImpl implements TableService {
         return tableDao.selectCheckList(map);
     }
 
+    @Override
+    public List<Map<String, Object>> selectCheckListold(Map<String, Object> map) {
+        return tableDao.selectCheckListold(map);
+    }
+
 }

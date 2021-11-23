@@ -51,6 +51,10 @@ public class WorkFlowDefine implements Serializable {
      */
     private String flowLabFld;
     /**
+     * 流程消息模板
+     */
+    private String flowLabFldliucheng;
+    /**
      * 流程全局主键
      */
     private String pkFeilds;
@@ -140,6 +144,14 @@ public class WorkFlowDefine implements Serializable {
 
     public void setFlowLabFld(String flowLabFld) {
         this.flowLabFld = flowLabFld;
+    }
+
+    public String getFlowLabFldliucheng() {
+        return flowLabFldliucheng;
+    }
+
+    public void setFlowLabFldliucheng(String flowLabFldliucheng) {
+        this.flowLabFldliucheng = flowLabFldliucheng;
     }
 
     public String getPkFeilds() {

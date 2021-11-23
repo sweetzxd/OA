@@ -1,0 +1,133 @@
+body {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/*.flowchart-demo {
+    width: 800px;
+    height: 600px;
+    border: 1px solid #000;
+}*/
+
+.flowchart .window {
+    border-radius: 0.5em;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+    text-align: center;
+    position: absolute;
+    background-color: rosybrown;
+    color: black;
+    font-family: helvetica;
+    font-size: 0.9em;
+    line-height: 30px;
+    width: 100px;
+    height: 30px;
+    z-index: 2;
+}
+
+.flowchart .diamond {
+    text-align: center;
+    position: absolute;
+    color: black;
+    overflow: hidden;
+    vertical-align: middle;
+    font-family: helvetica;
+    font-size: 0.9em;
+    line-height: 60px;
+    width: 140px;
+    height: 60px;
+    z-index: 2;
+}
+.diamond .diamond-div{
+    width: 140px;
+    height: 60px;
+    border-top: 30px solid transparent;
+    border-left: 80px solid rosybrown;
+    border-bottom: 30px solid transparent;
+    position: absolute;
+    right: -70px;
+    z-index: -5;
+}
+.diamond .diamond-div:after {
+    width: 140px;
+    height: 30px;
+    border-top: 30px solid transparent;
+    border-right: 80px solid rosybrown;
+    border-bottom: 30px solid transparent;
+    position: absolute;
+    content: "";
+    top:-30px;
+    right: 140px;
+    z-index: -5;
+}
+.diamond .diamond-text{
+    position: absolute;
+    width: 140px;
+    top:-30px;
+    right: 70px;
+}
+
+.flowchart .newnode {
+    border-radius: 0.5em;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+    text-align: center;
+    position: absolute;
+    background-color: rosybrown;
+    color: black;
+    font-family: helvetica;
+    font-size: 0.9em;
+    line-height: 60px;
+    width: 140px;
+    height: 60px;
+}
+
+.flowchart .active {
+    border: 1px dotted green;
+}
+
+.flowchart .hover {
+    border: 1px dotted red;
+}
+
+.starnode {
+    top: 10%;
+    left: 40%;
+}
+
+.endnode {
+    top: 90%;
+    left: 40%;
+}
+
+.flownode {
+    top: 40%;
+    left: 30%;
+}
+
+.nodeinput {
+    margin-top: 15px;
+    width: 120px;
+    height: 30px;
+}
+
+.workflow-fieldmap {
+    width: 100%;
+    height:40px;
+    border-bottom: 1px solid #ccc;
+}
+
+.workflow-fieldmap > span {
+    min-width: 100%;
+    line-height: 40px;
+    margin-left: 15px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.workflow-fieldmap > a {
+    float: right;
+    margin-top: 10px;
+    margin-right: 15px;
+}

@@ -115,13 +115,15 @@ public class WorkFlowController {
         WorkFlowDefine wkflw = workFlowDefineService.selectById(id);
         List<WorkFlowNode> workFlowNode = workFlowNodeService.selectByWkflwId(id);
         String select = "";
+        String nodes = "";
         try {
             for (WorkFlowNode node : workFlowNode) {
                 int position = node.getNodePosition();
+                String formId = node.getFormId();
+                String nodeId = node.getNodeID();
+                String nodeTitle = node.getNodeTitle();
+                nodes += "<option value='" + nodeId + "'>" + nodeTitle + "</option>";
                 if (position == 1) {
-                    String formId = node.getFormId();
-                    String nodeId = node.getNodeID();
-                    String nodeTitle = node.getNodeTitle();
                     if(formId!=null && !formId.equals("")) {
                         FormCustomMade formCustomMade = formCustomMadeService.selectFormCMByID(formId);
                         String formTask = formCustomMade.getFormTask();
@@ -163,6 +165,7 @@ public class WorkFlowController {
         mode.addObject("id", id);
         mode.addObject("wkflw", wkflw);
         mode.addObject("select", select);
+        mode.addObject("nodes", nodes);
         return mode;
     }
 
@@ -564,11 +567,13 @@ public class WorkFlowController {
             String wkfType = json.getString("wkfType");
             String flowLabFld = json.getString("flowLabFld");
             String specialField = json.getString("specialField");
+            String flowLabFldliucheng = json.getString("flowLabFldliucheng");
             WorkFlowDefine wkflw = new WorkFlowDefine();
             wkflw.setWkflwID(wkflwID);
             wkflw.setWkfName(wkfName);
             wkflw.setWkfType(wkfType);
             wkflw.setFlowLabFld(flowLabFld);
+            wkflw.setFlowLabFldliucheng(flowLabFldliucheng);
             wkflw.setSpecialField(specialField);
             wkflw.setModifyName(userId);
             wkflw.setModifyTime(DateHelper.now());
@@ -734,6 +739,8 @@ public class WorkFlowController {
         if (inputval != null && inputval != "") {
             if ("wkflwId".equals(option)) {
                 workFlowProc.setWkflwID(inputval);
+            }else if("originator".equals(option)){
+                workFlowProc.setOriginator(inputval);
             }
         }
         if (type != null && !type.equals("") && starnode != null) {

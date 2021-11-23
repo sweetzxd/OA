@@ -1,0 +1,44 @@
+[
+  {
+    "id": "usermanager",
+    "title": "用户管理",
+    "menus":  [
+      {
+        "id": "fieldlist",
+        "title": "字段定义",
+        "url": "dictionary/fieldlist.do"
+      },
+      {
+        "id": "tablelist",
+        "title": "表定义",
+        "url": "dictionary/tablelist.do"
+      },
+      {
+        "id": "tasklist",
+        "title": "任务定义",
+        "url": "dictionary/tasklist.do"
+      }
+    ]
+  },
+  {
+    "id": "usermanager",
+    "title": "用户管理",
+    "menus":  [
+      {
+        "id": "fieldlist",
+        "title": "字段定义",
+        "url": "dictionary/fieldlist.do"
+      },
+      {
+        "id": "tablelist",
+        "title": "表定义",
+        "url": "dictionary/tablelist.do"
+      },
+      {
+        "id": "tasklist",
+        "title": "任务定义",
+        "url": "dictionary/tasklist.do"
+      }
+    ]
+  }
+]

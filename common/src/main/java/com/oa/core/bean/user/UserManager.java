@@ -33,11 +33,11 @@ public class UserManager implements Serializable {
     /**
      * 账号状态 1：停用 2：启用
      */
-    private int accountStatus=0;
+    private int accountStatus=2;
     /**
      * 用户状态 1：临时账号 2：可登录 3：只允许本机登录
      */
-    private int userStatus=0;
+    private int userStatus=2;
     /**
      * 账号启用时间
      */

@@ -1,18 +1,24 @@
 package com.oa.core.controller.module;
 
+import com.google.gson.JsonObject;
 import com.oa.core.bean.Loginer;
 import com.oa.core.bean.module.Department;
 import com.oa.core.bean.module.Joblog;
+import com.oa.core.bean.module.Message;
 import com.oa.core.bean.system.TaskSender;
 import com.oa.core.bean.util.PageUtil;
 import com.oa.core.helper.DateHelper;
 import com.oa.core.helper.FileHelper;
+import com.oa.core.helper.JsonResult;
 import com.oa.core.service.module.DepartmentService;
 import com.oa.core.service.module.JoblogService;
+import com.oa.core.service.module.MessageService;
 import com.oa.core.service.system.TaskSenderService;
 import com.oa.core.util.LogUtil;
 import com.oa.core.util.PrimaryKeyUitl;
+import com.oa.core.util.SpringContextUtil;
 import com.oa.core.util.ToNameUtil;
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +28,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @ClassName:JoblogController
@@ -42,18 +49,18 @@ public class JoblogController {
     DepartmentService departmentService;
     @Autowired
     TaskSenderService taskSenderService;
+    @Autowired
+    MessageService messageService;
 
     @RequestMapping(value = "/gotoJoblogList", method = RequestMethod.GET)
     public ModelAndView gotoJoblogList(HttpServletRequest request, String type, String joblogId) {
         ModelAndView mav = new ModelAndView("module/joblog");
         if(type.equals("edit")){
             Joblog joblog = joblogService.selectById(joblogId);
-            Department department = departmentService.selectById(joblog.getDeptId());
-            if(department!=null){
-                joblog.setDeptStr(department.getDeptName());
-            }
             String leaderStr = ToNameUtil.getName("user", joblog.getLeader());
             joblog.setLeaderStr(leaderStr);
+            String csUserStr = ToNameUtil.getName("user", joblog.getCsUser());
+            joblog.setCsUserStr(csUserStr);
             mav.addObject("joblog",joblog);
             String fieldValue = joblog.getFile();
             String filesHtml = "";
@@ -78,24 +85,28 @@ public class JoblogController {
 
     @RequestMapping("/selectlist")
     @ResponseBody
-    public String getJoblogList(HttpServletRequest request, String inputval, String option, int page, int limit,String leader) {
+    public String getJoblogList(HttpServletRequest request, String inputval, String option, int page, int limit,String leader,String csUser) {
         PageUtil pu = new PageUtil();
         pu.setPageSize(limit);
         pu.setCurrentPage(page);
         Loginer loginer = (Loginer) request.getSession().getAttribute("loginer");
         Joblog joblog = new Joblog();
-        if (inputval != null && inputval != "") {
+            if (inputval != null && inputval != "") {
             if ("state".equals(option)) {
                 joblog.setState(Integer.valueOf(inputval));
             } else if ("status".equals(option)) {
                 joblog.setStatus(Integer.valueOf(inputval));
-            }else if("deptId".equals(option)){
-                joblog.setDeptId(inputval);
             }
+            /*else if("deptId".equals(option)){
+                joblog.setDeptId(inputval);
+            }*/
         }
         if(leader !=null && leader !=""){
             joblog.setLeader(leader);
             joblog.setState(2);
+        }else if(csUser !=null && csUser !=""){
+            joblog.setCsUser(csUser);
+            joblog.setLeader(csUser);
         }else{
             joblog.setUser(loginer.getId());
         }
@@ -104,14 +115,19 @@ public class JoblogController {
         int count = joblogService.selectAllTermsCont(joblog);
         List<Joblog> joblogList = joblogService.selectAllTerms(joblog);
         for(Joblog joblog1 : joblogList){
-            Department department = departmentService.selectById(joblog1.getDeptId());
-            if(department!=null){
-                joblog1.setDeptStr(department.getDeptName());
-            }
             String leaderStr = ToNameUtil.getName("user", joblog1.getLeader());
             joblog1.setLeaderStr(leaderStr);
             String userStr = ToNameUtil.getName("user", joblog1.getUser());
             joblog1.setUserStr(userStr);
+            //获取抄送人并将其名字转换成中文
+            String csuser = joblog1.getCsUser();
+            String [ ] line=csuser.split(";");
+            String csUserStr ="";
+            for(String s:line) {
+                String cs1 = ToNameUtil.getName("user", s);
+                csUserStr += ";"+cs1;
+            }
+            joblog1.setCsUserStr(csUserStr.substring(1,csUserStr.length()));
         }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", 0);
@@ -121,10 +137,15 @@ public class JoblogController {
         jsonObject.put("success",1);
         jsonObject.put("is", true);
         jsonObject.put("tip", "操作成功");
-
         return jsonObject.toString();
     }
 
+    /**
+     * 添加日志
+     * @param request
+     * @param joblog
+     * @return
+     */
     @RequestMapping(value = "/insert", method = RequestMethod.POST, produces = {"text/html;charset=UTF-8;", "application/json;"})
     @ResponseBody
     public String insertSave(HttpServletRequest request, Joblog joblog) {
@@ -154,68 +175,34 @@ public class JoblogController {
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces = {"text/html;charset=UTF-8;", "application/json;"})
     @ResponseBody
     public String updateSave(HttpServletRequest request, Joblog joblog) {
-        Loginer loginer = (Loginer) request.getSession().getAttribute("loginer");
-        String userId = loginer.getId();
+        String userId = request.getParameter("userId");
+        String type = request.getParameter("type");
+        //type为app端的参数
+        if(type!=null && type.equals("1")){
+            String joblog3 = request.getParameter("joblog");
+            String state = request.getParameter("state");
+            String reason = request.getParameter("reason");
+            int s = 1;
+            if(state!=null){
+                s = Integer.parseInt(state);
+            }
+            //{"csUser":"zhangxu","joblogId":"Z2019060600005","leader":"zhangxu","state":1}
+            JSONObject json = new JSONObject(joblog3);
+            joblog.setCsUser(json.getString("csUser"));
+            joblog.setJoblogId(json.getString("joblogId"));
+            joblog.setLeader(json.getString("leader"));
+            joblog.setReason(reason==null?"":reason);
+            joblog.setState(s);
+        }
+
+        if(userId==null || userId.equals("")) {
+            Loginer loginer = (Loginer) request.getSession().getAttribute("loginer");
+            userId = loginer.getId();
+        }
         try {
             joblog.setModifyName(userId);
             joblog.setModifyTime(DateHelper.now());
             joblogService.update(joblog);
-            TaskSender taskSender = new TaskSender();
-            taskSender.setWkflwID("joblog");
-            taskSender.setAccepter(joblog.getLeader());
-            TaskSender joblogTaskSender = taskSenderService.selectJoblogTask(taskSender);
-            if(joblog.getState()==1){
-                Joblog joblog1 = new Joblog();
-                joblog1.setLeader(joblog.getLeader());
-                joblog1.setState(2);
-                int count = joblogService.selectAllTermsCont(joblog1);
-                if(count==0){
-                    if(joblogTaskSender !=null){
-                        if(joblogTaskSender.getMsgStatus()==2){
-                            joblogTaskSender.setMsgStatus(4);
-                            joblogTaskSender.setModifyName(userId);
-                            joblogTaskSender.setModifyTime(DateHelper.now());
-                            taskSenderService.update(joblogTaskSender);
-                        }
-                    }
-                }
-            }else if(joblog.getState()==2){
-                if(joblogTaskSender !=null){
-                    if(joblogTaskSender.getMsgStatus()==4){
-                        joblogTaskSender.setMsgStatus(2);
-                        joblogTaskSender.setModifyName(userId);
-                        joblogTaskSender.setModifyTime(DateHelper.now());
-                        taskSenderService.update(joblogTaskSender);
-                    }
-                }else{
-                    PrimaryKeyUitl pk = new PrimaryKeyUitl();
-                    String permissionId = pk.getNextId("tasksender", "workOrderNO");
-                    taskSender.setWorkOrderNO(permissionId);
-                    taskSender.setTaskTitle("日志审批");
-                    taskSender.setRefLinkUrl("/joblog/gotoCheckJoblog.do");
-                    taskSender.setMsgStatus(2);
-                    taskSender.setRecordName(userId);
-                    taskSender.setRecordTime(DateHelper.now());
-                    taskSender.setModifyName(userId);
-                    taskSender.setModifyTime(DateHelper.now());
-                    taskSenderService.insert(taskSender);
-                }
-            }else if(joblog.getState()==3||joblog.getState()==4){
-                Joblog joblog1 = new Joblog();
-                joblog1.setLeader(userId);
-                joblog1.setState(2);
-                int count = joblogService.selectAllTermsCont(joblog1);
-                if(count==0){
-                    if(joblogTaskSender !=null){
-                        if(joblogTaskSender.getMsgStatus()==2){
-                            joblogTaskSender.setMsgStatus(4);
-                            joblogTaskSender.setModifyName(userId);
-                            joblogTaskSender.setModifyTime(DateHelper.now());
-                            taskSenderService.update(joblogTaskSender);
-                        }
-                    }
-                }
-            }
             return "1";
         } catch (Exception e) {
             LogUtil.sysLog("Exception:"+e);
@@ -243,6 +230,35 @@ public class JoblogController {
         mav.addObject("user",loginer.getId());
         mav.addObject("type","list");
         return mav;
+    }
+
+    @RequestMapping(value = "/gotocsuserjoblog", method = RequestMethod.GET)
+    public ModelAndView gotoCsUserJoblog(HttpServletRequest request) {
+        Loginer loginer = (Loginer) request.getSession().getAttribute("loginer");
+        ModelAndView mav = new ModelAndView("module/csUserJoblog");
+        mav.addObject("user",loginer.getId());
+        mav.addObject("type","list");
+        return mav;
+    }
+
+    public static String getHtmlInformare(Joblog joblog){
+        String tableHtml = "";
+        tableHtml += "<table class='layui-table' lay-skin='line' lay-size='sm'>";
+        tableHtml += "<colgroup>";
+        for (int i = 0; i < 2; i++) {
+            tableHtml += "<col width='70'>";
+            tableHtml += "<col width='120'>";
+        }
+        tableHtml += "</colgroup>";
+        /*tableHtml += "<thead>";*/
+        tableHtml += "<tr>";
+        tableHtml += "<th colspan='4' hight='auto'>" + joblog.getContent() + "</th>";
+        tableHtml += "</tr>";
+        /*tableHtml += "</thead>";*/
+        tableHtml += "<tbody>";
+        tableHtml += "</tbody>";
+        tableHtml += "</table>";
+        return tableHtml;
     }
 
 }

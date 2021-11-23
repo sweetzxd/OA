@@ -61,7 +61,15 @@ public class StringToHtmlUtil {
                         templet = ",templet: function(d){ return oa.editor('" + dname + "',d);}";
                         listHtml += "<th lay-data=\"{align:'center',unresize:true, sort: true " + templet + "}\">" + fieldData.getFieldTitle() + "</th>";
                     } else if (fieldTpye != null && (fieldTpye.equals("int") || fieldTpye.equals("decimal") || fieldTpye.equals("text"))) {
+                        if(finance){
+                            //edit = ",templet: function (d){ return textTool(d,'"+tableId + "_" + fields[i]+"','"+fieldTpye+"');}";
+                        }
                         listHtml += "<th lay-data=\"{field:'" + tableId + "_" + fields[i] + "', unresize:true " + edit + "}\">" + fieldData.getFieldTitle() + "</th>";
+                    } else if (fieldTpye != null && (fieldTpye.equals("select") || fieldTpye.equals("selects"))) {
+                        if(finance){
+                            templet = ",templet: function (d){ return selectTool(d,'"+tableId + "_" + fields[i]+"','"+fieldTpye+"');}";
+                        }
+                        listHtml += "<th lay-data=\"{field:'" + tableId + "_" + fields[i] + "', unresize:true " + templet + "}\">" + fieldData.getFieldTitle() + "</th>";
                     } else {
                         listHtml += "<th lay-data=\"{field:'" + tableId + "_" + fields[i] + "', unresize:true, sort: true " + templet + "}\">" + fieldData.getFieldTitle() + "</th>";
                     }
@@ -188,7 +196,7 @@ public class StringToHtmlUtil {
     public String getListButton(String num, boolean listsave,String formId) {
         String buttonHtml = "";
         if (AccessUtil.getAdd(num)) {
-            buttonHtml += "<a class='layui-btn layui-btn-primary layui-btn-xs' lay-event='add' title='添加'>添加</a>";
+            buttonHtml += "<a class='layui-btn layui-btn-xs' lay-event='add' title='添加'>添加</a>"; //layui-btn-primary
         }
         if (AccessUtil.getModi(num)) {
             if (!listsave) {
@@ -444,9 +452,6 @@ public class StringToHtmlUtil {
                 break;
             case "editor":
                 fieldHtml = FieldTypeUtil.fieldEditor(tableId, fieldData, value);
-                break;
-            case "selectcity":
-                fieldHtml = FieldTypeUtil.fieldSelectCity(tableId, fieldData, value);
                 break;
             default:
                 fieldHtml = FieldTypeUtil.fieldText(tableId, fieldData, value);

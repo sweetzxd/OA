@@ -1,0 +1,374 @@
+﻿@charset "utf-8";
+/* CSS Document */
+html,
+body {
+    background-color: #fff;
+    touch-action: none;
+}
+
+p {
+    text-indent: 22px;
+}
+
+span.mui-icon {
+    font-size: 14px;
+    color: #007aff;
+    margin-left: -15px;
+    padding-right: 10px;
+}
+
+.mui-off-canvas-right {
+    width: 80%;
+    background: #fff;
+    color: #333;
+}
+
+.title {
+    margin: 50px 15px 10px;
+}
+
+.title + .content {
+    margin: 10px 15px 35px;
+    color: #bbb;
+    text-indent: 1em;
+    font-size: 14px;
+    line-height: 24px;
+}
+
+input {
+    outline-style: none;
+    border: 0;
+    background: none;
+    font-size: 14px;
+}
+
+.mui-off-canvas-wrap {
+    background: #fff;
+    padding-top: 40px;
+}
+
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+    color: #aaa;
+    font-size: 12px;
+}
+
+ul,
+li {
+    list-style: none;
+}
+
+header .tit {
+    float: left;
+    margin-left: 5%;
+    line-height: 44px;
+    font-size: 15px;
+    color: #28D8A1;
+}
+
+header .amo {
+    width: 18px;
+    float: left;
+    margin-left: 35%;
+    line-height: 44px;
+    font-size: 15px;
+    color: #28D8A1;
+}
+
+header .amo img {
+    width: 100%;
+}
+
+header .rt {
+    width: 18px;
+    float: right;
+    line-height: 44px;
+    font-size: 15px;
+    color: #28D8A1;
+}
+
+header .rt img {
+    width: 100%;
+}
+
+.eval {
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+    margin: 0;
+}
+
+.eval li {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 15px;
+    background: #fff;
+    overflow: hidden;
+    text-align: center;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+}
+
+.wrapmain {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 10px;
+    background: #fff;
+    overflow: hidden;
+    text-align: center;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+}
+
+.wrapmain .lt {
+    width: 50%;
+    float: left;
+    margin-left: 5%;
+}
+
+.wrapmain .rt {
+    width: 45%;
+    float: right;
+}
+
+.divbox {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: center;
+    flex-grow: 0;
+}
+
+.divbox-tbody {
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: center;
+    flex-grow: 0;
+}
+
+.eval li .lt {
+    width: 50%;
+    float: left;
+    margin-left: 5%;
+}
+
+.eval li .slt-1 {
+    width: 12%;
+}
+
+.eval li .slt-2 {
+    width: 38%;
+}
+
+.eval li .slt-3 {
+    width: 50%;
+}
+
+.eval li .rt {
+    width: 45%;
+    float: right;
+}
+
+.eval li label {
+    /*设置label的样式*/
+    width: 100%;
+    display: block;
+    position: absolute;
+    height: 100%;
+}
+
+.eval li label .option {
+    /*把优化后的按钮图片设置为该div的背景图片，把该div定位到原生样式的上方，遮盖住原生样式。*/
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    font-size: 14px;
+    border: 1px solid #28D8A1;
+    position: absolute;
+    top: 12px;
+    left: 0px;
+}
+
+.eval li label .option.option1 {
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.eval li label input[type="checkbox"],
+.eval li label input[type="radio"] {
+    /*把原生样式隐藏掉*/
+    display: none;
+    margin-right: 8px;
+    opacity: 0;
+}
+
+.eval li label input[type="checkbox"]:checked + div,
+.eval li label input[type="radio"]:checked + div {
+    /*当radiuo被选中时，把input下边的div标签的背景图片替换掉*/
+    background: #28D8A1;
+    border: 0;
+}
+
+.title {
+    font-size: 14px;
+    color: #333;
+}
+
+.title div {
+    margin-bottom: 5px;
+}
+
+.title .search input {
+    text-align: left;
+    height: 30px;
+    line-height: 30px;
+    margin: 0;
+}
+
+.title .time input {
+    width: 45%;
+    height: 30px;
+    line-height: 30px;
+    margin: 0;
+    color: #28D8A1;
+}
+
+.side-footer {
+    width: 100%;
+    height: 80px;
+    position: fixed;
+    bottom: 10%;
+    left: 0;
+    text-align: center;
+}
+
+.side-search-btn {
+    background: #28D8A1;
+    border-radius: 30px;
+    -wekit-border-radius: 30px;
+    color: #fff;
+    font-size: 14px;
+    padding: 8px 80px;
+    border: none;
+}
+
+
+#show {
+    display: none;
+}
+
+#offCanvasContentScroll {
+    position: absolute;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    padding-bottom: 60px;
+}
+
+#scroller {
+    position: absolute;
+    z-index: 1;
+    /*  -webkit-touch-callout:none;*/
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    width: 100%;
+    padding: 0;
+}
+
+#scroller ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    text-align: left;
+}
+
+#scroller li {
+    padding: 0 10px;
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #fff;
+    background-color: #fafafa;
+    font-size: 14px;
+    position: relative;
+}
+
+
+/**
+ *
+ * Pull down styles
+ *
+ */
+#pullDown {
+    display: none;
+}
+
+#pullDown, #pullUp {
+    background: #fff;
+    height: 50px;
+    line-height: 40px;
+    padding: 5px 10px;
+    border-bottom: 1px solid #ccc;
+    font-weight: bold;
+    font-size: 14px;
+    color: #888;
+    justify-content: center;
+}
+
+#pullDown .pullDownIcon, #pullUp .pullUpIcon {
+    display: block;
+    float: left;
+    width: 40px;
+    height: 40px;
+    background: url("../images/pull-icon@2x.png") 0 0 no-repeat;
+    -webkit-background-size: 40px 80px;
+    background-size: 40px 80px;
+    -webkit-transition-property: -webkit-transform;
+    -webkit-transition-duration: 250ms;
+    margin-right: 5px;
+}
+
+#pullDown .pullDownIcon {
+    -webkit-transform: rotate(0deg) translateZ(0);
+}
+
+#pullUp .pullUpIcon {
+    -webkit-transform: rotate(-180deg) translateZ(0);
+}
+
+#pullDown.flip, #pullUp.flip, #pullUp.loading {
+    display: flex;
+}
+
+#pullDown.flip .pullDownIcon {
+    -webkit-transform: rotate(-180deg) translateZ(0);
+}
+
+#pullUp.flip .pullUpIcon {
+    -webkit-transform: rotate(0deg) translateZ(0);
+}
+
+#pullDown.loading .pullDownIcon, #pullUp.loading .pullUpIcon {
+    background-position: 0 100%;
+    -webkit-transform: rotate(0deg) translateZ(0);
+    -webkit-transition-duration: 0ms;
+
+    -webkit-animation-name: loading;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+}
+
+@-webkit-keyframes loading {
+    from {
+        -webkit-transform: rotate(0deg) translateZ(0);
+    }
+    to {
+        -webkit-transform: rotate(360deg) translateZ(0);
+    }
+}

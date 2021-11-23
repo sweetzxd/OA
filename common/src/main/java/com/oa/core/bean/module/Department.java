@@ -41,7 +41,7 @@ public class Department implements Serializable {
      * 部门排序
      * */
     private int deptSort;
-
+    private String headName;
     private int curStatus;
     private String recordName;
     private Timestamp recordTime;
@@ -103,6 +103,14 @@ public class Department implements Serializable {
 
     public int getDeptSort() {
         return deptSort;
+    }
+
+    public String getHeadName() {
+        return headName;
+    }
+
+    public void setHeadName(String headName) {
+        this.headName = headName;
     }
 
     public void setDeptSort(int deptSort) {

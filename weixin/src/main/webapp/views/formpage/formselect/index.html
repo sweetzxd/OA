@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>请选择文件</title>
+    <link href="css/public.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/mui.min.css">
+    <link href="css/mobiscroll_date.css" rel="stylesheet"/>
+    <!-- 上拉加载 -->
+    <link href="css/pull.css" rel="stylesheet"/>
+</head>
+
+<body>
+<header class="mui-bar mui-bar-nav box-bar">
+    <div class="tit box-bar-list">选择文本</div>
+    <div class="amo cell mar-r"><img src="images/oai2.png"></div>
+    <div class="rt"><a href="#offCanvasSide" id="offCanvasBtn"><img src="images/oai1.png"></a></div>
+</header>
+<!--侧滑菜单容器-->
+<div id="offCanvasWrapper" class="mui-off-canvas-wrap mui-draggable mui-slide-in">
+    <!--侧滑菜单部分-->
+    <aside id="offCanvasSide" class="mui-off-canvas-right">
+        <div id="offCanvasSideScroll" class="mui-scroll-wrapper">
+            <div class="title">
+                <div>搜索</div>
+                <div class="search"><input type="text" name="" id="testt" value="" placeholder="请输入你想查找的文档"/></div>
+                <div>选择时间段</div>
+                <div class="time"><input type="text" id="txtdate" name="txtdate" placeholder="请选择日期" value=""/>
+                    至
+                    <input type="text" id="txtdate2" name="txtdate2" placeholder="请选择日期" value=""/>
+                </div>
+            </div>
+            <div class="side-footer">
+                <button class="side-search-btn" id="searchBtn">搜索</button>
+            </div>
+        </div>
+    </aside>
+    <!--侧滑菜单部分结束-->
+    <div class="mui-inner-wrap">
+        <div id="offCanvasContentScroll" class="mui-content mui-scroll-wrapper">
+            <div id="scroller">
+                <div id="pullDown">
+                    <span class="pullDownIcon"></span><span class="pullDownLabel"></span>
+                </div>
+                <div id="content"></div>
+                <div id="pullUp" style="display:none;">
+                    <span class="pullUpIcon"></span><span class="pullUpLabel"></span>
+                </div>
+            </div>
+        </div>
+        <!-- off-canvas backdrop -->
+        <div class="mui-off-canvas-backdrop"></div>
+    </div>
+    <script type="text/html" id="main">
+        <div class="wrapmain">
+            {{each field}}
+            <div class="rt">{{$value}}</div>
+            {{/each}}
+        </div>
+        <ul class="eval" id="thelist-ul">
+            {{each tbody}}
+            <li style="display:flex">
+                {{each $value}}
+                {{if $index == 0}}
+                <div class="slt-1">
+                    <label>
+                    <input name="can" type="{{if eleType==true}}radio{{else}}checkbox{{/if}}" class="lt" value="{{$value}}"/>
+                        <div class="option{{if eleType==true}} option1{{/if}}"></div>
+                    </label>
+                </div>
+                {{/if}}
+                {{if $index == 1}}
+                <div class="slt-2">
+                    {{$value}}
+                </div>
+                {{/if}}
+                {{if $index == 2}}
+                <div class="slt-3">
+                    {{$value}}
+                </div>
+                {{/if}}
+                {{/each}}
+            </li>
+            {{/each}}
+        </ul>
+    </script>
+</div>
+<!-- 底部begin -->
+<div class="footer-oper-bar box-bar" id="footer">
+    <div class="box-bar-list mar-r">
+        <a href="javascript:;" class="footer-oper-save">确认</a>
+    </div>
+    <div class="box-bar-list">
+        <a href="javascript:;" class="footer-oper-cancel">取消</a>
+    </div>
+</div>
+<!-- 底部end -->
+
+<script src="/resources/js/util/system.js"></script>
+
+<script src="/resources/js/jquery.min.js"></script>
+<script src="/resources/js/layer.js"></script>
+<script src="/resources/js/template.min.js"></script>
+<script src="/resources/js/myCustomPage.js"></script>
+<script src="/resources/js/axios-loader.js"></script>
+<script src="/views/formpage/formselect/js/mui.min.js"></script>
+<script src="/views/formpage/formselect/js/mobiscroll_date.js" charset="gb2312"></script>
+<script src="/views/formpage/formselect/js/mobiscroll.js"></script>
+<script src="/views/formpage/formselect/js/index.js"></script>
+<!-- 上拉加载 -->
+<script type="text/javascript" src="/views/formpage/formselect/js/iscroll.js"></script>
+<script type="text/javascript" src="/views/formpage/formselect/js/iscroll-pull.js"></script>
+</body>
+
+</html>

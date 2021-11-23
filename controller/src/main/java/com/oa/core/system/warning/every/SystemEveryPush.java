@@ -13,10 +13,7 @@ import org.quartz.JobExecutionException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @ClassName:SystemEveryPush
@@ -60,9 +57,9 @@ public class SystemEveryPush implements Job {
     public void sendMsg(String user, String title) {
         if (user != null) {
             if (user.indexOf(";") > 0) {
-                LogUtil.toPhone(StringHelper.string2ArrayList(user, ";"), title);
+                LogUtil.toPhone(StringHelper.string2Vector(user, ";"), title);
             } else {
-                ArrayList<String> users = new ArrayList();
+                Vector<String> users = new Vector<>();
                 users.add(user);
                 LogUtil.toPhone(users, title);
             }

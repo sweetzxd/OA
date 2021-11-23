@@ -192,11 +192,11 @@ public class MyUrlController {
         try {
             String pid = mur.getParentId();
             int security = myUrlRegistService.getSecurity(pid);
-            /*if ("topmenu".equals(pid)) {
+            if ("topmenu".equals(pid)) {
                 mur.setMenuNum(1);
             } else {
                 mur.setMenuNum(2);
-            }*/
+            }
             PrimaryKeyUitl pk = new PrimaryKeyUitl();
             String pageId = pk.getNextId("MyUrlRegist", "pageId");
             mur.setPageId(pageId);
@@ -215,11 +215,9 @@ public class MyUrlController {
                 flow.setModifyTime(DateHelper.now());
                 workFlowDefineService.update(flow);
                 WorkFlowNode node = workFlowNodeService.selectTopNode(wkflwId);
-                if(node!=null){
                 String formId = node.getFormId();
                 mur.setFormId(formId);
                 myUrlRegistService.insert(mur);
-                }
             } else {
                 myUrlRegistService.insert(mur);
             }
@@ -590,7 +588,9 @@ public class MyUrlController {
         String userId = loginer.getId() == null ? "" : loginer.getId();
         UserComputer sqlvalue = userComputerService.selectUserName(userId);
         String menu = sqlvalue.getUserMenu();
-        JSONArray array = new JSONArray(menu);
+        JSONObject jsonmenu = new JSONObject(menu);
+        JSONArray array = jsonmenu.getJSONArray("topmenu");
+
         List<String> pageid = new ArrayList<>();
         for(int i=0,m=array.length();i<m;i++){
             JSONObject object = array.getJSONObject(i);
@@ -598,13 +598,11 @@ public class MyUrlController {
             if(!pageid.contains(id)) {
                 pageid.add(id);
             }
-            String menus = object.getString("menus");
-            System.out.println(menus);
-            JSONArray menuarray = new JSONArray(menus);
-            for(int j=0,n=menuarray.length();j<n;j++){
+            JSONArray menuarray = object.getJSONArray("menus");
+            for (int j = 0, n = menuarray.length(); j < n; j++) {
                 JSONObject menuobject = menuarray.getJSONObject(j);
                 String menuid = menuobject.getString("id");
-                if(!pageid.contains(menuid)) {
+                if (!pageid.contains(menuid)) {
                     pageid.add(menuid);
                 }
             }

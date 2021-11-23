@@ -30,7 +30,7 @@
         WHERE curStatus=2 AND deptId=#{deptId} AND deptId not in ('organize')
     </update>
     <select id="selectAll" resultType="Department">
-        SELECT * FROM department WHERE curStatus=2 AND deptId not in ('organize') ORDER BY deptSort DESC
+        SELECT * FROM department WHERE curStatus=2 AND deptId not in ('organize') ORDER BY deptSort ASC
         <if test="startRow>=0 and endRow>0"> limit #{startRow},#{endRow}</if>
     </select>
     <select id="selectById" resultType="Department">
@@ -101,6 +101,7 @@
             <if test="deptId!=null and deptId!=''">AND FIND_IN_SET(deptId,getChildrenOfDept(#{deptId}))</if>
             AND deptId not in ('organize') AND curStatus=2
         </where>
+         ORDER BY deptSort ASC
         <if test="startRow>=0 and endRow>0"> limit #{startRow},#{endRow}</if>
     </select>
     <select id="selectDeptInputByCont" resultType="int">

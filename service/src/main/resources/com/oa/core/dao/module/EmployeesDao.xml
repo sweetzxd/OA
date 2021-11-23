@@ -99,7 +99,7 @@
     <select id="selectAllTerms" parameterType="Employees" resultType="Employees">
         SELECT * FROM employees
         <where>
-            <if test="staffName!=null and staffName!=''">and (staffName like concat('%', #{staffName}, '%') or userName like concat('%', #{staffName}, '%'))</if>
+            <if test="staffName!=null and staffName!=''">and ((staffName like concat('%',#{staffName},'%')) or (userName like concat('%',#{staffName},'%')))</if>
             <if test="sex!=null and sex!=''">AND sex =#{sex},</if>
             <if test="dateOfBirth!=null and dateOfBirth!=''">AND dateOfBirth =#{dateOfBirth}</if>
             <if test="age!=null and age>0">age =#{age}</if>

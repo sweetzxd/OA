@@ -20,26 +20,38 @@ public class MenuUtil {
             try {
                 String menu = uc.getUserMenu();
                 String menuhtml = "";
-
+                menu = menu.replaceAll("\\\\","");
+                menu = menu.replaceAll("\"\\[","[");
+                menu = menu.replaceAll("]\"","]");
                 if(menu!=null && !menu.equals("")) {
-                    JSONObject jsonObject = new JSONObject(menu);
-                    JSONArray json = jsonObject.getJSONArray("topmenu");
+                    JSONArray json;
+                    if(menu.indexOf("topmenu")>=0){
+                        JSONObject jsonObject = new JSONObject(menu);
+                        json = jsonObject.getJSONArray("topmenu");
+                    }else {
+                        json = new JSONArray(menu);
+                    }
                     for (int i = 0; i < json.length(); i++) {
                         JSONObject subObject = json.getJSONObject(i);
                         String id = subObject.getString("id");
                         String title = subObject.getString("title");
+                        String img = "";
+                        if(!subObject.isNull("img")){
+                            img = subObject.getString("img");
+                        }
                         menuhtml += "<li class='layui-nav-item'>";
-                        menuhtml += "<a class='' href='javascript:;' data-id='" + id + "'>" + title + "</a>";
+                        menuhtml += "<a href='javascript:;' lay-tips='"+title+"' lay-direction='2' style='height: 55px;'>";
+                        menuhtml += "<img class='layui-icon' src='"+img+"'></i>";
+                        menuhtml += "<cite>"+title+"</cite></a>";
                         menuhtml += "<dl class='layui-nav-child'>";
                         if(!subObject.isNull("menus")) {
-                            String menus = subObject.getString("menus");
-                            JSONArray jsonArray = new JSONArray(menus);
+                            JSONArray jsonArray = subObject.getJSONArray("menus");
                             for (int n = 0; n < jsonArray.length(); n++) {
                                 JSONObject subObject2 = jsonArray.getJSONObject(n);
                                 String id2 = subObject2.getString("id");
                                 String title2 = subObject2.getString("title");
                                 String url2 = subObject2.getString("url");
-                                menuhtml += "<dd><a href='javascript:;' data-url='" + url2 + "' data-id='" + id2 + "' data-title='" + title2 + "' class='nav-active'>" + title2 + "</a></dd>";
+                                menuhtml += "<dd data-name='" + id2 + "' ><a lay-href='" + url2 + "' lay-text='" + title2 + "'>" + title2 + "</a></dd>";
                             }
                         }
                         menuhtml += "</dl></li>";

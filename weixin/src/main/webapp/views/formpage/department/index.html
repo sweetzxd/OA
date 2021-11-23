@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/public.css"/>
+    <link rel="stylesheet" type="text/css" href="css/common.css"/>
+    <!-- 分类 -->
+    <link rel="stylesheet" type="text/css" href="css/ectouch.css"/>
+    <title>选择部门</title>
+</head>
+<body class="bgwhite">
+<!-- 头部begin -->
+<div class="header-bar box-bar">
+    <div class="header-bar-title head-text-left">选择部门</div>
+</div>
+<!-- 头部end -->
+<!-- 底部begin -->
+<div class="footer-oper-bar box-bar" id="footer">
+    <div class="box-bar-list mar-r">
+        <a href="javascript:;" class="footer-oper-save">确认</a>
+    </div>
+    <div class="box-bar-list">
+        <a href="javascript:;" class="footer-oper-cancel">取消</a>
+    </div>
+</div>
+<!-- 底部end -->
+<div class="marin-wrap">
+    <div class="out-fix-banner" style="background: #E9FBF6;">
+        <!-- 已选 -->
+        <div class="selected-bar top-x-scroll 2222">
+            <div class="inner-selected-bar" id="onSelected"></div>
+        </div>
+        <!-- 搜索begin -->
+        <div class="search-bar box-bar">
+            <div class="box-bar-list mar-r"><input class="input-style searchText" type="text" placeholder="请输入搜索内容">
+            </div>
+            <div class="cell corb" id="searchBtn">搜索</div>
+        </div>
+        <!-- 搜索end -->
+    </div>
+    <script type="text/html" id="rct">
+        {{each data as source}}
+        <div class="mylist">
+            <ul class="eval">
+                <li class="mytit">
+                    <label>
+                        <div class="lt">
+                            <input name="can" title="{{source.name}}" type="{{if source.type==false}}checkbox{{else}}radio{{/if}}" value="{{source.id}}"/>
+                            <div class="option {{if source.type==true}}option1{{/if}}"></div>
+                            <span style="margin-left: 30px;">{{source.name}}</span>
+                        </div>
+                        {{if source.type==false && source.name!=='董事长'}}
+                        <span class="rt all-select">全选</span>
+                        {{/if}}
+                    </label>
+                </li>
+                {{each source.children}}
+                <li><label>
+                    <div class="lt2">
+                        <input name="can" title="{{$value.name}}" type="{{if source.type==false}}checkbox{{else}}radio{{/if}}" value="{{$value.id}}"/>
+                        <div class="option{{if source.type==true}} option1{{/if}}"></div>
+                        <span>{{$value.name}}</span>
+                    </div>
+                </label>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+        {{/each}}
+    </script>
+    <div id="content"></div>
+</div>
+<script src="/resources/js/jquery.min.js"></script>
+<script src="/resources/js/layer.js"></script>
+<script src="/resources/js/template.min.js"></script>
+<script src="/resources/js/LetterLibaray.js"></script>
+<script src="/resources/js/myCustomPage.js"></script>
+<script src="/resources/js/axios-loader.js"></script>
+<script src="/views/formpage/department/js/index.js"></script>
+<script>
+    $(function () {
+        if(window.navigator.userAgent.indexOf('iPhone') > 0) {
+            $("#content").css({height:550,overflow: 'auto'});
+        }
+    })
+    var diva=document.getElementsByClassName("w-t");
+    var wid=diva.offsetWidth;
+    function jt(){//定义监听a大小变化的函数
+        var wid1=diva.offsetWidth;//获取宽度
+        if(wid1!=wid){
+            wid=wid1;
+            resizea();
+        }
+        setTimeout("jt",100);
+    }
+    function resizea(){
+        diva.style.height=wid;//改变b的大小
+    }
+    jt();
+</script>
+</body>
+</html>

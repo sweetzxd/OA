@@ -1,0 +1,316 @@
+@media screen and (max-width: 800px) {
+    #leftmenu {
+        display: none;
+    }
+
+    .layui-body {
+        left: 0px !important;
+    }
+
+    .layui-footer {
+        left: 0px !important;
+    }
+}
+
+.msg-window {
+    padding: 0 5px;
+}
+
+.my-message {
+    padding: 0 10px;
+    margin-top: 5px;
+    width: 100%;
+    height: 45px;
+    background-color: #b2dba1;
+    cursor: pointer;
+}
+
+.my-message:hover {
+    cursor: hand;
+    background: #4bb1cf;
+}
+
+.my-message-msgtitle {
+    padding-top: 10px;
+    float: left;
+    width: 60%;
+    height: 100%;
+    text-align: left;
+}
+
+.my-message-msgtitle span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+}
+
+.my-message-msgvalue {
+    float: left;
+    width: 40%;
+    height: 100%;
+    text-align: left;
+
+}
+
+.my-message-msguser {
+    padding-top: 5px;
+    text-align: right;
+    height: 50%;
+}
+
+.my-message-msgtime {
+    text-align: right;
+    height: 50%;
+}
+
+.msg-winpop {
+    width: 300px;
+    height: 200px;
+    position: absolute;
+    z-index: 1000;
+    right: 0;
+    bottom: 0px;
+    padding: 1px;
+    overflow: hidden;
+    display: none;
+}
+
+.msg-winpop-title {
+    width: 300px;
+    min-height: 150px;
+    background: #d9edf7;
+}
+
+.msg-winpop-title div {
+    padding: 10px;
+}
+
+.layui-icon.layui-icon-refresh {
+    padding: 5px;
+    border-radius: 2px;
+    background-color: #4FB47A;
+    color: #fff
+}
+
+.layui-icon.layui-icon-refresh:hover {
+    background-color: #FF5722;
+    color: #fff
+}
+
+.layui-icon.layui-icon-close {
+    margin: 0px 10px;
+    padding: 5px;
+    border-radius: 2px;
+    background-color: #4FB47A;
+    color: #fff
+}
+
+.layui-icon.layui-icon-close:hover {
+    background-color: #FF5722;
+    color: #fff
+}
+.layadmin-side-shrink .layui-layout-admin .layui-logo {
+    width: 60px;
+    background-image: url(/images/res.png);
+}
+.oa-logo {
+    position: absolute;
+    left: 1px;
+    top: 0;
+    width: 200px;
+    height: 100%;
+    line-height: 60px;
+    text-align: center;
+    color: #5bc0de;
+    font-size: 16px;
+}
+
+.oa-logo > img {
+    /*padding-left: 10px;*/
+    height: 50px;
+}
+
+.oa-side-scroll {
+    position: relative;
+    width: 200px;
+    padding-bottom: 10px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.oa-nav-sidebar {
+    position: absolute;
+    top: 0px;
+    left: 200px;
+    height: 100%;
+    width: 20px;
+    background-color: #393D49;
+}
+
+.oa-sidebar {
+    position: absolute;
+    top: 45%;
+    height: 100px;
+    width: 20px;
+}
+
+.oa-sidebar > i {
+    position: relative;
+    top: 34.5px;
+    left: -5px;
+    color: #48728B;
+    z-index: 2;
+}
+
+.oa-icon {
+    font-size: 20px;
+    /*color: #5bc0de;
+    height: 60px;
+    line-height: 60px;*/
+}
+
+.oa-badge {
+    position: absolute;
+    display: inline-block;
+    border-radius: 2px;
+    margin-left: 4px;
+    float: right;
+    height: 12px;
+    width: 12px;
+    line-height: 12px;
+    font-size: 5px;
+    text-align: center;
+    background-color: #FF5722;
+    color: #fff;
+}
+
+.oa-side-user {
+    width: 200px;
+    height: 160px;
+    background-color: #55595C;
+}
+
+.oa-side-img {
+    height: 90px;
+    width: 100%;
+    text-align: center;
+}
+
+.oa-side-img > * {
+    font-size: 60px;
+    color: #5bc0de;
+}
+
+.oa-side-text {
+    height: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+.oa-side-text > * {
+    color: #5bc0de;
+}
+
+.oa-side-text > *:hover {
+    color: #b2dba1;
+}
+
+.layadmin-side-shrink .layui-side-menu .button-box .box-none{
+    display: none;
+}
+
+.layadmin-side-shrink .layui-side-menu .button-box .box-block{
+    display: block;
+}
+
+.button-box{
+    width:220px;
+    height: 80px;
+    line-height: 42px;
+    position: fixed;
+    bottom: 0;
+}
+
+/*天气日期*/
+.date-weather-panel{
+    width:220px;
+    overflow: hidden;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding:0 20px;
+    color:#fff;
+    position: fixed;
+    left: 0;
+    bottom: 43px;
+    z-index: 1002;
+}
+
+.weather-bar{
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+}
+.weather-imgbox{
+    -webkit-box-flex: 0;
+    -webkit-flex: none;
+    -ms-flex: none;
+    flex: none;
+    width: 18px;
+    height: 18px;
+    overflow: hidden;
+    align-self: center;
+    margin-right: 5px;
+}
+.weather-imgbox img{
+    width:100%;
+}
+.weather-infor{
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    box-sizing: border-box;
+    align-self: center;
+}
+/*限行*/
+.layadmin-side-shrink .layui-side-menu .button-box .limit-bar{
+    padding-left: 10px !important;
+}
+
+.limit-bar{
+    width:220px;
+    height: 42px;
+    line-height: 42px;
+    color:#fff;
+    font-size: 12px;
+    padding-left: 30px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+}
+
+/*限号*/
+.xh-span{
+    padding:2px 5px;
+    color:#fff;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    background:#FFB800;
+}
+.xh-and{
+    margin:0 2px;
+}

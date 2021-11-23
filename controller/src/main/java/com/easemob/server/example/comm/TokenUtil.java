@@ -29,19 +29,16 @@ public class TokenUtil {
      * get token from server
      */
     static {
-        /*InputStream inputStream = TokenUtil.class.getClassLoader().getResourceAsStream("config.properties");
+       /* InputStream inputStream = TokenUtil.class.getClassLoader().getResourceAsStream("config.properties");
         Properties prop = new Properties();
         try {
             prop.load(inputStream);
         } catch (IOException e) {
             logger.error(e.getMessage());
-        }
-        GRANT_TYPE = prop.getProperty("GRANT_TYPE");
-        CLIENT_ID = prop.getProperty("CLIENT_ID");
-        CLIENT_SECRET = prop.getProperty("CLIENT_SECRET");*/
-        GRANT_TYPE  = EasemobAPI.GRANT_TYPE;
-        CLIENT_ID  = EasemobAPI.CLIENT_ID;
-        CLIENT_SECRET  = EasemobAPI.CLIENT_SECRET;
+        }*/
+        GRANT_TYPE = "client_credentials";
+        CLIENT_ID = "YXA6HkH5kHtuEemCKO-dKnCCog";
+        CLIENT_SECRET = "YXA69732UGb704UJv3JFg1d3FVJM7n0";
         BODY = new Token().clientId(CLIENT_ID).grantType(GRANT_TYPE).clientSecret(CLIENT_SECRET);
     }
 

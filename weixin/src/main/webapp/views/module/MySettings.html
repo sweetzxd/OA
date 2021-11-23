@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" type="text/css" href="/resources/css/font/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="/resources/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/resources/css/public.css"/>
+    <link rel="stylesheet" type="text/css" href="/resources/css/custom.css"/>
+    <link rel="stylesheet" type="text/css" href="/resources/css/contact.css"/>
+    <script type='text/javascript' src='/resources/js/jquery.min.js' charset='utf-8'></script>
+    <script type='text/javascript' src='/resources/js/util/login.js' charset='utf-8'></script>
+    <title>我的</title>
+</head>
+<body>
+<!-- 头部begin -->
+<div class="header-bar box-bar">
+    <div class="header-bar-title">我的</div>
+</div>
+<!-- 头部end -->
+<!-- 底部begin -->
+<div class="footer-bar box-bar">
+    <a href="/views/index.html" class="footer-list box-bar-list">
+        <p class="footer-list-imgbox li1"></p>
+        <p class="footer-list-infor">首页</p>
+    </a>
+    <a href="/views/module/MenuPages.html" class="footer-list box-bar-list">
+        <p class="footer-list-imgbox li2"></p>
+        <p class="footer-list-infor">功能</p>
+    </a>
+    <a href="/views/module/AddressList.html" class="footer-list box-bar-list">
+        <p class="footer-list-imgbox li3"></p>
+        <p class="footer-list-infor">通讯</p>
+    </a>
+    <a href="/views/module/MySettings.html" class="footer-list box-bar-list on">
+        <p class="footer-list-imgbox li4"></p>
+        <p class="footer-list-infor">我的</p>
+    </a>
+</div>
+<!-- 底部end -->
+<div class="marin-wrap">
+    <ul class='list'>
+        <li class='listh listuse'>
+            <div class='userlt'><img src="/resources/images/usertou.png"/></div>
+            <div class='listamo'>
+                <div class='userm'></div>
+                <div class='userz'></div>
+            </div>
+            <div class="listrt">
+                <p><img src="/resources/images/userxie.png"/></p>
+                <p class="phone"></p>
+            </div>
+        </li>
+    </ul>
+    <ul class="useul">
+        <li>
+            <a href="javascript:;" class="">安全设置</a>
+        </li>
+        <li class="useli">
+            <a href="javascript:;" class="">清理缓存</a>
+        </li>
+        <li>
+            <a href="javascript:;" class="">关于我们</a>
+        </li>
+        <li>
+            <a href="javascript:;" class="">用户协议</a>
+        </li>
+        <li>
+            <a href="javascript:;" class="">当前版本</a>
+        </li>
+        <li>
+            <a href="javascript:;" class="">客服热线</a>
+        </li>
+    </ul>
+    <div class="quit"><input type="button" value="退出" onclick="logout()"/></div>
+</div>
+<script type='text/javascript' src='/resources/scripts/common/account.js' charset='utf-8'></script>
+<script>
+    $(function () {
+        $.ajax({
+            type: "POST",
+            url: "/weixin/mysettings/getuser.do",
+            dataType: "json",
+            success: function (val) {
+                var emp = val.data;
+                console.log(emp)
+                $('.userm').text(emp.name);
+                $('.phone').text(emp.phone);
+                $('.userz').text(emp.deptname);
+                if(emp.photo!=null && emp.photo!=""){
+                    $('.userlt img').attr("src",emp.photo);
+                }
+            },
+            error: function (message) {
+            }
+        });
+    })
+</script>
+</body>
+</html>

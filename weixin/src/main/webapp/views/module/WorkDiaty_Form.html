@@ -1,0 +1,236 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <script type='text/javascript' src='/views/common/css.js' charset='utf-8'></script>
+    <script type='text/javascript' src='/views/common/up-js.js' charset='utf-8'></script>
+    <title>填写日志</title>
+    <style type="text/css">
+        .choice{
+            position: relative;
+        }
+        .radio{
+            margin-left: 20px;
+        }
+        .choice .radio{
+            position: relative;
+            display: inline-block;
+            font-weight: 400;
+            color: #0c4757;
+            padding-left: 25px;
+            cursor: pointer;
+        }
+        .choice .radio input{
+            position: absolute;
+            left: -9999px;
+        }
+        .choice .radio i{
+            display: block;
+            position: absolute;
+            top: 6px;
+            left: 0;
+            width: 15px;
+            height: 15px;
+            outline: 0;
+            border: 1px solid #47a8c0;
+            background: #FFFFFF;
+            border-radius: 50%;
+            transition: border-color .3s;
+            -webkit-transition: border-color .3s;
+        }
+        .choice .radio input:checked+i{
+            border-color: #0c4757;
+        }
+        .choice .radio input+i:after{
+            position: absolute;
+            content: '';
+            top: 2px;
+            left: 2px;
+            width: 9px;
+            height: 9px;
+            border-radius: 100%;
+            background-color: #4EEE94;
+            opacity: 0;
+            transition: opacity .1s;
+            -webkit-transition: opacity .1s;
+        }
+        .choice .radio input:checked+i:after{
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+<!-- 头部begin -->
+<div class="header-bar box-bar">
+    <a href="javascript:oa.htmlgoback();" class="header-bar-left cell"><i class="iconfont">&#xe606;</i></a>
+    <div class="header-bar-title">填写日志</div>
+</div>
+<!-- 头部end -->
+<!-- 底部begin -->
+<div class="footer-oper-bar box-bar">
+    <div class="box-bar-list mar-r">
+        <a href="javascript:formsave();" class="footer-oper-save">保存</a>
+    </div>
+    <div class="box-bar-list">
+        <a href="javascript:oa.htmlgoback();" class="footer-oper-cancel">取消</a>
+    </div>
+</div>
+<!-- 底部end -->
+<div class="marin-wrap">
+    <div class="my-wrap">
+        <div class="my-mission pad-tb mar-b">
+            <div class="task-body-title" id="formtitle"></div>
+            <div class="my-wrap">
+                <form id="formtable">
+                    <input type="hidden" id="joblogId" name="joblogId"
+                           class="input-style pull-left" maxlength="30" placeholder="" value="">
+                    <input type="hidden" id="user" name="user"
+                           class="input-style pull-left" maxlength="40" placeholder="" value="">
+                    <div class="circumstance-bar box-bar">
+                        <div class="circumstance-title cell">标题:</div>
+                        <div class="objection-right box-bar-list">
+                            <input type="text" id="joblogTitle" name="joblogTitle"  class="input-style pull-left" value=""/>
+                        </div>
+                    </div>
+                    <div class="circumstance-bar box-bar">
+                        <div class="circumstance-title cell">分类:</div>
+                        <div class="objection-right box-bar-list layui-input-block choice">
+                            <label class="radio"><input type="radio" id="joblogType" name="joblogType"  value="周报" />周报<i></i></label>
+                            <label class="radio"><input type="radio" id="joblogType2" name="joblogType"  value="日报" />日报<i></i></label>
+                        </div>
+                    </div>
+                    <div class="circumstance-bar box-bar">
+                        <div class="circumstance-title cell">工作情况:</div>
+                        <div class=" box-bar-list">
+                            <textarea style="padding:10px;background-color: #FFFAFA;" id="content" name="content"  class="input-style pull-left" rows="10" cols="10" maxlength="500"></textarea>
+                        </div>
+                    </div>
+                    <div class="circumstance-bar box-bar">
+                        <div class="circumstance-title cell">开始时间</div>
+                        <div class="objection-right box-bar-list">
+                            <input type="text" id="startTime" name="startTime" readonly="" class="input-style pull-left" placeholder="" value="">
+                        </div>
+                    </div>
+                    <div class="circumstance-bar box-bar">
+                        <div class="circumstance-title cell">结束时间</div>
+                        <div class="objection-right box-bar-list">
+                            <input type="text" id="endTime" name="endTime" readonly="" class="input-style pull-left" placeholder="" value="">
+                        </div>
+                    </div>
+                    <div class="circumstance-bar box-bar">
+                        <div class="circumstance-title cell">上报人</div>
+                        <div class="objection-right box-bar-list">
+                            <div class="choose-contacts-bar" id="leader_name" onclick="oA.open(this,'leader', 'employees', 'single')">
+                            </div>
+                            <input type="hidden" id="leader_Value" name="leader" value=""/>
+                        </div>
+                    </div>
+                    <div class="circumstance-bar box-bar">
+                        <div class="circumstance-title cell">抄送人</div>
+                        <div class="objection-right box-bar-list">
+                            <div class="choose-contacts-bar" id="csUser_name" onclick="oA.open(this,'csUser', 'employees', 'more')">
+                            </div>
+                            <input type="hidden" id="csUser_Value" name="csUser" value=""/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="template">
+
+</div>
+<div id="alert-template" hidden></div>
+</body>
+<script type='text/javascript' src='/views/common/down-js.js' charset='utf-8'></script>
+<script>
+    $(function () {
+        var urlval = manyValues();
+        $('#startTime').val(urlval.date==null?getNowFormatDate():urlval.date);
+        $('#endTime').val(urlval.date==null?getNowFormatDate():urlval.date);
+        autoTextarea(document.getElementById("content"));
+        fielddate("startTime");
+        fielddate("endTime");
+        $('#user').val(urlval.userId);
+        $('#deptId').val(urlval.deptid);
+        $('#deptId_name').html(oa.decipher("dept",urlval.deptid));
+
+        if (urlval.recno!=null) {
+            $('#joblogId').val(urlval.recno);
+            $('#user').val(urlval.userId);
+
+            $.ajax({
+                type:"GET",
+                url:"/weixin/joblog/selectjobrecno.do",
+                data:{"recno":urlval.recno},
+                dataType:"json",
+                async: false,
+                success:function(data){
+                    console.log(data);
+                    $('#joblogTitle').val(data.joblogTitle);
+                    if(data.joblogType == "周报"){
+                        $('#joblogType').checked;
+                    }else {
+                        $('#joblogType2').checked;
+                    }
+                    $('#content').val(data.content);
+                    $('#startTime').val(oa.formatdate("date",data.startTime));
+                    $('#endTime').val(oa.formatdate("date",data.endTime));
+                    $("#leader_name").html(oa.decipher("user",data.leader));
+                    $('#leader').val(data.leader);
+                    $("#csUser_name").html(oa.decipher("users",data.csUser));
+                    $('#csUser').val(data.csUser);
+                },error:function (d) {
+
+                }
+            });
+
+        }
+    });
+
+    function formsave(type) {
+        var urlval = manyValues();
+        var saveurl = "/weixin/joblog/insert.do?userid="+urlval.userid;
+        if (urlval.recno!=null) {
+            saveurl = "/weixin/joblog/update.do?userid="+urlval.userid;
+        }
+        var date = $("#formtable").serializeArray();
+        console.log(date);
+        $.ajax({
+            type: "POST",
+            url: saveurl,
+            data: date,
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            cache: false,
+            dataType: "json",
+            success: function (data) {
+                window.android.finish();
+            },
+            error: function () {
+                window.android.finish();
+            }
+        });
+    }
+    function getNowFormatDate() {
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator1 + month + seperator1 + strDate;
+        return currentdate;
+    }
+</script>
+</html>

@@ -47,6 +47,9 @@ public class TaskSenderServiceImpl implements TaskSenderService {
     }
 
     @Override
+    public void endTask(String wkflwId,String procid) { taskSenderDao.endTask(wkflwId,procid); }
+
+    @Override
     public List<TaskSender> selectAll() {
         return taskSenderDao.selectAll();
     }

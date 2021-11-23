@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/public.css"/>
+    <link rel="stylesheet" type="text/css" href="css/common.css"/>
+    <!-- 分类 -->
+    <link rel="stylesheet" type="text/css" href="css/ectouch.css"/>
+    <title>选择联系人</title>
+</head>
+<body class="bgwhite">
+<!-- 头部begin -->
+<div class="header-bar box-bar">
+    <div class="header-bar-title head-text-left">选择联系人</div>
+</div>
+<!-- 头部end -->
+<!-- 底部begin -->
+<div class="footer-oper-bar box-bar" id="footer">
+    <div class="box-bar-list mar-r">
+        <a href="javascript:;" class="footer-oper-save">确认</a>
+    </div>
+    <div class="box-bar-list">
+        <a href="javascript:;" class="footer-oper-cancel">取消</a>
+    </div>
+</div>
+<!-- 底部end -->
+<div class="marin-wrap">
+    <div class="out-fix-banner">
+        <!-- 已选 -->
+        <div class="selected-bar top-x-scroll">
+            <div class="inner-selected-bar" id="onSelected"></div>
+        </div>
+        <!-- 搜索begin -->
+        <div class="search-bar box-bar">
+            <div class="box-bar-list mar-r"><input class="input-style searchText" type="text" placeholder="请输入搜索内容">
+            </div>
+            <div class="cell corb" id="searchBtn">搜索</div>
+        </div>
+        <!-- 搜索end -->
+    </div>
+    <script type="text/html" id="leftMenu">
+        <ul>
+            {{each dataMenu}}
+            <li class="{{if $index == 0}}active{{/if}} bold">{{$value.name}}</li>
+            {{each $value.children}}
+            <li>{{$value.name}}</li>
+            {{/each}}
+            {{/each}}
+        </ul>
+    </script>
+    <script type="text/html" id="rct">
+        {{each data}}
+        <section class="menu-right padding-all j-content padleft">
+            <h5 class="box-bar">
+                <div class="box-bar-list">{{$value.name}}</div>
+                <div class="cell">
+                    {{if $value.type==false}}
+                    <span class="all-select{{if $value.children.length < 1}}-none{{/if}}">全选</span>{{/if}}
+                </div>
+            </h5>
+            <ul>
+                {{if $value.children.length}}
+                {{each $value.children}}
+                <li class="w-3 hasperson" data-uid="{{$value.userName}}">
+                    {{if $value.photo == null || $value.photo == ''}}
+                        <img class="w-h" src="/upload/photo/touxiang/头像1.png"/>
+                    {{else}}
+                        <img class="w-h" src="{{$value.photo}}"/>
+                    {{/if}}
+                    <span>{{$value.staffName}}</span>
+                </li>
+                {{/each}}
+                {{else}}
+                <li class="w-3 noperson"></li>
+                {{/if}}
+            </ul>
+        </section>
+        {{/each}}
+    </script>
+
+    <div class="menu-left scrollbar-none" id="menuLeftDiv"></div>
+    <div id="content"></div>
+</div>
+<script src="/resources/js/jquery.min.js"></script>
+<script src="/resources/js/layer.js"></script>
+<script src="/resources/js/template.min.js"></script>
+<script src="/resources/js/LetterLibaray.js"></script>
+<script src="/resources/js/myCustomPage.js"></script>
+<script src="/resources/js/axios-loader.js"></script>
+<script src="/views/formpage/employees/js/index.js"></script>
+<script>
+    $(function () {
+        if(window.navigator.userAgent.indexOf('iPhone') > 0) {
+          $("#content").css({height:550,overflow: 'auto'});
+        }
+    })
+    var diva=document.getElementsByClassName("w-t");
+    var wid=diva.offsetWidth;
+    function jt(){//定义监听a大小变化的函数
+        var wid1=diva.offsetWidth;//获取宽度
+        if(wid1!=wid){
+            wid=wid1;
+            resizea();
+        }
+        setTimeout("jt",100);
+    }
+    function resizea(){
+        diva.style.height=wid;//改变b的大小
+    }
+    jt();
+</script>
+</body>
+</html>

@@ -20,4 +20,5 @@ public interface FileService {
     int selectAllTermsCont(File file);
 
     void deletes(@Param("fileId") String fileId, @Param("deleteName") String deleteName, @Param("deleteTime") Timestamp deleteTime);
+
 }

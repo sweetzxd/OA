@@ -18,17 +18,16 @@ import java.util.Vector;
 public class MessageUtil {
 
     public static String addArticle(String users, String msg,String url) {
-        ArrayList<String> list = new ArrayList<String>(0);
-        Vector<String> vuser = StringHelper.string2Vector(users, ";");
         if (users != null && !users.equals("")) {
-            for (int i = 0, len = vuser.size(); i < len; i++) {
-                list.add(vuser.get(i));
+            try {
+                Vector<String> strings = StringHelper.string2Vector(users, ";");
+                if(strings!=null && strings.size()>0) {
+                    JPushAllService.jpush(strings, msg, url);
+                }
+            }catch (Exception e){
+                e.getLocalizedMessage();
+                System.out.println(e.getLocalizedMessage());
             }
-        }
-        try {
-            JPushAllService.jpushAll(list, msg, url);
-        }catch (Exception e){
-            e.getLocalizedMessage();
         }
         return "1";
     }
@@ -36,6 +35,6 @@ public class MessageUtil {
     @Test
     public void test() {
         String url = "/task/tasksendpage.do?procId=FlowTask2019041400004&wkflwId=tysplc2018110700002&nodeId=txspnr2018110700001&workOrderNO=ZA2019041400007";
-        addArticle("zhenxudong;", "请处理管理员发起的流程审批！",url);
+        addArticle("yangning", "请处理管理员发起的流程审批！",url);
     }
 }

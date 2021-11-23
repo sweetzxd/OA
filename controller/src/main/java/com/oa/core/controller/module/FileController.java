@@ -11,10 +11,7 @@ import com.oa.core.service.module.FileService;
 import com.oa.core.service.module.FilepermissionService;
 import com.oa.core.service.module.FiletypeService;
 import com.oa.core.service.system.RoleDefinesService;
-import com.oa.core.util.FileUtil;
-import com.oa.core.util.LogUtil;
-import com.oa.core.util.PrimaryKeyUitl;
-import com.oa.core.util.ToNameUtil;
+import com.oa.core.util.*;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +21,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.*;
 
 /**
@@ -58,14 +59,26 @@ public class FileController {
             String fieldValue = file.getFileAdd();
             String filesHtml = "";
             if (fieldValue != null && fieldValue.contains("|")) {
+                ConfParseUtil cp = new ConfParseUtil();
+                String catPath = cp.getProperty("upload_file");
                 String[] files = fieldValue.split("\\|");
                 for (int i = 0; i < files.length; i++) {
                     java.io.File f = new java.io.File(files[i]);
+                    long size = 0L;
+                    try {
+                        FileInputStream fis = new FileInputStream(catPath+f);
+                        FileChannel fc = fis.getChannel();
+                        size = fc.size();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     String fileName = f.getName();
                     fileName = fileName.substring(fileName.indexOf("-") + 1);
                     filesHtml += "<tr id='upload-" + i + "'><td>";
                     filesHtml += "<a href='/" + files[i] + "' data-value='" + files[i] + "' download='" + fileName + "' title='点击下载 " + fileName + "'>" + fileName + "</a></td>";
-                    filesHtml += "<td>" + FileHelper.getPrintSize(f.length()) + "</td>";
+                    filesHtml += "<td>" + FileHelper.getPrintSize(size) + "</td>";
                     filesHtml +="<td><span style='color: #5FB878'>上传成功</span></td>";
                     filesHtml += "<td><a class='layui-btn layui-btn-xs layui-btn-danger upload-delete' herf='javascript:void(0)' onclick=\"removefile('upload-" + i + "','uploads_fileAdd')\">删除</a></td></tr>";
                 }

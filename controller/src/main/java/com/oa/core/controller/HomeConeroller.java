@@ -4,14 +4,17 @@ import com.oa.core.bean.Loginer;
 import com.oa.core.bean.module.Message;
 import com.oa.core.bean.module.Schedule;
 import com.oa.core.bean.system.TaskSender;
+import com.oa.core.bean.user.UserComputer;
 import com.oa.core.bean.util.PageUtil;
 import com.oa.core.helper.DateHelper;
 import com.oa.core.interceptor.Logined;
 import com.oa.core.service.module.MessageService;
 import com.oa.core.service.module.ScheduleService;
 import com.oa.core.service.system.TaskSenderService;
+import com.oa.core.service.user.UserComputerService;
 import com.oa.core.service.util.TableService;
 import com.oa.core.util.*;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,17 +36,19 @@ public class HomeConeroller {
     TableService tableService;
     @Autowired
     ScheduleService scheduleService;
+    @Autowired
+    UserComputerService userComputerService;
+
     @Logined
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public ModelAndView home(HttpServletRequest request) {
         ModelAndView mav = new ModelAndView("home");
         Loginer loginer = (Loginer) request.getSession().getAttribute("loginer");
         String userId = null;
-        String userMenu = null;
         if (loginer != null) {
             userId = loginer.getId();
-            MenuUtil mu = new MenuUtil();
-            userMenu = mu.getMenu(userId);
+           //MenuUtil mu = new MenuUtil();
+           //userMenu = mu.getMenu(userId);
         }
         List<TaskSender> taskSender = taskSenderService.selectUser("'"+userId+"'");
         try {
@@ -58,9 +63,28 @@ public class HomeConeroller {
             LogUtil.sysLog("Exception:"+e);
             mav.addObject("msgcont", 0);
         }
-        mav.addObject("userMenu", userMenu);
+        WeatherUtil weather = new WeatherUtil();
+        mav.addObject("weather", weather.getWeather(Const.LOCATION));
+        mav.addObject("restrict", RestrictUtil.getRestrict());
+        //mav.addObject("userMenu", userMenu);
         mav.addObject("taskNum", taskSender.size());
         return mav;
+    }
+
+    @Logined
+    @RequestMapping(value = "/getusermenu", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public String getUserMenu(HttpServletRequest request){
+        Loginer loginer = (Loginer) request.getSession().getAttribute("loginer");
+        String role = (String) request.getSession().getAttribute("role");
+        UserComputer userComputer = userComputerService.selectById(loginer.getId());
+        JSONObject json = new JSONObject(userComputer.getUserMenu());
+        JSONArray topmenu = json.getJSONArray("topmenu");
+        if(role.indexOf("admin;")>=0) {
+            String admin = "{id:\"admin\",num:0,title:\"系统管理\",type:0,menus:[{id:\"adminManage\",title:\"系统管理\",url:\"/adminManage.do\"}]};";
+            topmenu.put(new JSONObject(admin));
+        }
+        return topmenu.toString();
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -110,6 +134,10 @@ public class HomeConeroller {
         field.add("recordTime");
         List<String> where = new ArrayList<String>();
         where.add("tzggl18111002='通知'");
+        if(!userId.equals("admin")) {
+            where.add("ckr1906060002 like ('%" + userId + ";%')");
+            where.add("recorderNO not in (select glzj190606001 from ydzt190606001 where curStatus=2 and dxr1906060001='"+userId+"')");
+        }
         String sql = MySqlUtil.getSql(field, "tzgg181110001", where);
         List<Map<String,Object>> tzList = tableService.selectSqlMapList(sql);
         if(tzList.size()>8){
@@ -135,6 +163,16 @@ public class HomeConeroller {
         mav.addObject("ggList", ggList);
         mav.addObject("usermenu", usermenu);
         return mav;
+    }
+
+
+    @RequestMapping(value = "/home/getrestrict", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public String getRestrict() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("restrict", RestrictUtil.getRestrict());
+        jsonObject.put("success", 1);
+        return jsonObject.toString();
     }
 
 }

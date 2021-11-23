@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>常用下载</title>
+    <script src="../resources/js/system/qrcode.js"></script>
+</head>
+<body>
+<div>
+    <div>下载华腾APP</div>
+    <div id="qrcode"></div>
+</div>
+<script>
+    var host = window.location.host;
+    var port = window.location.port;
+    var qrcode = new QRCode(document.getElementById("qrcode"), {
+        text: host+"/upload/package/htoa.apk",
+        width: 128,
+        height: 128,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
+</script>
+</body>
+</html>

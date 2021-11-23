@@ -81,6 +81,7 @@ public class TaskSender implements Serializable {
 
     private int startRow;
     private int endRow;
+    private  String recordTimeShot;
 
     public String getWorkOrderNO() {
         return workOrderNO;
@@ -272,5 +273,44 @@ public class TaskSender implements Serializable {
 
     public void setEndRow(int endRow) {
         this.endRow = endRow;
+    }
+
+    public String getRecordTimeShot() {
+        return recordTimeShot;
+    }
+
+    public void setRecordTimeShot(String recordTimeShot) {
+        this.recordTimeShot = recordTimeShot;
+    }
+
+    @Override
+    public String toString() {
+        return "TaskSender{" +
+                "workOrderNO='" + workOrderNO + '\'' +
+                ", sameOrderNO='" + sameOrderNO + '\'' +
+                ", wkflwID='" + wkflwID + '\'' +
+                ", procID='" + procID + '\'' +
+                ", wkfNode='" + wkfNode + '\'' +
+                ", accepter='" + accepter + '\'' +
+                ", refLinkUrl='" + refLinkUrl + '\'' +
+                ", stress='" + stress + '\'' +
+                ", msgStatus=" + msgStatus +
+                ", taskTitle='" + taskTitle + '\'' +
+                ", linkKey='" + linkKey + '\'' +
+                ", linkRecordID='" + linkRecordID + '\'' +
+                ", remindTime=" + remindTime +
+                ", finishTime=" + finishTime +
+                ", remindPeriod=" + remindPeriod +
+                ", curStatus=" + curStatus +
+                ", recordName='" + recordName + '\'' +
+                ", recordTime=" + recordTime +
+                ", modifyName='" + modifyName + '\'' +
+                ", modifyTime=" + modifyTime +
+                ", deleteName='" + deleteName + '\'' +
+                ", deleteTime=" + deleteTime +
+                ", startRow=" + startRow +
+                ", endRow=" + endRow +
+                ", recordTimeShot='" + recordTimeShot + '\'' +
+                '}';
     }
 }

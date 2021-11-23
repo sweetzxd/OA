@@ -1,0 +1,183 @@
+[
+  {
+    "title": "我的页面",
+    "field": [
+      {
+        "name": "wdym181112002_dxwb181112003",
+        "length": 50,
+        "placeholder": "",
+        "title": "单行文本",
+        "type": "text",
+        "decimal": 0,
+        "value": "",
+        "required": 1,
+        "option": []
+      },
+      {
+        "name": "wdym181112002_dxwb181112004",
+        "length": 1024,
+        "placeholder": "",
+        "title": "多行文本",
+        "type": "textarea",
+        "decimal": 0,
+        "value": "",
+        "required": 0,
+        "option": []
+      },
+      {
+        "name": "wdym181112002_dxr1811120003",
+        "length": 200,
+        "placeholder": "",
+        "title": "单选人",
+        "type": "user",
+        "decimal": 0,
+        "value": "admin",
+        "required": 1,
+        "option": []
+      },
+      {
+        "name": "wdym181112002_dxr1811120004",
+        "length": 200,
+        "placeholder": "",
+        "title": "多选人",
+        "type": "users",
+        "decimal": 0,
+        "value": "",
+        "required": 0,
+        "option": []
+      },
+      {
+        "name": "wdym181112002_dxbm181112003",
+        "length": 200,
+        "placeholder": "",
+        "title": "单选部门",
+        "type": "dept",
+        "decimal": 0,
+        "value": "",
+        "required": 1,
+        "option": []
+      },
+      {
+        "name": "wdym181112002_dxbm181112004",
+        "length": 200,
+        "placeholder": "",
+        "title": "多选部门",
+        "type": "depts",
+        "decimal": 0,
+        "value": "",
+        "required": 0,
+        "option": []
+      },
+      {
+        "name": "wdym181112002_xdtjd18111201",
+        "length": 200,
+        "placeholder": "",
+        "title": "携带添加(单)",
+        "type": "form",
+        "decimal": 0,
+        "value": "",
+        "required": 1,
+        "option": []
+      },
+      {
+        "name": "wdym181112002_xdtjd18111202",
+        "length": 200,
+        "placeholder": "",
+        "title": "携带添加(多)",
+        "type": "forms",
+        "decimal": 0,
+        "value": "",
+        "required": 0,
+        "option": []
+      },
+      {
+        "name": "wdym181112002_dx18111200003",
+        "length": 32,
+        "placeholder": "",
+        "title": "单选",
+        "type": "select",
+        "decimal": 0,
+        "value": "",
+        "required": 1,
+        "option": [{"id":"1","name":"选项一"},{"id":"2","name":"选项二"},{"id":"3","name":"选项三"},{"id":"4","name":"选项四"}]
+      },
+      {
+        "name": "wdym181112002_dx18111200004",
+        "length": 256,
+        "placeholder": "",
+        "title": "多选",
+        "type": "selects",
+        "decimal": 0,
+        "value": "",
+        "required": 0,
+        "option": [{"id":"1","name":"选项一"},{"id":"2","name":"选项二"},{"id":"3","name":"选项三"},{"id":"4","name":"选项四"}]
+      },
+      {
+        "name": "wdym181112002_rqxz181112002",
+        "length": 10,
+        "placeholder": "",
+        "title": "日期选择",
+        "type": "date",
+        "decimal": 0,
+        "value": "",
+        "required": 0,
+        "option": []
+      },
+      {
+        "name": "wdym181112002_rqsjx18111202",
+        "length": 19,
+        "placeholder": "",
+        "title": "日期时间选择",
+        "type": "datetime",
+        "decimal": 0,
+        "value": "",
+        "required": 1,
+        "option": []
+      },
+      {
+        "name": "wdym181112002_zs18111200002",
+        "length": 20,
+        "placeholder": "",
+        "title": "整数",
+        "type": "int",
+        "decimal": 0,
+        "value": "",
+        "required": 1,
+        "option": []
+      },
+      {
+        "name": "wdym181112002_xs18111200002",
+        "length": 40,
+        "placeholder": "",
+        "title": "小数",
+        "type": "decimal",
+        "decimal": 2,
+        "value": "",
+        "required": 1,
+        "option": []
+      },
+      {
+        "name": "wdym181112002_dwjsc18111202",
+        "length": 1024,
+        "placeholder": "",
+        "title": "单文件上传",
+        "type": "upload",
+        "decimal": 0,
+        "value": "",
+        "required": 0,
+        "option": []
+      },
+      {
+        "name": "wdym181112002_xzdwj18111202",
+        "length": 1024,
+        "placeholder": "",
+        "title": "选择多文件",
+        "type": "uploads",
+        "decimal": 0,
+        "value": "",
+        "required": 0,
+        "option": []
+      }
+    ]
+  }
+]

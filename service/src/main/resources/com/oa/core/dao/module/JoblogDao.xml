@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.oa.core.dao.module.JoblogDao" >
     <insert id="insert">
-    INSERT INTO joblog (joblogId, user, deptId, leader,
-      startTime, endTime, content, finish, file, remark, state, status, reason,
+    INSERT INTO joblog (joblogId, user,leader,csUser,joblogTitle,joblogType,
+      content, finish,startTime,endTime, file, remark, state, status, reason,
       curStatus, linkRecorderNO, reserveField, recordName,
       recordTime, modifyName, modifyTime,
       deleteName, deleteTime)
-    VALUES (#{joblogId}, #{user}, #{deptId}, #{leader},
-      #{startTime}, #{endTime}, #{content},#{finish},#{file},#{remark},#{state},#{status},#{reason},
+    VALUES (#{joblogId}, #{user}, #{leader},#{csUser},#{joblogTitle},#{joblogType},
+      #{content},#{finish},#{startTime},#{endTime},#{file},#{remark},#{state},#{status},#{reason},
       2,#{linkRecorderNO},#{reserveField}, #{recordName},
       #{recordTime}, #{modifyName}, #{modifyTime},
       #{deleteName}, #{deleteTime})
@@ -20,12 +20,14 @@
         UPDATE joblog
         <set>
             <if test="user!=null and user!=''">user =#{user},</if>
-            <if test="deptId!=null and deptId!=''">deptId =#{deptId},</if>
             <if test="leader!=null and leader!=''">leader =#{leader},</if>
-            <if test="startTime!=null and startTime!=''">startTime =#{startTime},</if>
-            <if test="endTime!=null and endTime!=''">endTime =#{endTime},</if>
+            <if test="joblogTitle!=null and joblogTitle!=''">joblogTitle =#{joblogTitle},</if>
+            <if test="csUser!=null and csUser!=''">csUser =#{csUser},</if>
+            <if test="joblogType!=null and joblogType!=''">joblogType =#{joblogType},</if>
             <if test="content!=null and content!=''">content =#{content},</if>
             <if test="finish!=null and finish!=''">finish =#{finish},</if>
+            <if test="startTime!=null and startTime!=''">startTime =#{startTime},</if>
+            <if test="endTime!=null and endTime!=''">endTime =#{endTime},</if>
             <if test="file!=null and file!=''">file =#{file},</if>
             <if test="remark!=null and remark!=''">remark =#{remark},</if>
             <if test="state!=null and state!=''">state =#{state},</if>
@@ -45,6 +47,7 @@
             <if test="user!=null and user!=''">and user =#{user}</if>
             <if test="deptId!=null and deptId!=''">and deptId =#{deptId}</if>
             <if test="leader!=null and leader!=''">and leader =#{leader}</if>
+            <if test="csUser!=null and csUser!=''">and (csUser like concat('%', #{csUser}, '%') or leader =#{csUser})</if>
             <if test="state!=null and state!=''">and state =#{state}</if>
             <if test="status!=null and status!=''">and status =#{status}</if>
             AND curStatus=2
@@ -58,13 +61,95 @@
             <if test="user!=null and user!=''">and user =#{user}</if>
             <if test="deptId!=null and deptId!=''">and deptId =#{deptId}</if>
             <if test="leader!=null and leader!=''">and leader =#{leader}</if>
+            <if test="csUser!=null and csUser!='' and leader!=null and leader!=''" >or (csUser like concat('%', #{csUser}, '%'))</if>
             <if test="state!=null and state!=''">and state =#{state}</if>
             <if test="status!=null and status!=''">and status =#{status}</if>
             AND curStatus=2
         </where>
     </select>
+    <select id="selectAllJobLog" resultType="Joblog">
+        SELECT * FROM joblog
+    </select>
     <delete id="deletes">
       UPDATE joblog SET curStatus=0,deleteName=#{deleteName},deleteTime=#{deleteTime} WHERE joblogId in (${joblogId}) AND curStatus=2
    </delete>
+    <select id="selectJobLogByMonth" parameterType="map" resultType="map">
+        select d.days as num,(case when joblogId is not null then 1 when joblogId is null then 0 END) as type from (SELECT ADDDATE(y.first, x.d - 1) as d,x.d as days
+        FROM
+        (
+        SELECT @xi:=@xi+1 as d from
+        (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5) xc1,
+        (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7) xc2,
+        (SELECT 1 ) xc3,
+        (SELECT @xi:=0) xc0
+        ) X,
+        (
+        SELECT '${year}-${month}-01' - INTERVAL DAY('${year}-${month}-01') - 1 DAY AS first,
+        DAY(LAST_DAY('${year}-${month}-01')) AS last) Y
+        WHERE x.d &lt;= y.last) d LEFT JOIN (select * from joblogview where YEAR(date) = ${year} and MONTH(date) = ${month} and user =#{userid} ) as c on d.days=c.day GROUP BY num,type
+    </select>
+    <select id="selectJoblogByDay" parameterType="map" resultType="map">
+         select * from joblogview where YEAR(date) = ${year} and MONTH(date) = ${month} and Day(date) = ${day} and user =#{userid} and curStatus = 2
+    </select>
+    <select id="selectJobLogByCsuser" parameterType="map" resultType="Joblog">
+        select * from joblogview
+        <where>
+            <if test="year!=null and year!=''">and YEAR(date) = ${year}</if>
+            <if test="month!=null and month!=''">and MONTH(date) = ${month}</if>
+            <if test="day!=null and day!=''">and Day(date) = ${day}</if>
+            <if test="userid!=null and userid!=''">and ((csUser like concat('%', #{userid}, '%')) OR leader like concat('%', #{userid}, '%'))</if>
+            <if test="rolename!=null and rolename!=''">and (user in (select userName from roleline where (roleTitle like concat('%', #{rolename}, '%'))))</if>
+            <if test="user!=null and user!=''">and (user in (select userName from userinfo where (staffName like concat('%', #{user}, '%'))))</if>
+            <if test="deptname!=null and deptname!=''">and (user in (select userName from userinfo where (deptName like concat('%', #{deptname}, '%'))))</if>
+        </where>
+        AND curStatus = 2 ORDER BY startTime DESC
+
+    </select>
+    <select id="selectJoblogByCsuserMonth" parameterType="map" resultType="map">
+         select d.days as num,(case when joblogId is not null then 1 when joblogId is null then 0 END) as type from (SELECT ADDDATE(y.first, x.d - 1) as d,x.d as days
+        FROM
+        (
+        SELECT @xi:=@xi+1 as d from
+        (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5) xc1,
+        (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7) xc2,
+        (SELECT 1 ) xc3,
+        (SELECT @xi:=0) xc0
+        ) X,
+        (
+        SELECT '${year}-${month}-01' - INTERVAL DAY('${year}-${month}-01') - 1 DAY AS first,
+        DAY(LAST_DAY('${year}-${month}-01')) AS last) Y
+        WHERE x.d &lt;= y.last) d LEFT JOIN (select * from joblogview where YEAR(date) = ${year} and MONTH(date) = ${month} and (csUser like concat('%', #{userid}, '%') OR leader like concat('%', #{userid}, '%'))) as c on d.days=c.day GROUP BY num,type
+    </select>
+    <select id="selectJobLogByLeader" parameterType="map" resultType="map">
+        select * from joblog where leader = #{userId} and state = 2 and curStatus = 2 limit #{StartRow},#{EndRow}
+    </select>
+    <select id="selectJobLogByLeaderMonth" parameterType="map" resultType="map">
+        select d.days as num,(case when joblogId is not null then 1 when joblogId is null then 0 END) as type from (SELECT ADDDATE(y.first, x.d - 1) as d,x.d as days
+        FROM
+        (
+        SELECT @xi:=@xi+1 as d from
+        (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5) xc1,
+        (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7) xc2,
+        (SELECT 1 ) xc3,
+        (SELECT @xi:=0) xc0
+        ) X,
+        (
+        SELECT '${year}-${month}-01' - INTERVAL DAY('${year}-${month}-01') - 1 DAY AS first,
+        DAY(LAST_DAY('${year}-${month}-01')) AS last) Y
+        WHERE x.d &lt;= y.last) d LEFT JOIN (select * from joblogview where YEAR(date) = ${year} AND MONTH(date) = ${month} AND leader like concat('%', #{userid}, '%') AND state = 2 AND curStatus = 2) as c on d.days=c.day GROUP BY num,type
+    </select>
+    <select id="selectJoblogByLeaderDay" parameterType="map" resultType="map">
+        select * from joblogview
+        <where>
+            <if test="year!=null and year!=''">and YEAR(date) = ${year}</if>
+            <if test="month!=null and month!=''">and MONTH(date) = ${month}</if>
+            <if test="day!=null and day!=''">and Day(date) = ${day}</if>
+            <if test="userid!=null and userid!=''">and leader like concat('%', #{userid}, '%')</if>
+            <if test="rolename!=null and rolename!=''">and (user in (select userName from roleline where (roleTitle like concat('%', #{rolename}, '%'))))</if>
+            <if test="user!=null and user!=''">and (user in (select userName from userinfo where (staffName like concat('%', #{user}, '%'))))</if>
+            <if test="deptname!=null and deptname!=''">and (user in (select userName from userinfo where (deptName like concat('%', #{deptname}, '%'))))</if>
+        </where>
+        AND curStatus = 2   AND state = 2 ORDER BY startTime DESC
+    </select>
 
 </mapper>

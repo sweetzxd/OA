@@ -73,10 +73,7 @@ public class FlowPageSkipController {
         mode.addObject("formid", formid);
         mode.addObject("wkflwId", wkflwId);
         mode.addObject("tableName", tableId);
-        if(!formid.equals("flowtable2019041900003")||!formid.equals("flowtable2019050900006")||!formid.equals("flowtable2019050900001")){
-            mode.addObject("form", form);
-        }
-        System.out.println(form);
+        mode.addObject("form", form);
         mode.addObject("starnode", "true");
         return mode;
     }
@@ -198,9 +195,7 @@ public class FlowPageSkipController {
         mode.addObject("nodeId", nodeId);
         mode.addObject("table", sqlvalue);
         mode.addObject("tableName", tableId);
-        if(!formid.equals("flowtable2019050900006")){
         mode.addObject("form", form);
-        }
         return mode;
     }
 
@@ -296,11 +291,10 @@ public class FlowPageSkipController {
         mode.addObject("nodeId", nodeId);
         mode.addObject("table", sqlvalue);
         mode.addObject("tableName", tableId);
-        if(!formid.equals("flowtable2019041900003")){
-            mode.addObject("form", form);
-        }
+        mode.addObject("form", form);
         return mode;
     }
+
     @Logined
     @RequestMapping(value = "/flowaddsave/{formid}", method = RequestMethod.POST)
     public ModelAndView formAddSave(HttpServletRequest request, @PathVariable("formid") String formid) {
@@ -347,7 +341,7 @@ public class FlowPageSkipController {
                     }else {
                         String name = table + "_" + fieldName + "_Value";
                         String value = request.getParameter(name);
-                        if (value != null && !value.equals("")) {
+                        if (value != null) {
                             value = new String(value.getBytes("iso-8859-1"), "UTF-8");
                             map.put(fieldName, value);
                         }
@@ -388,7 +382,6 @@ public class FlowPageSkipController {
                 mode = new ModelAndView("redirect:/flowpage/infoviewpage/" + formid + ".do?recno=" + recorderNO + "&wkflwId=" + wkflwId + "&procId=" + procId + "&workOrderNO=" + workOrderNO);
                 //mode = new ModelAndView("redirect:/task/tasksendpage.do?formid=" + formid + "&recno=" + recorderNO + "&wkflwId=" + wkflwId + "&procId=" + procId+"&workOrderNO="+workOrderNO);
                 mode.addObject("msg", "保存成功");
-                System.out.println(mode+"22222222");
                 return mode;
             } else {
                 mode = new ModelAndView("redirect:/flowpage/error.do");

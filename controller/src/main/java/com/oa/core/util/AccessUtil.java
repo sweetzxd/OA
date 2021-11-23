@@ -55,6 +55,7 @@ public class AccessUtil {
                 List<MyUrlRegist> plist = myUrlRegistService.selectAll();
                 menu = nextMenu3(plist);
             } else {
+                accmap = new HashMap<>();
                 List<String> roleids = roleDefinesService.getRoleIds(userName);
                 roleids.add("allemployees");
                 String rolestr = StringUtils.join(roleids, "','");
@@ -374,7 +375,7 @@ public class AccessUtil {
             List<String> where = new ArrayList<>();
             where.add("(recordName='" + userId + "' or recordName='all')");
             String delsql = MySqlUtil.getSql(field, table, where, "order by cdpx181210001 asc");*/
-            String sql = "select cdmc181210001,cdzj181210001,cddz181210001,IFNULL(menuImg,'/upload/menuimg/其他通用.png') as menuImg from wdcyc18121001 w " +
+            String sql = "select cdmc181210001 as name,cdzj181210001 as id,cddz181210001 as url,IFNULL(menuImg,'/upload/menuimg/其他通用.png') as menuImg from wdcyc18121001 w " +
                     "left join myurlregist m on w.cdzj181210001=m.pageId where (w.recordName='" + userId + "' or w.recordName='all')";
             sqlvalue = tableService.selectSqlMapList(sql);
         }
@@ -417,11 +418,18 @@ public class AccessUtil {
 
     public static void setAccmap(String pageid, String userName, String type) {
         Map<String, List<String>> acc = accmap.get(pageid);
+        List<String> user = null;
         if (acc == null) {
             acc = new HashMap<>();
+        }else{
+            user = acc.get(type);
         }
-        List<String> users = Arrays.asList(userName.split(";"));
-        acc.put(type, users);
+        if(user==null){
+            user = new ArrayList<>();
+        }
+        List<String> newusers = StringHelper.string2ArrayList(userName,";");
+        user.addAll(newusers);
+        acc.put(type, user);
         accmap.put(pageid, acc);
     }
 
@@ -566,29 +574,34 @@ public class AccessUtil {
             AccessRights special = accessRightsService.selectTerm(pageid, roles, "special");
             if (special != null) {
                 String val = special.getAccessValue();
-                if (val.equals("loginName")) {
-                    where.add("recordName='" + userId + "'");
-                } else if (val.equals("loginDept")) {
-                    List<String> strings = tableService.selectSql("select userName from employees where department in (select department from employees where userName='" + userId + "')");
-                    String s = StringHelper.list2String(strings, "','");
-                    where.add("recordName in ('" + s + "')");
-                } else if (val.contains("userName-")) {
-                    String[] tp = val.split("-");
-                    where.add(tp[1] + "='" + userId + "'");
-                } else if (val.contains("deptName-")) {
-                    List<String> strings = tableService.selectSql("select userName from employees where department in (select department from employees where userName='" + userId + "')");
+                if(val.contains("gsldName-")){
+
+                }else if(val.contains("roleName-")){
+
+                }else if(val.contains("deptName-")) {
+                    List<String> departmentList = tableService.selectSql("select department from employees where userName='" + userId + "'");
+                    List<String> strings =tableService.selectSql("select deptId from  department WHERE FIND_IN_SET(deptId,getChildrenOfDept('"+departmentList.get(0)+"')) AND deptId not in ('organize') AND curStatus=2");
                     String s = StringHelper.list2String(strings, "','");
                     String[] tp = val.split("-");
                     where.add(tp[1] + " in ('" + s + "')");
-                } else if (val.contains("condition-")) {
+                }else if(val.equals("loginDept")) {
+                    List<String> strings = tableService.selectSql("select userName from employees where department in (select department from employees where userName='" + userId + "')");
+                    String s = StringHelper.list2String(strings, "','");
+                    where.add("recordName in ('" + s + "')");
+                }else if(val.contains("condition-")) {
                     String[] tp = val.split("-");
                     where.add(tp[1]);
-                } else if (val.contains("conditions-")) {
+                }else if(val.contains("conditions-")) {
                     String[] tp = val.split("-");
                     String[] w = tp[1].split("\\|");
                     for (int i = 0, len = w.length; i < len; i++) {
                         where.add(w[i]);
                     }
+                }else if(val.equals("loginName")) {
+                    where.add("recordName='" + userId + "'");
+                }else if(val.contains("userName-")) {
+                    String[] tp = val.split("-");
+                    where.add(tp[1] + "='" + userId + "'");
                 }
             }
         }catch (Exception e){

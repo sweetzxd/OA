@@ -70,4 +70,6 @@ public interface TableDao {
     public void insertSqlMap(@Param("sql") String sql);
 
     public List<Map<String, Object>> selectCheckList(Map<String,Object> map);
+
+    List<Map<String, Object>> selectCheckListold(Map<String, Object> map);
 }

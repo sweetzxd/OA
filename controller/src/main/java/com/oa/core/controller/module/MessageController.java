@@ -167,15 +167,15 @@ public class MessageController {
         pu.setCurrentPage(page);
         Loginer loginer = (Loginer) request.getSession().getAttribute("loginer");
         Message m = new Message();
-        m.setMsgSendUser(loginer.getId());
+        m.setMsgRecUser(loginer.getId());
         if(msgStatus==null||msgStatus.equals("")){
             m.setMsgStatus(1);
         } else{
             m.setMsgStatus(Integer.parseInt(msgStatus));
         }
-        if(loginer.getId().equals(m.getMsgSendUser())){
+        /*if(loginer.getId().equals(m.getMsgSendUser())){
             m.setMsgStatus(0);
-        }
+        }*/
         m.setStartRow(pu.getStartRow());
         m.setEndRow(pu.getEndRow()-pu.getStartRow());
         if ("msgTitle".equals(option)) {

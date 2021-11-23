@@ -80,7 +80,7 @@ public class LogUtil {
         tableHtml += "</colgroup>";
         tableHtml += "<thead>";
         tableHtml += "<tr>";
-        tableHtml += "<th colspan='4'>" + nodeTitle + "-" + tableData.getTableTitle() + "</th>";
+        tableHtml += "<th colspan='4'>" + nodeTitle + "</th>";   //"-" + tableData.getTableTitle() +
         tableHtml += "</tr>";
         tableHtml += "</thead>";
         tableHtml += "<tbody>";
@@ -152,12 +152,12 @@ public class LogUtil {
         EmailHelper.email(user, title, msg);
     }
 
-    public static void toPhone(ArrayList users, String title) {
+    public static void toPhone(Vector users, String title) {
         toPhone(users, title, null);
     }
 
-    public static void toPhone(ArrayList users,String title,String url){
-        JPushAllService.jpushAll(users, title,url);
+    public static void toPhone(Vector users,String title,String url){
+        JPushAllService.jpush(users, title,url);
     }
 
     //发送消息
@@ -329,7 +329,7 @@ public class LogUtil {
             }
         }
         messageService.insertList(messageMap);
-        ArrayList a_users = new ArrayList();
+        Vector a_users = new Vector();
         String title = "请查看消息";
         boolean st = true;
         for(Message m0 : messageMap.values()){

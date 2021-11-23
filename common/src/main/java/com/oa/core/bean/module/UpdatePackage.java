@@ -40,7 +40,7 @@ public class UpdatePackage implements Serializable {
     /**
      * 更新包上传人
      */
-    private String packUpName;
+    private String packUpName_Value;
     /**
      * 更新包版本
      */
@@ -109,12 +109,12 @@ public class UpdatePackage implements Serializable {
         this.packUpFile = packUpFile;
     }
 
-    public String getPackUpName() {
-        return packUpName;
+    public String getPackUpName_Value() {
+        return packUpName_Value;
     }
 
-    public void setPackUpName(String packUpName) {
-        this.packUpName = packUpName;
+    public void setPackUpName_Value(String packUpName_Value) {
+        this.packUpName_Value = packUpName_Value;
     }
 
     public String getPackVersion() {
@@ -203,5 +203,29 @@ public class UpdatePackage implements Serializable {
 
     public void setEndRow(int endRow) {
         this.endRow = endRow;
+    }
+
+    @Override
+    public String toString() {
+        return "UpdatePackage{" +
+                "packId='" + packId + '\'' +
+                ", packName='" + packName + '\'' +
+                ", packType='" + packType + '\'' +
+                ", packRely='" + packRely + '\'' +
+                ", packUpTime='" + packUpTime + '\'' +
+                ", packUpFile='" + packUpFile + '\'' +
+                ", packUpName_Value='" + packUpName_Value + '\'' +
+                ", packVersion='" + packVersion + '\'' +
+                ", updateType=" + updateType +
+                ", curStatus=" + curStatus +
+                ", recordName='" + recordName + '\'' +
+                ", recordTime=" + recordTime +
+                ", modifyName='" + modifyName + '\'' +
+                ", modifyTime=" + modifyTime +
+                ", deleteName='" + deleteName + '\'' +
+                ", deleteTime=" + deleteTime +
+                ", startRow=" + startRow +
+                ", endRow=" + endRow +
+                '}';
     }
 }

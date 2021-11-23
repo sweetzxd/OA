@@ -41,7 +41,7 @@ public class ProcUtil {
     private FormCustomMadeService formCustomMadeService = (FormCustomMadeService) SpringContextUtil.getBean("formCustomMadeService");
     private DictionaryService dictionaryService = (DictionaryService) SpringContextUtil.getBean("dictionaryService");
 
-    private EmployeesService employeesService  = (EmployeesService) SpringContextUtil.getBean("employeesService");
+    private EmployeesService employeesService = (EmployeesService) SpringContextUtil.getBean("employeesService");
     private DepartmentService departmentService = (DepartmentService) SpringContextUtil.getBean("departmentService");
 
     private WorkFlowNodeService workFlowNodeService = (WorkFlowNodeService) SpringContextUtil.getBean("workFlowNodeService");
@@ -54,14 +54,19 @@ public class ProcUtil {
     public ModelAndView WorkFlowProc(HttpServletRequest request) {
         Loginer loginer = (Loginer) request.getSession().getAttribute("loginer");
         String userId = loginer.getId() == null ? "" : loginer.getId();
+        String formid = request.getParameter("formid") == null ? "" : request.getParameter("formid");//表单页面
+        String wkflwId = request.getParameter("wkflwId") == null ? "" : request.getParameter("wkflwId");//流程定义号
+        String recno = request.getParameter("recorderNO") == null ? "" : request.getParameter("recorderNO");//表主键
+        String procid = request.getParameter("workflowProcID") == null ? "" : request.getParameter("workflowProcID");//流程运行号
+        String workOrderNO = request.getParameter("workOrderNO") == null ? "" : request.getParameter("workOrderNO");//任务主键
+
+        return WorkFlowProc(userId, formid, wkflwId, recno, procid, workOrderNO);
+    }
+
+    public ModelAndView WorkFlowProc(String userId, String formid, String wkflwId, String recno, String procid, String workOrderNO) {
         ModelAndView mode = new ModelAndView("redirect:/flowpage/tasksendmsg.do");
         mode.addObject("type", "flow");
         try {
-            String formid = request.getParameter("formid") == null ? "" : request.getParameter("formid");//表单页面
-            String wkflwId = request.getParameter("wkflwId") == null ? "" : request.getParameter("wkflwId");//流程定义号
-            String recno = request.getParameter("recorderNO") == null ? "" : request.getParameter("recorderNO");//表主键
-            String procid = request.getParameter("workflowProcID") == null ? "" : request.getParameter("workflowProcID");//流程运行号
-            String workOrderNO = request.getParameter("workOrderNO") == null ? "" : request.getParameter("workOrderNO");//任务主键
             //查当前任务
             TaskSender task = taskSenderService.selectById(workOrderNO);
 
@@ -100,6 +105,12 @@ public class ProcUtil {
             boolean star = starnode.equals(nodeid);
             if (star) {
                 procid = recno;
+            }
+
+            if (procid == null || procid.equals("")) {
+                mode.addObject("msg", "任务发从失败，请联系管理员处理");
+                mode.addObject("actors", "");
+                return mode;
             }
 
             /*
@@ -150,10 +161,10 @@ public class ProcUtil {
                     w.add("workflowProcID='" + procid + "'");
                     String s = MySqlUtil.getSql(l, re[0], w);
                     Map<String, Object> sqlv = tableService.selectSqlMap(s);
-                    if(sqlv!=null){
-                    String value = (String) sqlv.get(re[1]);
-                    value = ToNameUtil.idToName(re[1], value);
-                    flowLab = flowLab.replaceAll(aMsg, value);
+                    if (sqlv != null) {
+                        String value = (String) sqlv.get(re[1]);
+                        value = ToNameUtil.idToName(re[1], value);
+                        flowLab = flowLab.replaceAll(aMsg, value);
                     }
                 }
             }
@@ -189,7 +200,7 @@ public class ProcUtil {
                 /*
                  * 获取下一节点执行人员
                  * */
-                WorkFlowProc workFlowProc = workFlowProcService.selectById(procid,wkflwId);
+                WorkFlowProc workFlowProc = workFlowProcService.selectById(procid, wkflwId);
                 if (workFlowProc != null) {
                     try {
                         flowpeoples = StringHelper.string2Vector(workFlowProc.getFlowpeoples(), ";");
@@ -235,15 +246,15 @@ public class ProcUtil {
                  * 路径通时对其他同批任务的处理（0：撤消其他人的任务；1：其他人的任务继续）
                  */
                 int path1ToOtherTask = line.getPath1ToOtherTask();
-                /**
+                /*
                  * 是否是并行路径
                  */
                 int isAsynchPath = line.getIsAsynchPath();
-                /**
+                /*
                  * 等待同节点他人执行
                  */
                 boolean determine = false;
-                /**
+                /*
                  * 等待并行节点他人执行
                  */
                 boolean isAsynch = false;
@@ -298,7 +309,7 @@ public class ProcUtil {
                 if (determine) {
                     if (star) {
                         if (workFlowProc != null) {
-                            if (updateProc(procid,wkflwId, userId, flowpeoples, nextNodeId, actors, 1)) {
+                            if (updateProc(procid, wkflwId, userId, flowpeoples, nextNodeId, actors, 1)) {
                                 msg = "任务发送失败[cod:1]";
                                 wkflog = false;
                                 break;
@@ -312,13 +323,13 @@ public class ProcUtil {
                         }
                     } else {
                         if (end) {
-                            if (updateProc(procid,wkflwId, userId, flowpeoples, nextNodeId, actors, 2, nodeid)) {
+                            if (updateProc(procid, wkflwId, userId, flowpeoples, nextNodeId, actors, 2, nodeid)) {
                                 msg = "任务发送失败[cod:1]";
                                 wkflog = false;
                                 break;
                             }
                         } else {
-                            if (updateProc(procid,wkflwId, userId, flowpeoples, nextNodeId, actors, 1)) {
+                            if (updateProc(procid, wkflwId, userId, flowpeoples, nextNodeId, actors, 1)) {
                                 msg = "任务发送失败[cod:1]";
                                 wkflog = false;
                                 break;
@@ -332,12 +343,20 @@ public class ProcUtil {
                                 PostPosition post = new PostPosition();
                                 boolean postposition = post.getPostPosition("Flow" + wkflwId, workOrderNO, procid, recno);
                             }
-                            if (ss != null && ss.indexOf("<account>") >= 0) {
-                                AccountUtil account = new AccountUtil();
-                                account.insertTable(userId,wkflwId,procid);
+                            AccountUtil account = new AccountUtil();
+                            int tablenum = account.selectTable(wkflwId, procid);
+                            if (tablenum == 0) {
+                                account.insertTable(userId, wkflwId, procid);
+                            } else {
+                                account.updateTable(userId, wkflwId, procid);
                             }
                             String name = UserDict.getName((String) starVal.get("recordName"));
                             msg = "关于 " + name + " 发起的【" + wkf.getWkfName() + "】流程已结束。";
+
+                            Map tmap = new HashMap();
+                            tmap.put("wkflwId", wkflwId);
+                            tmap.put("procId", procid);
+                            taskSenderService.endTask(wkflwId, procid);
                         } else {
                             msg = "等待并行节点任务处理";
                         }
@@ -351,6 +370,20 @@ public class ProcUtil {
                                 String name = UserDict.getNames(actors, ";");
                                 String title = nextNode.getNodeTitle();
                                 msg += "关于流程【" + wkf.getWkfName() + "】的任务已发出给节点“" + title + "”的" + name + "执行<br/>";
+                                if (ss != null && ss.indexOf("<account[") >= 0) {
+                                    String accnodes = ss.substring(ss.indexOf("["), ss.indexOf("]"));
+                                    accnodes = accnodes.substring(1, accnodes.length());
+                                    Vector<String> strings = StringHelper.string2Vector(accnodes, ";");
+                                    if (strings.contains(nodeid)) {
+                                        AccountUtil account = new AccountUtil();
+                                        int tablenum = account.selectTable(wkflwId, procid);
+                                        if (tablenum == 0) {
+                                            account.insertTable(userId, wkflwId, procid);
+                                        } else {
+                                            account.updateTable(userId, wkflwId, procid);
+                                        }
+                                    }
+                                }
                                 LogUtil.toHtml("mymsg", StringHelper.string2Vector(actors, ";"), flowLab);
                             }
                         } else {
@@ -362,20 +395,22 @@ public class ProcUtil {
                     msg = "关于流程【" + wkf.getWkfName() + "】的任务已处理完成，等待节点他人任务处理。";
                 }
                 LogUtil.toEmail(StringHelper.string2Vector(actors, ";"), flowLab);
-                nextUser+=actors;
+                nextUser += actors;
             }
-            String url = "/task/tasksendpage.do?procId="+procid+"&wkflwId="+wkflwId+"&nodeId="+nodeid+"&workOrderNO="+workOrderNO;
-            MessageUtil.addArticle(nextUser,msg,url);
             /*
              * 插入流程日志
              * */
-            if(wkflog) {
+            if (wkflog) {
                 insertLog(userId, wkflwId, procid, node, "", workOrderNO, formtask, table, sqlvalue);
             }
+            String url = "/task/tasksendpage.do?procId=" + procid + "&wkflwId=" + wkflwId + "&nodeId=" + nodeid + "&workOrderNO=" + workOrderNO;
+            MessageUtil.addArticle(nextUser, msg, url);
             mode.addObject("msg", StringHelper.gbEncoding(msg));
+            mode.addObject("actors", nextUser);
         } catch (Exception e) {
             LogUtil.sysLog("Exception:" + e.getMessage());
             e.printStackTrace();
+            mode.addObject("actors", "");
             mode.addObject("msg", StringHelper.gbEncoding("任务发送失败[cod:0]"));
         }
         return mode;
@@ -408,10 +443,10 @@ public class ProcUtil {
                     String s = MySqlUtil.getSql(f, contex[1], w);
                     Map<String, Object> sqlv = tableService.selectSqlMap(s);
                     String val = (String) sqlv.get(contex[2]);
-                    if(contex.length>3 ) {
-                        if("dept".equals(contex[3])) {
+                    if (contex.length > 3) {
+                        if ("dept".equals(contex[3])) {
                             actors += getDeptUser(val);
-                        }else if("user".equals(contex[3]) || "users".equals(contex[3])){
+                        } else if ("user".equals(contex[3]) || "users".equals(contex[3])) {
                             actors += getEmpUser(val);
                         }
                     } else {
@@ -425,10 +460,10 @@ public class ProcUtil {
                     }
                 } else if (type.equals("useractor")) {
                     actors += actor.getContextValue() + ";";
-                } else if (type.equals("deptactor")){
+                } else if (type.equals("deptactor")) {
                     String[] contex = actor.getContextValue().split("_");
                     Department department = departmentService.selectById(contex[0]);
-                    if("deptHead".equals(contex[1])) {
+                    if ("deptHead".equals(contex[1])) {
                         actors += department.getDeptHead();
                     }
                 }
@@ -437,7 +472,7 @@ public class ProcUtil {
         return actors;
     }
 
-    public String getEmpUser(String user){
+    public String getEmpUser(String user) {
         String actors = "";
         if (user != null && user.substring(user.length() - 1).equals(";")) {
             actors += user;
@@ -446,15 +481,16 @@ public class ProcUtil {
         }
         return actors;
     }
-    public String getDeptUser(String dept){
+
+    public String getDeptUser(String dept) {
         String actors = "";
-        if (dept != null ) {
-            if(dept.substring(dept.length() - 1).equals(";")){
-                dept = dept.replaceAll(";","','");
+        if (dept != null) {
+            if (dept.substring(dept.length() - 1).equals(";")) {
+                dept = dept.replaceAll(";", "','");
             }
-            String sql = "select deptHead from (select deptHead from  department where curStatus=2 and deptId in ('"+dept+"') UNION select deptHead from department d join employees e on d.deptId=e.department where e.userName in ('"+dept+"')) a GROUP BY deptHead";
+            String sql = "select deptHead from (select deptHead from  department where curStatus=2 and deptId in ('" + dept + "') UNION select deptHead from department d join employees e on d.deptId=e.department where e.userName in ('" + dept + "')) a GROUP BY deptHead";
             List<String> duser = tableService.selectSql(sql);
-            actors = StringHelper.list2String(duser,";");
+            actors = StringHelper.list2String(duser, ";");
         }
         return actors;
     }
@@ -511,11 +547,11 @@ public class ProcUtil {
         }
     }
 
-    public boolean updateProc(String procid,String wkflwId, String userId, Vector<String> flowpeoples, String nextNodeId, String actors, int wkfStatus) {
-        return updateProc(procid,wkflwId, userId, flowpeoples, nextNodeId, actors, wkfStatus, null);
+    public boolean updateProc(String procid, String wkflwId, String userId, Vector<String> flowpeoples, String nextNodeId, String actors, int wkfStatus) {
+        return updateProc(procid, wkflwId, userId, flowpeoples, nextNodeId, actors, wkfStatus, null);
     }
 
-    public boolean updateProc(String procid,String wkflwId, String userId, Vector<String> flowpeoples, String nextNodeId, String actors, int wkfStatus, String endNode) {
+    public boolean updateProc(String procid, String wkflwId, String userId, Vector<String> flowpeoples, String nextNodeId, String actors, int wkfStatus, String endNode) {
         Timestamp datetime = DateHelper.now();
         WorkFlowProc wfproc = new WorkFlowProc();
         wfproc.setProcId(procid);
@@ -557,8 +593,14 @@ public class ProcUtil {
         workFlowLog.setRecordTime(DateHelper.now());
         workFlowLog.setModifyName(userId);
         workFlowLog.setModifyTime(DateHelper.now());
-        workFlowLogService.insert(workFlowLog);
-        return true;
+        try {
+            workFlowLogService.insert(workFlowLog);
+            return true;
+        } catch (Exception e) {
+            LogUtil.sysLog("流程日志插入失败");
+            e.getLocalizedMessage();
+            return false;
+        }
     }
 
     public boolean isAsynchPath(String procid, String nodeId, String nextNodeId) {

@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <script type='text/javascript' src='/views/common/css.js' charset='utf-8'></script>
+    <script type='text/javascript' src='/views/common/up-js.js' charset='utf-8'></script>
+    <title>我的页面</title>
+    <style>
+        .layui-m-layercont {
+            padding: 0px 0px;
+            line-height: 22px;
+            text-align: center;
+        }
+        .error{
+            color: #E37E66;
+        }
+    </style>
+</head>
+<body>
+<!-- 头部begin -->
+<div class="header-bar box-bar">
+    <a href="javascript:oa.htmlgoback();" class="header-bar-left cell"><i class="iconfont">&#xe606;</i></a>
+    <div class="header-bar-title">填写表单</div>
+</div>
+<!-- 头部end -->
+<!-- 底部begin -->
+<div class="footer-oper-bar box-bar">
+    <div class="box-bar-list mar-r">
+        <a href="javascript:void(0);" onclick="formsave(this);" class="footer-oper-save">保存</a>
+    </div>
+    <div class="box-bar-list">
+        <a href="javascript:oa.htmlgoback();" class="footer-oper-cancel">取消</a>
+    </div>
+</div>
+<!-- 底部end -->
+<div class="marin-wrap">
+    <div class="my-wrap">
+        <div class="my-mission pad-tb mar-b">
+            <div class="task-body-title" id="formtitle"></div>
+            <div class="my-wrap">
+                <form id="formtable" action="" method="POST" novalidate="novalidate"></form>
+                <input type="hidden" id="sendvalue" value="">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="template"></div>
+<div id="alert-template" hidden></div>
+
+</body>
+<script type='text/javascript' src='/views/common/down-js.js' charset='utf-8'></script>
+<script>
+    $(document).ready(function () {
+        $("#template").load("/views/template/formInfo.html", function (content) {
+            $("#template").html(content);
+            getFieldHtml();
+        });
+    });
+
+    $(".footer-oper-save").on("click", function () {
+        var validRet = $("#formtable").valid();
+        console.log(validRet)
+        if (!validRet) {
+            return;
+        }
+        layer.open({
+            content: '<div style="height: 100px;line-height: 100px;">保存成功，是否发送任务？</div>'
+            , btn: ['发送', '取消']
+            , yes: function (index) {
+                formsend(index);
+            }
+            , no: function () {
+                oa.htmlgoback();
+            }
+        });
+    });
+    var tysave = true;
+
+    function formsave(obj) {
+        var urlval = manyValues();
+        var uid = urlval.userid == null ? "" : urlval.userid;
+        var f = urlval.formid == null ? "" : urlval.formid;
+        var p = urlval.procId == null ? "" : urlval.procId;
+        var wf = urlval.wkflwID == null ? "" : urlval.wkflwID;
+        var wn = urlval.wkfNode == null ? "" : urlval.wkfNode;
+        var wo = urlval.workOrderNO == null ? "" : urlval.workOrderNO;
+        var re = urlval.recno == null ? "" : urlval.recno;
+        if (tysave) {
+            $("#formtable").attr("action", "/weixin/flowpage/flowaddsave/" + f + ".do?userid=" + uid + "&procId=" + p + "&wkflwId=" + wf + "&nodeId=" + wn + "&workOrderNO=" + wo);
+            $("#formtable").ajaxSubmit(function (data) {
+                console.log(JSON.stringify(data.data))
+                $("#sendvalue").val(JSON.stringify(data.data));
+            });
+            tysave = false;
+        }
+        return false;
+    }
+
+    var tysend = true;
+
+    function formsend(index) {
+        var urlval = manyValues();
+        var result = $.parseJSON($("#sendvalue").val());
+        console.log(result)
+        var uid = urlval.userid == null ? "" : urlval.userid;
+        var f = urlval.formid == null ? "" : urlval.formid;
+        var p = result.procId == null ? "" : result.procId;
+        var wf = result.wkflwId == null ? "" : result.wkflwId;
+        var wn = result.wkfNode == null ? "" : result.wkfNode;
+        var wo = result.workOrderNO == null ? "" : result.workOrderNO;
+        var re = result.recno == null ? "" : result.recno;
+        console.log(re)
+        if (tysend) {
+            $.ajax({
+                type: "POST",
+                url: "/weixin/flowpage/flowformsend/" + f + ".do?userid=" + uid + "&recno=" + re + "&procId=" + p + "&wkflwId=" + wf + "&wkfNode=" + wn + "&workOrderNO=" + wo,
+                data: result,
+                dataType: "json",
+                success: function (data) {
+                    if (data.success == "1") {
+                        oa.htmlgoback();
+                    }
+                },
+                error: function (message) {
+                    console.log(message)
+                }
+            });
+            tysend = false;
+        }
+    }
+</script>
+</html>

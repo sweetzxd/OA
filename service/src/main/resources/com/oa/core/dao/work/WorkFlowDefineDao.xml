@@ -36,6 +36,7 @@
             <if test="specialField!=null and specialField!=''">specialField =#{specialField},</if>
             <if test="pageId!=null and pageId!=''">pageId =#{pageId},</if>
             <if test="flowLabFld!=null and flowLabFld!=''">flowLabFld =#{flowLabFld},</if>
+            <if test="flowLabFldliucheng!=null and flowLabFldliucheng!=''">flowLabFldliucheng = #{flowLabFldliucheng},</if>
             <if test="pkFeilds!=null and pkFeilds!=''">pkFeilds =#{pkFeilds},</if>
             <if test="wkfdefStatus!=null and wkfdefStatus!=''">wkfdefStatus =#{wkfdefStatus},</if>
 

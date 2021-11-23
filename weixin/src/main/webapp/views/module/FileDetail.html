@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<script type='text/javascript' src='/views/common/css.js' charset='utf-8'></script>
+<script type='text/javascript' src='/views/common/up-js.js' charset='utf-8'></script>
+<title>通知详情</title>
+</head>
+<body>
+<!-- 头部begin -->
+<div class="header-bar box-bar">
+    <a href="javascript:history.go(-1);" class="header-bar-left cell"><i class="iconfont">&#xe606;</i></a>
+    <div class="header-bar-title">文档详情</div>
+</div>
+<!-- 头部end -->
+<div class="marin-wrap">
+    <div class="my-wrap" id="accordion">
+        <div class="my-mission pad-tb mar-b">
+            <div class="my-wrap">
+                <div class="circumstance-bar box-bar">
+                    <div class="circumstance-title cell">文件标题：</div>
+                    <div class="objection-right box-bar-list">
+                        <span class="input-style pull-left" id="fileName"></span>
+                    </div>
+                </div>
+                <div class="circumstance-bar box-bar">
+                    <div class="circumstance-title cell">上传时间：</div>
+                    <div class="objection-right box-bar-list">
+                        <span class="input-style pull-left" id="uploadTime"></span>
+                    </div>
+                </div>
+                <div class="circumstance-bar box-bar">
+                    <div class="circumstance-title cell">上传人：</div>
+                    <div class="objection-right box-bar-list">
+                        <span class="quit-textarea" id="recordName"></span>
+                    </div>
+                </div>
+                <div class="circumstance-bar box-bar">
+                    <div class="circumstance-title cell">文件说明：</div>
+                    <div class="objection-right box-bar-list">
+                        <span class="quit-textarea" id="intro"></span>
+                    </div>
+                </div>
+                <div class="circumstance-bar box-bar">
+                    <div class="circumstance-title cell">备注：</div>
+                    <div class="objection-right box-bar-list">
+                        <span class="quit-textarea" id="remark"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="my-mission pad-tb mar-b">
+            <div class="task-body-title">
+                附件
+            </div>
+            <div class="my-wrap">
+                <div class="add-document-wrap">
+                    <div class="my-panel" id="fileAdd">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="downloadss">
+
+        </div>
+    </div>
+</div>
+</body>
+<script type='text/javascript' src='/resources/scripts/module/fileDetail.js' charset='utf-8'></script>
+</html>

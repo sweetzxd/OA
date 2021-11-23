@@ -1,0 +1,213 @@
+<script type="text/html" id="form-pkid">
+   <input type="hidden" id="{{id}}_Value" name="{{id}}_Value" class="input-style pull-left"  maxlength="{{length}}" placeholder="{{placeholder}}" value="{{value}}">
+</script>
+
+<script type="text/html" id="form-text">
+    <div class="circumstance-bar box-bar">
+        <div class="circumstance-title cell">{{name}}</div>
+        <div class="objection-right box-bar-list">
+            <input type="text" id="{{id}}_Value" name="{{id}}_Value" class="input-style pull-left"
+                   maxlength="{{length}}" placeholder="{{placeholder}}" value="{{value}}" {{required}} {{validate}}>
+            <p class="error-box" id="{{id}}_error"></p>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="form-textarea">
+    <div class="circumstance-bar box-bar">
+        <div class="circumstance-title cell">{{name}}</div>
+        <div class="objection-right box-bar-list">
+            <textarea class="quit-textarea" id="{{id}}_Value" name="{{id}}_Value" maxlength="{{length}}"
+                      placeholder="{{placeholder}}" {{required}} {{validate}}>{{value}}</textarea>
+            <p class="error-box" id="{{id}}_error"></p>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="form-select">
+    <div class="circumstance-bar box-bar">
+        <div class="circumstance-title cell">{{name}}</div>
+        <div class="objection-right box-bar-list">
+            <select class="objection-select pull-left" id="{{id}}_Value" name="{{id}}_Value" title="请选择" {{required}} {{validate}}>
+                {{each option as op}}
+                <option value="{{op.id}}" {{if value == op.id }} selected {{/if}}>{{op.name}}</option>
+                {{/each}}
+            </select>
+            <p class="error-box" id="{{id}}_error"></p>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="form-selects">
+    <div class="circumstance-bar box-bar">
+        <div class="circumstance-title cell">{{name}}</div>
+        <div class="objection-right box-bar-list">
+            <select class="objection-select pull-left form-control selectpicker" id="{{id}}_Value" name="{{id}}_Value" multiple data-live-search="false" title="请选择" {{required}} {{validate}}>
+                {{each option as op}}
+                <option value="{{op.id}}">{{op.name}}</option>
+                {{/each}}
+            </select>
+            <p class="error-box" id="{{id}}_error"></p>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="form-date">
+    <div class="circumstance-bar box-bar">
+        <div class="circumstance-title cell">{{name}}</div>
+        <div class="objection-right box-bar-list">
+            <input type="text" id="{{id}}_Value" name="{{id}}_Value" readonly class="input-style pull-left"
+                   placeholder="{{placeholder}}" value="{{value}}" todate="{{todate}}" {{required}} {{validate}}>
+            <p class="error-box" id="{{id}}_error"></p>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="form-datetime">
+    <div class="circumstance-bar box-bar">
+        <div class="circumstance-title cell">{{name}}</div>
+        <div class="objection-right box-bar-list">
+            <input type="text" id="{{id}}_Value" name="{{id}}_Value" readonly class="input-style pull-left"
+                   placeholder="{{placeholder}}" value="{{value}}" todate="{{todate}}" {{required}} {{validate}}>
+            <p class="error-box" id="{{id}}_error"></p>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="form-int">
+    <div class="circumstance-bar box-bar">
+        <div class="circumstance-title cell">{{name}}</div>
+        <div class="objection-right box-bar-list">
+            <input type="text" id="{{id}}_Value" name="{{id}}_Value" class="input-style pull-left"
+                   maxlength="{{length}}" placeholder="{{placeholder}}" value="{{value}}"
+                   onkeyup="this.value=this.value.replace(/[^(\-)0-9]/g,'')"
+                   onafterpaste="this.value=this.value.replace(/[^(\-)0-9]/g,'')" {{required}} {{validate}}>
+            <p class="error-box" id="{{id}}_error"></p>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="form-decimal">
+    <div class="circumstance-bar box-bar">
+        <div class="circumstance-title cell">{{name}}</div>
+        <div class="objection-right box-bar-list">
+            <input type="text" id="{{id}}_Value" name="{{id}}_Value" class="input-style pull-left"
+                   maxlength="{{length}}" decimal="{{decimal}}" placeholder="{{placeholder}}" value="{{value}}" {{required}} {{validate}}>
+            <p class="error-box" id="{{id}}_error"></p>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="form-user">
+    <div class="circumstance-bar box-bar">
+        <div class="circumstance-title cell">{{name}}</div>
+        <div class="objection-right box-bar-list">
+            <div class="choose-contacts-bar" id="{{id}}_name" onclick="oA.open(this,'{{id}}', 'employees', 'single')">
+                {{getidtoname type value}}
+            </div>
+            <input type="hidden" id="{{id}}_Value" name="{{id}}_Value" value="{{value}}" {{required}}/>
+            <p class="error-box" id="{{id}}_error"></p>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="form-users">
+    <div class="circumstance-bar box-bar">
+        <div class="circumstance-title cell">{{name}}</div>
+        <div class="objection-right box-bar-list">
+            <div class="choose-contacts-bar" id="{{id}}_name" onclick="oA.open(this,'{{id}}', 'employees', 'more')">
+                {{getidtoname type value}}
+            </div>
+            <input type="hidden" id="{{id}}_Value" name="{{id}}_Value" value="{{value}}" {{required}}/>
+            <p class="error-box" id="{{id}}_error"></p>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="form-dept">
+    <div class="circumstance-bar box-bar">
+        <div class="circumstance-title cell">{{name}}</div>
+        <div class="objection-right box-bar-list">
+            <div class="choose-contacts-bar" id="{{id}}_name" onclick="oA.open(this,'{{id}}','department', 'single')">
+                {{getidtoname type value}}
+            </div>
+            <input type="hidden" id="{{id}}_Value" name="{{id}}_Value" value="{{value}}" {{required}}/>
+            <p class="error-box" id="{{id}}_error"></p>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="form-depts">
+    <div class="circumstance-bar box-bar">
+        <div class="circumstance-title cell">{{name}}</div>
+        <div class="objection-right box-bar-list">
+            <div class="choose-contacts-bar" id="{{id}}_name" onclick="oA.open(this,'{{id}}','department', 'more')">
+                {{getidtoname type value}}
+            </div>
+            <input type="hidden" id="{{id}}_Value" name="{{id}}_Value" value="{{value}}" {{required}}/>
+            <p class="error-box" id="{{id}}_error"></p>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="form-form">
+    <div class="circumstance-bar box-bar">
+        <div class="circumstance-title cell">{{name}}</div>
+        <div class="objection-right box-bar-list">
+            <div class="choose-contacts-bar" id="{{id}}_name" onclick="oA.open(this,'{{id}}', 'formselect', 'single','{{taskName}}')">
+                {{getidtoname type value}}
+            </div>
+            <input type="hidden" id="{{id}}_Value" name="{{id}}_Value" value="{{value}}" {{required}}/>
+            <p class="error-box" id="{{id}}_error"></p>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="form-forms">
+    <div class="circumstance-bar box-bar">
+        <div class="circumstance-title cell">{{name}}</div>
+        <div class="objection-right box-bar-list">
+            <div class="choose-contacts-bar" id="{{id}}_name" onclick="oA.open(this,'{{id}}', 'formselect', 'more','{{taskName}}')">
+                {{getidtoname type value}}
+            </div>
+            <input type="hidden" id="{{id}}_Value" name="{{id}}_Value" value="{{value}}" {{required}}/>
+            <p class="error-box" id="{{id}}_error"></p>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="form-upload">
+    <div class="my-mission pad-tb mar-b">
+        <div class="task-body-title">{{name}}</div>
+        <div class="my-wrap">
+            <table class="my-mission" id="{{id}}_text">
+                {{getfilehtml id value}}
+            </table>
+            <div class="add-document-wrap">
+                <a href="javascript:;" class="add-document-btn mar-b">
+                    <input type="button" id="{{id}}_Value" class="file-input" onclick="fieldupload2('{{id}}')">
+                </a>
+                <input type="hidden" id="{{id}}" name="{{id}}_Value" value="{{value}}" {{required}} {{validate}}>
+                <p class="error-box" id="{{id}}_error"></p>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="form-uploads">
+    <div class="my-mission pad-tb mar-b">
+        <div class="task-body-title">{{name}}</div>
+        <div class="my-wrap">
+            <table class="my-mission" id="{{id}}_text">
+                {{getfilehtml id value}}
+            </table>
+            <div class="add-document-wrap">
+                <a href="javascript:;" class="add-document-btn mar-b">
+                    <input type="button" id="{{id}}_Value" class="file-input" onclick="fieldupload2('{{id}}')">
+                </a>
+                <input type="hidden" id="{{id}}" name="{{id}}_Value" value="{{value}}" {{required}} {{validate}}>
+                <p class="error-box" id="{{id}}_error"></p>
+            </div>
+        </div>
+    </div>
+</script>

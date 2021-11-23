@@ -81,7 +81,7 @@
             <if test="msgStatus!=null and msgStatus>=0">and msgStatus =#{msgStatus}</if>
             and curStatus=2
         </where>
-        ORDER BY msgLevel DESC, msgSendTime ASC
+        ORDER BY msgLevel DESC, msgSendTime desc
     </select>
     <select id="selectAllTermsCont" parameterType="Message" resultType="int">
         SELECT COUNT(*) FROM Message

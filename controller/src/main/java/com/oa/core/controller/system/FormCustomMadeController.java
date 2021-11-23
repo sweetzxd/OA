@@ -71,11 +71,6 @@ public class FormCustomMadeController {
     public ModelAndView gotoFormSetUp(HttpServletRequest request, String type, String data) {
         FieldData fieldData = new FieldData();
         JSONObject json = new JSONObject(data);
-        String  fieldNum = json.get("fieldNum")+"";
-        if(fieldNum==null){
-            json.put("fieldNum",200);
-        }
-        System.out.println("5555"+json+"5555");
         fieldData.setJsonValue(json);
         ModelAndView mav = new ModelAndView("manage/form_edit_setup");
         mav.addObject("type", type);
@@ -137,7 +132,6 @@ public class FormCustomMadeController {
                         tablefields.add(htmlUtil.getFieldValue(taskData.getTableName(),fieldnames[i],null));
                     }
                     mav.addObject("tablefields", tablefields);
-                    System.out.println(tablefields+"99999");
                 }
             }
         }

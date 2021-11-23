@@ -1,0 +1,236 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<script type='text/javascript' src='/views/common/css.js' charset='utf-8'></script>
+<script type='text/javascript' src='/views/common/up-js.js' charset='utf-8'></script>
+<link rel="stylesheet" type="text/css" href="/resources/css/dropload.css"/>
+<!-- 日历 -->
+<link rel="stylesheet" type="text/css" href="/resources/css/simple-calendar.css">
+<script type='text/javascript' src='/resources/js/flexible.js' charset='utf-8'></script>
+<title>考勤打卡</title>
+</head>
+<body>
+<!-- 头部begin -->
+<div class="header-bar box-bar">
+    <a href="javascript:history.go(-1);" class="header-bar-left cell"><i class="iconfont">&#xe606;</i></a>
+    <div class="header-bar-title">考勤打卡</div>
+</div>
+<!-- 头部end -->
+<div class="marin-wrap">
+    <!-- 日历begin -->
+    <div id='calendar' class="sc-calendar">
+        <div class="sc-header">
+            <div class="sc-title">
+                <div class="month">
+                    <div class="arrow sc-mleft"><i class="iconfont">&#xe607;</i></div>
+                    <div class="monthdiv">
+                        <span class="sc-select-year" name=""></span>年
+                        <span class="sc-select-month" name=""></span>
+                    </div>
+                    <div class="arrow sc-mright"><i class="iconfont">&#xe602;</i></div>
+                </div>
+            </div>
+            <div class="sc-week"></div> 
+        </div>
+        <div class="sc-body">
+            <div class="sc-days"></div>
+        </div>
+        <div class="sc-foot">
+            <span class="abnormal-span"><i class="iconfont">&#xe631;</i></span>
+            <span class="language-span">异常</span>
+            <span class="leave-span">假</span>
+            <span class="language-span">请假</span>
+            <span class="business-span">差</span>
+            <span class="language-span">出差</span>
+            <span class="rest-span">休</span>
+            <span class="language-span">休息</span>
+            <span class="today-span"><i class="iconfont">&#xe600;</i></span>
+            <span class="language-span">今天</span>
+        </div>
+    </div>    
+    <!-- 日历end -->
+    <div class="my-wrap">
+        <!-- 工作安排begin -->
+        <div class="my-mission">
+            <div class="attendance-card-hd box-bar">
+                <div class="schedule-title box-bar-list">工作安排</div>
+                <div class="cell"><i class="iconfont corb">&#xe613;</i></div>
+            </div>
+            <div class="schedule-panel pad-lr">
+                <!--<a href="javascript:;" class="attendance-card-bar box-bar">
+                    <div class="box-bar-list corh">1.制作华腾项目标书</div>
+                    <div class="cell"><span class="schedule-icon-span"></span></div>
+                </a>-->
+            </div>
+        </div>
+        <!-- 工作安排end -->
+    </div>
+</div>
+</body>
+<!-- 日历 -->
+<script type="text/javascript" src="/resources/js/hammer-2.0.8-min.js"></script>
+<script type="text/javascript" src="/resources/js/simple-calendar.js"></script>
+<script type='text/javascript' src='/resources/js/dropload.js' charset='utf-8'></script>
+<script type="text/javascript">
+    var year = null;
+    var month = null;
+    var day = null;
+    var myCalendar = new SimpleCalendar('#calendar');
+    $(function(){
+        var date = new Date();
+        year = date.getFullYear();
+        month = date.getMonth()+1;
+        day = date.getDate();
+        var monthCH = $('.sc-select-month').text();
+        $(".sc-mleft").click(function(){
+            removeSpan();
+            myCalendar.subMonth();
+           year = $('.sc-select-year').text();
+           var monthCH = $('.sc-select-month').text();
+           month = SimpleCalendar.prototype.languageData.months_CH.indexOf(monthCH)+1;
+           setFlag(year,month);
+       })
+        $(".sc-mright").click(function(){
+            removeSpan();
+            myCalendar.addMonth();
+            year = $('.sc-select-year').text();
+            var monthCH = $('.sc-select-month').text();
+            month = SimpleCalendar.prototype.languageData.months_CH.indexOf(monthCH)+1;
+            setFlag(year,month);
+        })
+        setFlag(year,month);
+        getScheduleList(day);
+    });
+    function removeSpan(){
+        $("span[id^='day_']").each(function () {
+            $(this).remove();
+        })
+    }
+    function setFlag(year,month) {
+        $.ajax({
+            type: "POST",
+            url: "/weixin/getworkingcalendar.do",
+            data:{year:year,month:month},
+            dataType: "json",
+            success: function (d) {
+                for(var item in d){
+                    var val = d[item];
+                    var day = parseInt(item);
+                    if(val.type=="leave"){
+                        $('#day_'+day).text("假");
+                        $('#day_'+day).attr("class","date-tab leave-span");
+                    }else if(val.type=="out"){
+                        $('#day_'+day).text("差");
+                        $('#day_'+day).attr("class","date-tab business-span");
+                    }else if(val.type=="rest"){
+                        if(val.value.exp.indexOf("休")>-1){
+                            $('#day_'+day).text("休");
+                            $('#day_'+day).attr("class","date-tab rest-span");
+                        }else{
+                            $('#day_'+day).text(val.value.exp);
+                            $('#day_'+day).attr("class","date-tab rest-span");
+                        }
+                    }
+
+                }
+            },error:function () {
+            }
+        })
+    }
+    //分页显示
+    function getScheduleList(day) {
+        $(".schedule-panel.pad-lr").empty();
+        var arr = $(".marin-wrap").find(".dropload-down");
+        if(arr.length>0){
+            $(".dropload-down").remove();
+        }
+
+        var date = year+"-"+month+"-"+day;
+
+        var itemIndex = 0;
+        var tabLoadEndArray = [false, false, false];
+        var tabLenghtArray = [28, 15, 47];
+        var tabScroolTopArray = [0, 0, 0];
+        var pageNum = 1;
+        // dropload
+        var dropload = $('.marin-wrap').dropload({
+            scrollArea: window,
+            loadDownFn: function (me) {
+                setTimeout(function () {
+                    if (tabLoadEndArray[itemIndex]) {
+                        me.resetload();
+                        me.lock();
+                        me.noData();
+                        me.resetload();
+                        return;
+                    }
+                    var result = '';
+                    var taskList = null;
+                    $.ajax({
+                        type: "POST",
+                        url: "/weixin/schedule/getScheduleList.do",
+                        data: {date:date,page:pageNum,limit:5},
+                        dataType: "json",
+                        async:false,
+                        success: function (d) {
+                            taskList = d.data;
+                            if(pageNum==1){//初始化列表总长度     只初始化一次
+                                tabLenghtArray[itemIndex] = d.count;
+                            }
+                        }
+                    })
+                    pageNum = pageNum +1;
+                    for (var index = 0; index < 10; index++) {
+                        if (tabLenghtArray[itemIndex] > 0) {
+                            tabLenghtArray[itemIndex]--;
+                        } else {
+                            tabLoadEndArray[itemIndex] = true;
+                            break;
+                        }
+                        var task = taskList[index];
+                        result += "<a href=\"javascript:;\" class=\"attendance-card-bar box-bar\">\n" +
+                            "           <div class='box-bar-list corh'>"+task.scheduletTitle+"</div>\n" +
+                            "           <div class=\"cell\"><span class=\"schedule-icon-span\"></span></div>\n" +
+                            "      </a>"
+
+                    }
+                    $('.schedule-panel.pad-lr').eq(itemIndex).append(result);
+                    me.resetload();
+                }, 500);
+            },
+            domDown: {
+                domClass: 'dropload-down',
+                domRefresh: '<div class="dropload-refresh">上拉加载更多</div>',
+                domLoad: '<div class="dropload-load"><span class="loading"></span>加载中...</div>',
+                domNoData: '<div class="dropload-noData">已无数据</div>'
+            }
+        });
+    }
+    //滑动切换
+    var myElement = document.getElementById('calendar');
+　　              var hammer = new Hammer(myElement);
+            hammer.on("swipeleft", function (ev) {
+        myCalendar.addMonth();
+    });
+    hammer.on("swiperight", function (ev) {
+        myCalendar.subMonth();
+    });
+    
+    //添加标记
+    var mark = {
+        '2019-3-1':[
+            {title:'通知通知事件',startTime:'2019-3-2 8:00:00',endTime:'2019-3-2 11:30:00'},
+            {title:'通知通知',startTime:'2019-3-2 18:00:00',endTime:'2019-3-2 19:30:00'}]
+    };
+    myCalendar._defaultOptions.mark=mark;
+    myCalendar.update();
+
+
+</script>
+</html>

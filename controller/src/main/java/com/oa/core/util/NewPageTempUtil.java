@@ -30,9 +30,9 @@ public class NewPageTempUtil {
         String realPath = cp.getProperty("produce_file");
         String path = "";
         if (type != null && type.equals("form")) {
-            path = "config/Form.jsp";
+            path = "config/Form.tmp";
         } else {
-            path = "config/Flow.jsp";
+            path = "config/Flow.tmp";
         }
         LogUtil.sysLog("========path============>" + type + "<===========" + path);
         String infilePath = this.getClass().getClassLoader().getResource("").getPath() + path;

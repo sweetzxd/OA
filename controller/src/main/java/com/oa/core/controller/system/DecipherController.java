@@ -5,6 +5,7 @@ import com.oa.core.helper.DateHelper;
 import com.oa.core.listener.InitDataListener;
 import com.oa.core.tag.UserDict;
 import com.oa.core.util.ToNameUtil;
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,16 @@ public class DecipherController {
     @ResponseBody
     public String getDecipher(HttpServletRequest request, String type, String value) {
         return ToNameUtil.getName(type,value);
+    }
+
+    @RequestMapping(value = "/iosdecipher",  method = RequestMethod.POST, produces = {"text/html;charset=UTF-8;"})
+    @ResponseBody
+    public String getIosDecipher(HttpServletRequest request, String type, String value) {
+        String data = ToNameUtil.getName(type,value);
+        JSONObject json = new JSONObject();
+        json.put("data",data);
+        json.put("success", 1);
+        return json.toString();
     }
 
     @RequestMapping(value = "/fieldidtoname",  method = RequestMethod.POST, produces = {"text/html;charset=UTF-8;"})
