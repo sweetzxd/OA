@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" type="text/css" href="/resources/css/font/iconfont.css"/>
+<link rel="stylesheet" type="text/css" href="/resources/css/bootstrap.min.css"/>
+<link rel="stylesheet" type="text/css" href="/resources/css/public.css"/>
+<link rel="stylesheet" type="text/css" href="/resources/css/custom.css"/>
+<link rel="stylesheet" type="text/css" href="/resources/css/input.css"/>
+<script type='text/javascript' src='/resources/js/jquery.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='/resources/js/flexible.js' charset='utf-8'></script>
+<script type='text/javascript' src='/resources/js/layui/layui.all.js' charset='utf-8'></script>
+<title></title>
+</head>
+<body>
+<div class="login-wrap">
+    <!-- 底部圈背景 -->
+    <div class="footer-login"></div>
+    <div class="inner-login-wrap">
+        <!-- 标题 -->
+        <div class="login-title">
+            <p class="">华腾</p>
+            <p class="">OA办公系统</p>
+        </div>
+        <div class="login-panel">
+            <div class="my-bg-line box-bar">
+                <div class="cell corb mar-r">
+                    <i class="iconfont">&#xe62b;</i>
+                </div>
+                <div class="box-bar-list">
+                    <input class="input-style" placeholder="请输入账号" type="text" name="userName" id="userName" value="admin">
+                </div>
+            </div>
+            <div class="my-bg-line box-bar">
+                <div class="cell corb mar-r">
+                    <i class="iconfont">&#xe60c;</i>
+                </div>
+                <div class="box-bar-list">
+                    <input class="input-style" placeholder="请输入密码" type="password" id="password" name="password" value="123">
+                </div>
+            </div>
+            <div class="my-bg-line no-border mar-bot">
+                <input class="magic-checkbox" type="checkbox" name="layout[0]" id="c1" checked>
+                <label for="c1">我同意<a href="javascript:;" class="corb">《OA办公系统协议》</a></label>
+            </div>
+            <div class="out-btn-box mar-b30"><a href="javascript:;" class="my-btn-block" onclick="login()">登录</a></div>
+        </div>
+    </div>
+</div>
+</body>
+<script type='text/javascript' src='/resources/js/bootstrap.min.js' charset='utf-8'></script>
+<script>
+    var layer;
+    layui.use('layer', function() { //独立版的layer无需执行这一句
+        layer = layui.layer; //独立版的layer无需执行这一句
+
+    });
+    function login() {
+        var flag = $("input[type='checkbox']").prop('checked');
+        if(flag){
+            var userName = $("#userName").val();
+            var password = $("#password").val();
+            $.ajax({
+                type:"POST",
+                url:"/weixin/login.do",
+                data:{"userName":userName,"password":password},
+                dataType:"json",
+                success:function(d){
+                    if(d.success==1){
+                        window.location.href="/views/index.html";
+                    }else{
+                        layer.alert(d.msg, {icon: 6});
+                    }
+                },error:function (d) {
+
+                }
+            });
+        }else{
+            layer.alert('请先同意OA协议', {icon: 6});
+        }
+    }
+
+</script>
+</html>

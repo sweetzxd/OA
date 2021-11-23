@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为UserDao接口方法提供sql语句配置 -->
+<mapper namespace="com.oa.core.dao.work.WorkFlowDefineDao">
+    <insert id="insert" parameterType="WorkFlowDefine">
+        INSERT INTO WorkFlowDefine(wkflwID,wkfName,wkfType,tableName,wkfValue,mailContent,specialField,pageId,flowLabFld,pkFeilds,wkfdefStatus,curStatus,recordName,recordTime,modifyName,modifyTime,deleteName,deleteTime)
+        VALUES
+        (#{wkflwID},#{wkfName},#{wkfType},#{tableName},#{wkfValue},#{mailContent},#{specialField},#{pageId},#{flowLabFld},#{pkFeilds},#{wkfdefStatus},2,#{recordName},#{recordTime},#{modifyName},#{modifyTime},#{deleteName},#{deleteTime})
+    </insert>
+
+    <delete id="delete" parameterType="WorkFlowDefine">
+        UPDATE WorkFlowDefine
+        <set>
+            <if test="deleteName!=null">deleteName =#{deleteName},</if>
+            <if test="deleteTime!=null">deleteTime =#{deleteTime},</if>
+            curStatus=0
+        </set>
+        WHERE wkflwID=#{wkflwID}
+    </delete>
+    <delete id="deletes" parameterType="WorkFlowDefine">
+        UPDATE WorkFlowDefine
+        <set>
+            curStatus=0
+        </set>
+        WHERE wkflwID in (${wkflwID})
+    </delete>
+    <update id="update" parameterType="WorkFlowDefine">
+        UPDATE WorkFlowDefine
+        <set>
+            <if test="wkfName!=null and wkfName!=''">wkfName =#{wkfName},</if>
+            <if test="wkfType!=null and wkfType!=''">wkfType =#{wkfType},</if>
+            <if test="tableName!=null and tableName!=''">tableName =#{tableName},</if>
+            <if test="wkfValue!=null and wkfValue!=''">wkfValue =#{wkfValue},</if>
+            <if test="mailContent!=null and mailContent!=''">mailContent =#{mailContent},</if>
+            <if test="specialField!=null and specialField!=''">specialField =#{specialField},</if>
+            <if test="pageId!=null and pageId!=''">pageId =#{pageId},</if>
+            <if test="flowLabFld!=null and flowLabFld!=''">flowLabFld =#{flowLabFld},</if>
+            <if test="pkFeilds!=null and pkFeilds!=''">pkFeilds =#{pkFeilds},</if>
+            <if test="wkfdefStatus!=null and wkfdefStatus!=''">wkfdefStatus =#{wkfdefStatus},</if>
+
+            <if test="modifyName!=null"> modifyName =#{modifyName},</if>
+            <if test="modifyTime!=null"> modifyTime =#{modifyTime}</if>
+        </set>
+        where wkflwID=#{wkflwID}
+    </update>
+
+    <select id="selectAll" resultType="WorkFlowDefine">
+        SELECT * FROM WorkFlowDefine WHERE curStatus=2 order by recordTime desc
+    </select>
+
+    <select id="selectTerms" parameterType="WorkFlowDefine" resultType="WorkFlowDefine">
+        SELECT * FROM WorkFlowDefine
+        <where>
+            <if test="wkflwID!=null and wkflwID!=''">and wkflwId IN (${wkflwID})</if>
+            <if test="wkfName!=null and wkfName!=''">and wkfName like concat('%', #{wkfName}, '%')</if>
+            <if test="wkfType!=null and wkfType!=''">and wkfType like concat('%', #{wkfType}, '%')</if>
+            <if test="tableName!=null and tableName!=''">and tableName like concat('%', #{tableName}, '%')</if>
+            <if test="pkFeilds!=null and pkFeilds!=''">and pkFeilds like concat('%', #{pkFeilds}, '%')</if>
+            <if test="wkfdefStatus!=null and wkfdefStatus!=''">and wkfdefStatus =#{wkfdefStatus}</if>
+            and curStatus=2
+        </where>
+        order by recordTime desc
+    </select>
+
+    <select id="selectByIds" parameterType="java.lang.String" resultType="WorkFlowDefine">
+        SELECT * FROM WorkFlowDefine WHERE wkflwId IN (${_parameter}) AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="selectById" parameterType="java.lang.String" resultType="WorkFlowDefine">
+        SELECT * FROM WorkFlowDefine WHERE wkflwId = #{_parameter} AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="selectByPageId" parameterType="java.lang.String" resultType="WorkFlowDefine">
+        SELECT * FROM WorkFlowDefine WHERE pageId = #{_parameter} AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="selectAllCount" resultType="int">
+        select count(*) from WorkFlowDefine WHERE curStatus=2
+    </select>
+
+    <select id="selectTermsCount" parameterType="WorkFlowDefine" resultType="int">
+        SELECT count(*) FROM WorkFlowDefine
+        <where>
+            <if test="wkflwID!=null and wkflwID!=''">and wkflwId IN (${wkflwID})</if>
+            <if test="wkfName!=null and wkfName!=''">and wkfName like concat('%', #{wkfName}, '%')</if>
+            <if test="wkfType!=null and wkfType!=''">and wkfType like concat('%', #{wkfType}, '%')</if>
+            <if test="tableName!=null and tableName!=''">and tableName like concat('%', #{tableName}, '%')</if>
+            <if test="pkFeilds!=null and pkFeilds!=''">and pkFeilds like concat('%', #{pkFeilds}, '%')</if>
+            <if test="wkfdefStatus!=null and wkfdefStatus!=''">and wkfdefStatus =#{wkfdefStatus}</if>
+            and curStatus=2
+        </where>
+        order by recordTime desc
+    </select>
+
+    <select id="selectByIdCount" parameterType="java.lang.String" resultType="int">
+        SELECT count(*) FROM WorkFlowDefine WHERE wkflwId IN (${_parameter}) AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+</mapper>

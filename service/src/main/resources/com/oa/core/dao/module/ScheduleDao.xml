@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oa.core.dao.module.ScheduleDao" >
+    <insert id="insert">
+    INSERT INTO schedule (scheduleId, scheduletTitle, content,
+      startTime, endTime, type,
+      user, state, curStatus, linkRecorderNO, reserveField, recordName,
+      recordTime, modifyName, modifyTime,
+      deleteName, deleteTime)
+    VALUES (#{scheduleId}, #{scheduletTitle}, #{content},
+      #{startTime}, #{endTime}, #{type},
+      #{user}, #{state}, 2,#{linkRecorderNO},#{reserveField}, #{recordName},
+      #{recordTime}, #{modifyName}, #{modifyTime},
+      #{deleteName}, #{deleteTime})
+  </insert>
+    <delete id="delete">
+      UPDATE schedule SET curStatus=0,deleteName=#{deleteName},deleteTime=#{deleteTime} WHERE scheduleId=#{scheduleId} AND curStatus=2
+  </delete>
+    <update id="update">
+        UPDATE schedule
+        <set>
+            <if test="scheduletTitle!=null and scheduletTitle!=''">scheduletTitle =#{scheduletTitle},</if>
+            <if test="content!=null and content!=''">content =#{content},</if>
+            <if test="startTime!=null and startTime!=''">startTime =#{startTime},</if>
+            <if test="endTime!=null and endTime!=''">endTime =#{endTime},</if>
+            <if test="type!=null and type!=''">type =#{type},</if>
+            <if test="state!=null and state!=''">state =#{state},</if>
+            <if test="modifyName!=null and modifyName!=''">modifyName =#{modifyName},</if>
+            <if test="modifyTime!=null and modifyTime!=''">modifyTime =#{modifyTime},</if>
+        </set>
+        WHERE curStatus=2 AND scheduleId=#{scheduleId}
+    </update>
+    <select id="selectById" resultType="Schedule">
+        SELECT * FROM schedule WHERE curStatus=2 AND scheduleId=#{scheduleId}
+  </select>
+    <select id="selectAllTerms" parameterType="Schedule" resultType="Schedule">
+        SELECT * FROM schedule
+        <where>
+            <if test="scheduletTitle!=null and scheduletTitle!=''">and scheduletTitle like concat('%', #{scheduletTitle}, '%')</if>
+            <if test="content!=null and content!=''">and content =#{content}</if>
+            <if test="startTime!=null and startTime!=''">and startTime &gt;=#{startTime}</if>
+            <if test="endTime!=null and endTime!=''">and endTime &lt;=#{endTime}</if>
+            <if test="type!=null and type!=''">and type =#{type}</if>
+            <if test="state!=null and state!=''">and state =#{state}</if>
+            <if test="user!=null and user!=''">and user =#{user}</if>
+            AND curStatus=2
+        </where>
+        ORDER BY recordTime DESC
+        <if test="startRow>=0 and endRow>0"> limit #{startRow},#{endRow}</if>
+    </select>
+    <select id="selectAllTermsCont" parameterType="Schedule" resultType="int">
+        SELECT COUNT(*) FROM schedule
+        <where>
+            <if test="scheduletTitle!=null and scheduletTitle!=''">and scheduletTitle like concat('%', #{scheduletTitle}, '%')</if>
+            <if test="content!=null and content!=''">and content =#{content}</if>
+            <if test="startTime!=null and startTime!=''">and startTime &gt;=#{startTime}</if>
+            <if test="endTime!=null and endTime!=''">and endTime &lt;=#{endTime}</if>
+            <if test="type!=null and type!=''">and type =#{type}</if>
+            <if test="state!=null and state!=''">and state =#{state}</if>
+            <if test="user!=null and user!=''">and user =#{user}</if>
+            AND curStatus=2
+        </where>
+    </select>
+    <delete id="deletes">
+      UPDATE schedule SET curStatus=0,deleteName=#{deleteName},deleteTime=#{deleteTime} WHERE scheduleId in (${scheduleId}) AND curStatus=2
+   </delete>
+    <select id="getUserSchedule" parameterType="Schedule" resultType="Schedule">
+        SELECT * FROM  schedule WHERE startTime &lt;= #{startTime} AND endTime &gt;= #{endTime} AND user = #{user}  AND curStatus=2
+    </select>
+
+</mapper>

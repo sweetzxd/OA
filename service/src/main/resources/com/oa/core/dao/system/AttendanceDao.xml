@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为UserDao接口方法提供sql语句配置 -->
+<mapper namespace="com.oa.core.dao.system.AttendanceDao">
+    <insert id="insert" parameterType="Attendance">
+
+    </insert>
+    <update id="update" parameterType="Attendance">
+
+    </update>
+    <delete id="delete" parameterType="String">
+        UPDATE ygkqj18112001
+        <set>
+            <if test="deleteName!=null">deleteName =#{deleteName},</if>
+            <if test="deleteTime!=null">deleteTime =#{deleteTime},</if>
+            curStatus=0
+        </set>
+        WHERE recorderNO=#{recorderNO}
+    </delete>
+</mapper>

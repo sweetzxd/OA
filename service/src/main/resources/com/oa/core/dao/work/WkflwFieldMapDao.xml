@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为UserDao接口方法提供sql语句配置 -->
+<mapper namespace="com.oa.core.dao.work.WkflwFieldMapDao">
+    <insert id="insert" parameterType="WkflwFieldMap">
+        INSERT INTO wkflwfieldmap(wkflwfieldmapId,wkflwId,nodeTableName,nodeFieldName,formTableName,formFieldName,curStatus,recordName,recordTime)
+        VALUES
+        (#{wkflwfieldmapId},#{wkflwId},#{nodeTableName},#{nodeFieldName},#{formTableName},#{formFieldName},2,#{recordName},#{recordTime})
+    </insert>
+    <delete id="delete" parameterType="WkflwFieldMap">
+        UPDATE wkflwfieldmap
+        <set>
+            <if test="deleteName!=null and deleteName!=''">deleteName = #{deleteName},</if>
+            <if test="deleteTime!=null and deleteTime!=''">deleteTime = #{deleteTime},</if>
+            curStatus=0
+        </set>
+        WHERE wkflwfieldmapId = #{wkflwfieldmapId}
+    </delete>
+    <delete id="deletes" parameterType="WkflwFieldMap">
+        UPDATE wkflwfieldmap
+        <set>
+            <if test="deleteName!=null and deleteName!=''">deleteName = #{deleteName},</if>
+            <if test="deleteTime!=null and deleteTime!=''">deleteTime = #{deleteTime},</if>
+            curStatus=0
+        </set>
+        WHERE wkflwfieldmapId in (${wkflwfieldmapId})
+    </delete>
+    <update id="update" parameterType="WkflwFieldMap">
+        UPDATE wkflwfieldmap
+        <set>
+            <if test="wkflwId!=null and wkflwId!=''">wkflwId =#{wkflwId},</if>
+            <if test="nodeTableName!=null and nodeTableName!=''">nodeTableName =#{nodeTableName},</if>
+            <if test="nodeFieldName!=null and nodeFieldName!=''">nodeFieldName =#{nodeFieldName},</if>
+            <if test="formTableName!=null and formTableName!=''">formTableName =#{formTableName},</if>
+            <if test="formFieldName!=null and formFieldName!=''">formFieldName =#{formFieldName},</if>
+            <if test="modifyName!=null and modifyName!=''">modifyName =#{modifyName},</if>
+            <if test="modifyTime!=null and modifyTime!=''">modifyTime =#{modifyTime}</if>
+        </set>
+        where wkflwfieldmapId=#{wkflwfieldmapId} and curStatus=2
+    </update>
+
+    <select id="selectWkflwFieldMapById" resultType="WkflwFieldMap" parameterType="String">
+        SELECT * FROM wkflwfieldmap WHERE wkflwfieldmapId = #{wkflwfieldmapId} AND curStatus=2
+    </select>
+
+    <select id="selectWkflwFieldMapByWkflwId" resultType="WkflwFieldMap" parameterType="String">
+        SELECT * FROM wkflwfieldmap WHERE wkflwId = #{wkflwId} AND curStatus=2
+    </select>
+
+    <select id="selectWkflwFieldMap" resultType="WkflwFieldMap">
+        SELECT * FROM wkflwfieldmap
+        <where>
+            <if test="wkflwId!=null and wkflwId!=''">and wkflwId=#{wkflwId}</if>
+            AND curStatus=2
+        </where>
+        order by recordTime desc
+        <if test="startRow>0 and endRow>0"> limit #{startRow},#{endRow}</if>
+    </select>
+
+    <select id="selectWkflwFieldMapByCount" resultType="int">
+        select count(*) from wkflwfieldmap
+        <where>
+            <if test="wkflwId!=null and wkflwId!=''">and wkflwId=#{wkflwId}</if>
+            AND curStatus=2
+        </where>
+    </select>
+
+    <select id="selectWkflwFieldMapByFormFieldName" resultType="WkflwFieldMap" parameterType="String">
+        SELECT * FROM wkflwfieldmap WHERE formFieldName = #{formFieldName} AND curStatus=2
+    </select>
+
+</mapper>

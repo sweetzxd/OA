@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为ListenerDao接口方法提供sql语句配置 -->
+<mapper namespace="com.oa.core.dao.ListenerDao">
+    <!-- FieldData表SQL语句配置-->
+    <select id="listenerField" resultType="FieldData">
+        SELECT * FROM FieldData WHERE  curStatus=2 order by recTime desc
+    </select>
+    <!-- TableData表SQL语句配置-->
+    <select id="listenerTable" resultType="TableData">
+        SELECT * FROM TableData WHERE curStatus=2 order by recTime desc
+    </select>
+    <!-- TaskData表SQL语句配置-->
+    <select id="listenerTask" resultType="TaskData">
+        SELECT * FROM TaskData WHERE curStatus=2 order by recTime desc
+    </select>
+    <!-- UserManager表SQL语句配置-->
+    <select id="listenerUser" resultType="UserManager">
+        SELECT * FROM UserManager WHERE accountStatus=2 AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+    <!-- RoleDefines表SQL语句配置-->
+    <select id="listenerRole" resultType="RoleDefines">
+        SELECT * FROM RoleDefines WHERE curStatus=2 ORDER BY recordTime DESC
+    </select>
+</mapper>

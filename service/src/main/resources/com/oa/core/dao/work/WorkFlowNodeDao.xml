@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为UserDao接口方法提供sql语句配置 -->
+<mapper namespace="com.oa.core.dao.work.WorkFlowNodeDao">
+    <insert id="insert" parameterType="WorkFlowNode">
+        INSERT INTO WorkFlowNode(nodeID,nodeTitle,needFormPage,formId,wkflwID,nodePosition,maxWorkHouses,stress,workType,checkPageType,showInfoPages,flwNodeOpt,toSchedule,allowOtherDoit,warnContent,isParellel,isORAction,actor1ByOne,eachType1Only,security,reminder,remindPeriod,remindType,remindTimeValue,curStatus,recordName,recordTime,modifyName,modifyTime,deleteName,deleteTime)
+        VALUES
+        (#{nodeID},#{nodeTitle},#{needFormPage},#{formId},#{wkflwID},#{nodePosition},#{maxWorkHouses},#{stress},#{workType},#{checkPageType},#{showInfoPages},#{flwNodeOpt},#{toSchedule},#{allowOtherDoit},#{warnContent},#{isParellel},#{isORAction},#{actor1ByOne},#{eachType1Only},#{security},#{reminder},#{remindPeriod},#{remindType},#{remindTimeValue},2,#{recordName},#{recordTime},#{modifyName},#{modifyTime},#{deleteName},#{deleteTime})
+    </insert>
+
+    <delete id="delete" parameterType="WorkFlowNode">
+        UPDATE WorkFlowNode
+        <set>
+            <if test="deleteName!=null">deleteName =#{deleteName},</if>
+            <if test="deleteTime!=null">deleteTime =#{deleteTime},</if>
+            curStatus=0
+        </set>
+        WHERE nodeID=#{nodeID}
+    </delete>
+    <delete id="deletes" parameterType="WorkFlowNode">
+        UPDATE WorkFlowNode
+        <set>
+            curStatus=0
+        </set>
+        WHERE nodeID in (${nodeID})
+    </delete>
+    <update id="update" parameterType="WorkFlowNode">
+        UPDATE WorkFlowNode
+        <set>
+            <if test="nodeTitle!=null and nodeTitle!=''">nodeTitle =#{nodeTitle},</if>
+            <if test="needFormPage!=null and needFormPage!=''">needFormPage =#{needFormPage},</if>
+            <if test="formId!=null and formId!=''">formId =#{formId},</if>
+            <if test="wkflwID!=null and wkflwID!=''">wkflwID =#{wkflwID},</if>
+            <if test="maxWorkHouses!=null and maxWorkHouses!=''">maxWorkHouses =#{maxWorkHouses},</if>
+            <if test="stress!=null and stress!=''">stress =#{stress},</if>
+            <if test="workType!=null and workType!=''">workType =#{workType},</if>
+            <if test="checkPageType!=null and checkPageType!=''">checkPageType =#{checkPageType},</if>
+            <if test="showInfoPages!=null and showInfoPages!=''">showInfoPages =#{showInfoPages},</if>
+            <if test="flwNodeOpt!=null and flwNodeOpt!=''">flwNodeOpt =#{flwNodeOpt},</if>
+            <if test="toSchedule!=null">toSchedule =#{toSchedule},</if>
+            <if test="allowOtherDoit!=null">allowOtherDoit =#{allowOtherDoit},</if>
+            <if test="warnContent!=null and warnContent!=''">warnContent =#{warnContent},</if>
+            <if test="isParellel!=null">isParellel =#{isParellel},</if>
+            <if test="isORAction!=null">isORAction =#{isORAction},</if>
+            <if test="actor1ByOne!=null">actor1ByOne =#{actor1ByOne},</if>
+            <if test="eachType1Only!=null">eachType1Only =#{eachType1Only},</if>
+            <if test="security!=null">security =#{security},</if>
+            <if test="reminder!=null and reminder!=''">reminder =#{reminder},</if>
+            <if test="remindPeriod!=null">remindPeriod =#{remindPeriod},</if>
+            <if test="remindType!=null and remindType!=''">remindType =#{remindType},</if>
+            <if test="remindTimeValue!=null and remindTimeValue!=''">remindTimeValue =#{remindTimeValue},</if>
+
+            <if test="modifyName!=null"> modifyName =#{modifyName},</if>
+            <if test="modifyTime!=null"> modifyTime =#{modifyTime}</if>
+        </set>
+        where nodeID=#{nodeID}
+    </update>
+
+    <update id="updatePosition">
+        UPDATE WorkFlowNode SET nodePosition=#{nodePosition} WHERE nodeID=#{nodeId} AND curStatus=2
+    </update>
+
+    <select id="selectAll" resultType="WorkFlowNode">
+        SELECT * FROM WorkFlowNode WHERE curStatus=2 order by recordTime desc
+    </select>
+
+    <select id="selectTerms" parameterType="WorkFlowNode" resultType="WorkFlowNode">
+        SELECT * FROM WorkFlowNode
+        <where>
+            <if test="nodeTitle!=null and nodeTitle!=''">and nodeTitle like concat('%', #{nodeTitle}, '%')</if>
+            <if test="needFormPage!=null and needFormPage!=''">and needFormPage =#{needFormPage}</if>
+            <if test="formId!=null and formId!=''">and formId =#{formId}</if>
+            <if test="wkflwID!=null and wkflwID!=''">and wkflwID =#{wkflwID}</if>
+            <!--<if util="nodePosition!=null">and nodePosition =#{nodePosition}</if>-->
+            <if test="maxWorkHouses!=null and maxWorkHouses!=''">and maxWorkHouses =#{maxWorkHouses}</if>
+            <if test="stress!=null and stress!=''">and stress =#{stress}</if>
+            <if test="workType!=null and workType!=''">and workType =#{workType}</if>
+            <if test="checkPageType!=null and checkPageType!=''">and checkPageType =#{checkPageType}</if>
+            <if test="showInfoPages!=null and showInfoPages!=''">and showInfoPages =#{showInfoPages}</if>
+            <if test="flwNodeOpt!=null and flwNodeOpt!=''">and flwNodeOpt =#{flwNodeOpt}</if>
+            <!--<if util="toSchedule!=null">and toSchedule =#{toSchedule}</if>
+            <if util="allowOtherDoit!=null">and allowOtherDoit =#{allowOtherDoit}</if>-->
+            <if test="warnContent!=null and warnContent!=''">and warnContent =#{warnContent}</if>
+            <!--<if util="isParellel!=null">and isParellel =#{isParellel}</if>
+            <if util="isORAction!=null">and isORAction =#{isORAction}</if>
+            <if util="actor1ByOne!=null">and actor1ByOne =#{actor1ByOne}</if>
+            <if util="eachType1Only!=null">and eachType1Only =#{eachType1Only}</if>
+            <if util="security!=null">and security =#{security}</if>-->
+            <if test="reminder!=null and reminder!=''">and reminder =#{reminder}</if>
+            <!--<if util="remindPeriod!=null">and remindPeriod =#{remindPeriod}</if>-->
+            <if test="remindType!=null and remindType!=''">and remindType =#{remindType}</if>
+            <if test="remindTimeValue!=null and remindTimeValue!=''">and remindTimeValue =#{remindTimeValue}</if>
+
+            and curStatus=2
+        </where>
+        order by recordTime desc
+    </select>
+
+    <select id="selectById" parameterType="java.lang.String" resultType="WorkFlowNode">
+        SELECT * FROM WorkFlowNode WHERE nodeID = #{_parameter} AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="selectByIds" parameterType="java.lang.String" resultType="WorkFlowNode">
+        SELECT * FROM WorkFlowNode WHERE nodeID IN (${_parameter}) AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="selectByWkflwId" parameterType="java.lang.String" resultType="WorkFlowNode">
+        SELECT * FROM WorkFlowNode WHERE wkflwId = #{_parameter} AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="selectTopNode" parameterType="java.lang.String" resultType="WorkFlowNode">
+        SELECT * FROM WorkFlowNode WHERE wkflwID = #{_parameter} AND nodePosition=1 AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="selectAllCount" resultType="int">
+        select count(*) from WorkFlowNode WHERE curStatus=2
+    </select>
+
+    <select id="selectTermsCount" parameterType="WorkFlowNode" resultType="int">
+        SELECT count(*) FROM WorkFlowNode
+        <where>
+            <if test="nodeTitle!=null and nodeTitle!=''">and nodeTitle like concat('%', #{nodeTitle}, '%')</if>
+            <if test="needFormPage!=null and needFormPage!=''">and needFormPage =#{needFormPage}</if>
+            <if test="formId!=null and formId!=''">and formId =#{formId}</if>
+            <if test="wkflwID!=null and wkflwID!=''">and wkflwID =#{wkflwID}</if>
+            <if test="nodePosition!=null and nodePosition!=''">and nodePosition =#{nodePosition}</if>
+            <if test="maxWorkHouses!=null and maxWorkHouses!=''">and maxWorkHouses =#{maxWorkHouses}</if>
+            <if test="stress!=null and stress!=''">and stress =#{stress}</if>
+            <if test="workType!=null and workType!=''">and workType =#{workType}</if>
+            <if test="checkPageType!=null and checkPageType!=''">and checkPageType =#{checkPageType}</if>
+            <if test="showInfoPages!=null and showInfoPages!=''">and showInfoPages =#{showInfoPages}</if>
+            <if test="flwNodeOpt!=null and flwNodeOpt!=''">and flwNodeOpt =#{flwNodeOpt}</if>
+            <!--<if util="toSchedule!=null">and toSchedule =#{toSchedule}</if>
+            <if util="allowOtherDoit!=null">and allowOtherDoit =#{allowOtherDoit}</if>-->
+            <if test="warnContent!=null and warnContent!=''">and warnContent =#{warnContent}</if>
+           <!-- <if util="isParellel!=null">and isParellel =#{isParellel}</if>
+            <if util="isORAction!=null">and isORAction =#{isORAction}</if>
+            <if util="actor1ByOne!=null">and actor1ByOne =#{actor1ByOne}</if>
+            <if util="eachType1Only!=null">and eachType1Only =#{eachType1Only}</if>
+            <if util="security!=null">and security =#{security}</if>-->
+            <if test="reminder!=null and reminder!=''">and reminder =#{reminder}</if>
+            <!--<if util="remindPeriod!=null">and remindPeriod =#{remindPeriod}</if>-->
+            <if test="remindType!=null and remindType!=''">and remindType =#{remindType}</if>
+            <if test="remindTimeValue!=null and remindTimeValue!=''">and remindTimeValue =#{remindTimeValue}</if>
+        </where>
+        order by recordTime desc
+    </select>
+
+    <select id="selectByIdCount" parameterType="java.lang.String" resultType="int">
+        SELECT count(*) FROM WorkFlowNode WHERE nodeID IN (${_parameter}) AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+</mapper>

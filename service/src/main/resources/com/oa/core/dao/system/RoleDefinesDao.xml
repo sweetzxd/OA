@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为UserDao接口方法提供sql语句配置 -->
+<mapper namespace="com.oa.core.dao.system.RoleDefinesDao">
+    <insert id="insert" parameterType="RoleDefines">
+        INSERT INTO RoleDefines(roleId,roleName,roleTitle,userName,department,module,curStatus,recordName,recordTime,modifyName,modifyTime,deleteName,deleteTime)
+        VALUES
+        (#{roleId},#{roleName},#{roleTitle},#{userName},#{department},#{module},2,#{recordName},#{recordTime},#{modifyName},#{modifyTime},#{deleteName},#{deleteTime})
+    </insert>
+
+    <delete id="delete" parameterType="RoleDefines">
+         UPDATE RoleDefines
+        <set>
+            <if test="deleteName!=null">deleteName =#{deleteName},</if>
+            <if test="deleteTime!=null">deleteTime =#{deleteTime},</if>
+            curStatus=0
+        </set>
+          WHERE roleId=#{roleId}
+    </delete>
+    <delete id="deletes" parameterType="RoleDefines">
+        UPDATE RoleDefines
+        <set>
+            <if test="deleteName!=null">deleteName =#{deleteName},</if>
+            <if test="deleteTime!=null">deleteTime =#{deleteTime},</if>
+            curStatus=0
+        </set>
+        WHERE roleId in (${roleId})
+    </delete>
+    <update id="update" parameterType="RoleDefines">
+        UPDATE RoleDefines
+        <set>
+            <if test="roleName!=null and roleName!=''">roleName =#{roleName},</if>
+            <if test="roleTitle!=null and roleTitle!=''">roleTitle =#{roleTitle},</if>
+            <if test="userName!=null and userName!=''">userName =#{userName},</if>
+            <if test="department!=null and department!=''">department =#{department},</if>
+            <if test="module!=null and module!=''">module =#{module},</if>
+            <if test="modifyName!=null"> modifyName =#{modifyName},</if>
+            <if test="modifyTime!=null"> modifyTime =#{modifyTime}</if>
+        </set>
+        where roleId=#{roleId}
+    </update>
+
+    <select id="selectById" resultType="RoleDefines" parameterType="java.lang.String">
+        SELECT * FROM RoleDefines WHERE roleId = #{roleId} AND CURSTATUS=2
+    </select>
+
+    <select id="getRoleIds" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT roleId FROM RoleDefines WHERE userName like concat('%', #{userName}, '%') AND curStatus=2
+    </select>
+
+    <select id="selectAll" resultType="RoleDefines">
+        SELECT * FROM RoleDefines WHERE CURSTATUS=2 order by recordTime desc
+    </select>
+
+    <select id="selectTerms" parameterType="RoleDefines" resultType="RoleDefines">
+        SELECT * FROM RoleDefines
+        <where>
+            <if test="roleName!=null and roleName!=''">and roleName like concat('%', #{roleName}, '%')</if>
+            <if test="roleTitle!=null and roleTitle!=''">and roleTitle like concat('%', #{roleTitle}, '%')</if>
+            <if test="userName!=null">and userName like concat('%', #{userName}, '%')</if>
+            <if test="department!=null">and department like concat('%', #{department}, '%')</if>
+            <if test="module!=null">and module like concat('%', #{module}, '%')</if>
+            and curStatus=2
+        </where>
+        order by recordTime desc
+        <if test="startRow>=0 and endRow>0">limit #{startRow},#{endRow}</if>
+    </select>
+
+    <select id="selectAllCount" resultType="int">
+        select count(*) from RoleDefines WHERE CURSTATUS=2
+    </select>
+
+    <select id="selectTermsCount" resultType="int">
+        SELECT count(*) FROM RoleDefines
+        <where>
+            <if test="roleName!=null and roleName!=''">and roleName like concat('%', #{roleName}, '%')</if>
+            <if test="roleTitle!=null and roleTitle!=''">and roleTitle like concat('%', #{roleTitle}, '%')</if>
+            <if test="userName!=null">and userName like concat('%', #{userName}, '%')</if>
+            <if test="department!=null">and department like concat('%', #{department}, '%')</if>
+            <if test="module!=null">and module like concat('%', #{module}, '%')</if>
+            and curStatus=2
+        </where>
+        order by recordTime desc
+    </select>
+</mapper>

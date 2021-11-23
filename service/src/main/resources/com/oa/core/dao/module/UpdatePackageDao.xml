@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oa.core.dao.module.UpdatePackageDao">
+    <insert id="insert">
+        INSERT INTO UpdatePackage (packId,packName,packType,packRely,packUpTime,packUpFile,packUpName,packVersion,updateType,curStatus,recordName,recordTime,modifyName,modifyTime,deleteName,deleteTime)
+        VALUES(#{packId},#{packName},#{packType},#{packRely},#{packUpTime},#{packUpFile},#{packUpName},#{packVersion},0,2,#{recordName},#{recordTime},#{modifyName},#{modifyTime},#{deleteName},#{deleteTime})
+    </insert>
+    <delete id="delete">
+        UPDATE UpdatePackage SET curStatus=0,deleteName=#{deleteName},deleteTime=#{deleteTime} WHERE packId=#{packId} AND curStatus=2
+    </delete>
+
+    <delete id="deletes">
+        UPDATE UpdatePackage SET curStatus=0,deleteName=#{deleteName},deleteTime=#{deleteTime} WHERE curStatus=2
+        AND packId IN
+        <foreach collection="packIds" index="index" item="packId" open="(" separator="," close=")">
+            #{packId}
+        </foreach>
+    </delete>
+    <update id="update">
+        UPDATE UpdatePackage
+        <set>
+            <if test="packName!=null and packName!=''">packName =#{packName},</if>
+            <if test="packType!=null and packType!=''">packType =#{packType},</if>
+            <if test="packRely!=null and packRely!=''">packRely =#{packRely},</if>
+            <if test="packUpTime!=null and packUpTime!=''">packUpTime =#{packUpTime},</if>
+            <if test="packUpFile!=null and packUpFile!=''">packUpFile =#{packUpFile},</if>
+            <if test="packUpName!=null and packUpName!=''">packUpName =#{packUpName},</if>
+            <if test="packVersion!=null and packVersion!=''">packVersion =#{packVersion},</if>
+            <if test="modifyName!=null and modifyName!=''">modifyName =#{modifyName},</if>
+            <if test="modifyTime!=null and modifyTime!=''">modifyTime =#{modifyTime},</if>
+        </set>
+        WHERE curStatus=2 AND packId=#{packId}
+    </update>
+    <select id="selectAll" resultType="UpdatePackage">
+        SELECT * FROM UpdatePackage WHERE curStatus=2
+        ORDER BY packUpTime DESC
+    </select>
+
+    <select id="selectById" parameterType="java.util.List" resultType="UpdatePackage">
+        SELECT * FROM UpdatePackage WHERE curStatus=2 AND packId=#{packId}
+    </select>
+
+    <select id="selectByIds" resultType="int">
+        SELECT * FROM UpdatePackage WHERE curStatus=2
+        AND packId IN
+        <foreach collection="packIds" index="index" item="packId" open="(" separator="," close=")">
+            #{packId}
+        </foreach>
+        <if test="startRow!=null and endRow>0">order by packUpTime desc limit #{startRow},#{endRow}</if>
+    </select>
+    <select id="selectByIdsCount" resultType="int">
+        SELECT count(*) FROM UpdatePackage WHERE curStatus=2
+        AND packId IN
+        <foreach collection="packIds" index="index" item="packId" open="(" separator="," close=")">
+            #{packId}
+        </foreach>
+        <if test="startRow!=null and endRow>0">order by packUpTime desc limit #{startRow},#{endRow}</if>
+    </select>
+    <select id="selectTerms" parameterType="UpdatePackage" resultType="UpdatePackage">
+        SELECT * FROM UpdatePackage
+        <where>
+            <if test="packId!=null and packId!=''">and packId =#{packId}</if>
+            <if test="packName!=null and packName!=''">and (packName =#{packName} or packName like concat('%', #{packName}, '%'))</if>
+            <if test="packType!=null and packType!=''">and packType =#{packType}</if>
+            <if test="packRely!=null and packRely!=''">and (packRely =#{packRely} or packRely like concat('%', #{packRely}, '%'))</if>
+            <if test="packUpTime!=null and packUpTime!=''">and packUpTime =#{packUpTime}</if>
+            <if test="packUpFile!=null and packUpFile!=''">and packUpFile =#{packUpFile}</if>
+            <if test="packVersion!=null and packVersion!=''">and packVersion =#{packVersion}</if>
+            and curStatus=2
+        </where>
+        <if test="startRow!=null and endRow>0">order by packUpTime desc limit #{startRow},#{endRow}</if>
+    </select>
+    <select id="selectTermsCount" parameterType="UpdatePackage" resultType="int">
+        SELECT COUNT(*) FROM UpdatePackage
+        <where>
+            <if test="packId!=null and packId!=''">and packId =#{packId}</if>
+            <if test="packName!=null and packName!=''">and (packName =#{packName} or packName like concat('%', #{packName}, '%'))</if>
+            <if test="packType!=null and packType!=''">and packType =#{packType}</if>
+            <if test="packRely!=null and packRely!=''">and (packRely =#{packRely} or packRely like concat('%', #{packRely}, '%'))</if>
+            <if test="packUpTime!=null and packUpTime!=''">and packUpTime =#{packUpTime}</if>
+            <if test="packUpFile!=null and packUpFile!=''">and packUpFile =#{packUpFile}</if>
+            <if test="packVersion!=null and packVersion!=''">and packVersion =#{packVersion}</if>
+            AND curStatus=2
+        </where>
+    </select>
+</mapper>

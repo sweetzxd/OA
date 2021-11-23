@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oa.core.dao.module.JoblogDao" >
+    <insert id="insert">
+    INSERT INTO joblog (joblogId, user, deptId, leader,
+      startTime, endTime, content, finish, file, remark, state, status, reason,
+      curStatus, linkRecorderNO, reserveField, recordName,
+      recordTime, modifyName, modifyTime,
+      deleteName, deleteTime)
+    VALUES (#{joblogId}, #{user}, #{deptId}, #{leader},
+      #{startTime}, #{endTime}, #{content},#{finish},#{file},#{remark},#{state},#{status},#{reason},
+      2,#{linkRecorderNO},#{reserveField}, #{recordName},
+      #{recordTime}, #{modifyName}, #{modifyTime},
+      #{deleteName}, #{deleteTime})
+  </insert>
+    <delete id="delete">
+      UPDATE joblog SET curStatus=0,deleteName=#{deleteName},deleteTime=#{deleteTime} WHERE joblogId=#{joblogId} AND curStatus=2
+  </delete>
+    <update id="update">
+        UPDATE joblog
+        <set>
+            <if test="user!=null and user!=''">user =#{user},</if>
+            <if test="deptId!=null and deptId!=''">deptId =#{deptId},</if>
+            <if test="leader!=null and leader!=''">leader =#{leader},</if>
+            <if test="startTime!=null and startTime!=''">startTime =#{startTime},</if>
+            <if test="endTime!=null and endTime!=''">endTime =#{endTime},</if>
+            <if test="content!=null and content!=''">content =#{content},</if>
+            <if test="finish!=null and finish!=''">finish =#{finish},</if>
+            <if test="file!=null and file!=''">file =#{file},</if>
+            <if test="remark!=null and remark!=''">remark =#{remark},</if>
+            <if test="state!=null and state!=''">state =#{state},</if>
+            <if test="status!=null and status!=''">status =#{status},</if>
+            <if test="reason!=null and reason!=''">reason =#{reason},</if>
+            <if test="modifyName!=null and modifyName!=''">modifyName =#{modifyName},</if>
+            <if test="modifyTime!=null and modifyTime!=''">modifyTime =#{modifyTime},</if>
+        </set>
+        WHERE curStatus=2 AND joblogId=#{joblogId}
+    </update>
+    <select id="selectById" resultType="Joblog">
+        SELECT * FROM joblog WHERE curStatus=2 AND joblogId=#{joblogId}
+  </select>
+    <select id="selectAllTerms" parameterType="Joblog" resultType="Joblog">
+        SELECT * FROM joblog
+        <where>
+            <if test="user!=null and user!=''">and user =#{user}</if>
+            <if test="deptId!=null and deptId!=''">and deptId =#{deptId}</if>
+            <if test="leader!=null and leader!=''">and leader =#{leader}</if>
+            <if test="state!=null and state!=''">and state =#{state}</if>
+            <if test="status!=null and status!=''">and status =#{status}</if>
+            AND curStatus=2
+        </where>
+        ORDER BY recordTime DESC
+        <if test="startRow>=0 and endRow>0"> limit #{startRow},#{endRow}</if>
+    </select>
+    <select id="selectAllTermsCont" parameterType="Joblog" resultType="int">
+        SELECT COUNT(*) FROM joblog
+        <where>
+            <if test="user!=null and user!=''">and user =#{user}</if>
+            <if test="deptId!=null and deptId!=''">and deptId =#{deptId}</if>
+            <if test="leader!=null and leader!=''">and leader =#{leader}</if>
+            <if test="state!=null and state!=''">and state =#{state}</if>
+            <if test="status!=null and status!=''">and status =#{status}</if>
+            AND curStatus=2
+        </where>
+    </select>
+    <delete id="deletes">
+      UPDATE joblog SET curStatus=0,deleteName=#{deleteName},deleteTime=#{deleteTime} WHERE joblogId in (${joblogId}) AND curStatus=2
+   </delete>
+
+</mapper>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oa.core.dao.module.FilepermissionDao" >
+  <insert id="insert">
+    INSERT INTO filepermission (permissionId, fileTypeId, actorType,
+      contextValue, see, download,
+      curStatus, recordName, recordTime,
+      modifyName, modifyTime, deleteName,
+      deleteTime)
+    VALUES (#{permissionId}, #{fileTypeId}, #{actorType},
+      #{contextValue}, #{see}, #{download},
+      2, #{recordName}, #{recordTime},
+      #{modifyName}, #{modifyTime}, #{deleteName},
+      #{deleteTime})
+  </insert>
+  <delete id="delete">
+      UPDATE filepermission SET curStatus=0,deleteName=#{deleteName},deleteTime=#{deleteTime} WHERE permissionId=#{permissionId} AND curStatus=2
+  </delete>
+  <update id="update">
+    UPDATE filepermission
+    <set>
+      <if test="fileTypeId!=null and fileTypeId!=''">fileTypeId =#{fileTypeId},</if>
+      <if test="actorType!=null and actorType!=''">actorType =#{actorType},</if>
+      <if test="contextValue!=null and contextValue!=''">contextValue =#{contextValue},</if>
+      <if test="see!=null and see!=''">see =#{see},</if>
+      <if test="download!=null and download!=''">download =#{download},</if>
+      <if test="modifyName!=null and modifyName!=''">modifyName =#{modifyName},</if>
+      <if test="modifyTime!=null and modifyTime!=''">modifyTime =#{modifyTime},</if>
+    </set>
+    WHERE curStatus=2 AND permissionId=#{permissionId}
+  </update>
+  <select id="selectById" resultType="Filepermission">
+        SELECT * FROM filepermission WHERE curStatus=2 AND permissionId=#{permissionId}
+  </select>
+  <select id="selectAllTerms" parameterType="Filepermission" resultType="Filepermission">
+    SELECT * FROM filepermission
+    <where>
+      <if test="fileTypeId!=null and fileTypeId!=''">and fileTypeId =#{fileTypeId}</if>
+      <if test="actorType!=null and actorType!=''">and actorType =#{actorType}</if>
+      <if test="contextValue!=null and contextValue!=''">and contextValue =#{contextValue}</if>
+      <if test="see!=null and see!=''">and see =#{see}</if>
+      <if test="download!=null and download!=''">and download =#{download}</if>
+      <if test="list!=null and list!=''">and (fileTypeId like concat('%', 'allemployees;', '%')
+        <foreach item="item" index="key" collection="list" separator=" ">
+          OR fileTypeId = #{item}
+        </foreach>
+        )
+      </if>
+      AND curStatus=2
+    </where>
+    ORDER BY recordTime DESC
+    <if test="startRow>=0 and endRow>0"> limit #{startRow},#{endRow}</if>
+  </select>
+  <select id="selectAllTermsCont" parameterType="Filepermission" resultType="int">
+    SELECT COUNT(*) FROM filepermission
+    <where>
+      <if test="fileTypeId!=null and fileTypeId!=''">and fileTypeId =#{fileTypeId}</if>
+      <if test="actorType!=null and actorType!=''">and actorType =#{actorType}</if>
+      <if test="contextValue!=null and contextValue!=''">and contextValue =#{contextValue}</if>
+      <if test="see!=null and see!=''">and see =#{see}</if>
+      <if test="download!=null and download!=''">and download =#{download}</if>
+      <if test="list!=null and list!=''">and (fileTypeId like concat('%', 'allemployees;', '%')
+        <foreach item="item" index="key" collection="list" separator=" ">
+          OR fileTypeId = #{item}
+        </foreach>
+        )
+      </if>
+      AND curStatus=2
+    </where>
+  </select>
+  <delete id="deletes">
+      UPDATE filepermission SET curStatus=0,deleteName=#{deleteName},deleteTime=#{deleteTime} WHERE permissionId in (${permissionId}) AND curStatus=2
+  </delete>
+  <select id="getUserFileType" parameterType="java.util.List" resultType="String">
+    SELECT fileTypeId FROM filepermission WHERE (contextValue = 'allemployees'
+        <if test="list!=null and list!=''">
+            <foreach item="item" index="key" collection="list" separator=" ">
+              OR contextValue = #{item}
+            </foreach>
+        </if>
+        )
+      AND curStatus=2 AND (see = 1 OR download = 1)
+  </select>
+</mapper>

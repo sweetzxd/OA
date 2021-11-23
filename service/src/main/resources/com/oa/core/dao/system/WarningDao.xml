@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为UserDao接口方法提供sql语句配置 -->
+<mapper namespace="com.oa.core.dao.system.WarningDao">
+
+    <insert id="insert" parameterType="Warning">
+        INSERT INTO WarningManager(warningId,warningName,warningType,warningTime,warningClass,warningMsg,warningRule,curStatus,recordName,recordTime,modifyName,modifyTime)
+        VALUES
+        (#{warningId},#{warningName},#{warningType},#{warningTime},#{warningClass},#{warningMsg},#{warningRule},2,#{recordName},#{recordTime},#{recordName},#{recordTime})
+    </insert>
+
+    <delete id="delete">
+        UPDATE WarningManager SET curStatus = 0,deleteName = #{deleteName},deleteTime = #{deleteTime} WHERE warningId=#{warningId}
+    </delete>
+
+    <update id="update" parameterType="Warning">
+        UPDATE WarningManager
+        <set>
+            <if test="warningName!=null and warningName!=''">warningName =#{warningName},</if>
+            <if test="warningType!=null and warningType!=''">warningType =#{warningType},</if>
+            <if test="warningTime!=null and warningTime!=''">warningTime =#{warningTime},</if>
+            <if test="warningClass!=null and warningTime!=''">warningClass =#{warningClass},</if>
+            <if test="warningMsg!=null and warningMsg!=''">warningMsg =#{warningMsg},</if>
+            <if test="warningRule!=null and warningRule!=''">warningRule =#{warningRule},</if>
+        </set>
+        WHERE warningId=#{warningId}
+    </update>
+
+    <select id="selectAll" parameterType="java.lang.String" resultType="Warning">
+        SELECT * FROM WarningManager WHERE
+        curStatus=2
+        <where>
+            <if test="type!=null and type!=''">and warningType = #{type}</if>
+        </where>
+        order by recordTime desc
+    </select>
+
+</mapper>

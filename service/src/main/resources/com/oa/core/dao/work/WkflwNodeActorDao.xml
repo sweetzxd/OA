@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为UserDao接口方法提供sql语句配置 -->
+<mapper namespace="com.oa.core.dao.work.WkflwNodeActorDao">
+    <insert id="insert" parameterType="WkflwNodeActor">
+        INSERT INTO WkflwNodeActor(nodeActorID,nodeID,actorID,wkfActorType,contextValue,nodeActrOrder,formActions,curStatus,recordName,recordTime,modifyName,modifyTime,deleteName,deleteTime)
+        VALUES
+        (#{nodeActorID},#{nodeID},#{actorID},#{wkfActorType},#{contextValue},#{nodeActrOrder},#{formActions},2,#{recordName},#{recordTime},#{modifyName},#{modifyTime},#{deleteName},#{deleteTime})
+    </insert>
+
+    <delete id="delete" parameterType="WkflwNodeActor">
+        UPDATE WkflwNodeActor
+        <set>
+            <if test="deleteName!=null">deleteName =#{deleteName},</if>
+            <if test="deleteTime!=null">deleteTime =#{deleteTime},</if>
+            curStatus=0
+        </set>
+        WHERE nodeActorID=#{nodeActorID}
+    </delete>
+    <delete id="deletes" parameterType="list">
+        UPDATE WkflwNodeActor
+        <set>
+            deleteName='admin',
+            deleteTime = NOW(),
+            curStatus=0
+        </set>
+        WHERE nodeActorID in
+        <foreach collection="list" index="index" item="nodeActorID" open="(" close=")" separator=",">
+            #{nodeActorID}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByNode" parameterType="java.lang.String">
+        UPDATE WkflwNodeActor SET deleteName='admin',deleteTime = NOW(),curStatus=0 WHERE nodeId = #{_parameter}
+    </delete>
+
+    <update id="update" parameterType="WkflwNodeActor">
+        UPDATE WkflwNodeActor
+        <set>
+            <if test="nodeID!=null and nodeID!=''">nodeID =#{nodeID},</if>
+            <if test="actorID!=null and actorID!=''">actorID =#{actorID},</if>
+            <if test="wkfActorType!=null and wkfActorType!=''">wkfActorType =#{wkfActorType},</if>
+            <if test="contextValue!=null and contextValue!=''">contextValue =#{contextValue},</if>
+            <if test="nodeActrOrder!=null">nodeActrOrder =#{nodeActrOrder},</if>
+            <if test="formActions!=null and formActions!=''">formActions =#{formActions},</if>
+
+            <if test="modifyName!=null">modifyName =#{modifyName},</if>
+            <if test="modifyTime!=null">modifyTime =#{modifyTime}</if>
+        </set>
+        where nodeActorID=#{nodeActorID}
+    </update>
+
+    <select id="selectAll" resultType="WkflwNodeActor">
+        SELECT * FROM WkflwNodeActor WHERE curStatus=2 order by recordTime desc
+    </select>
+
+    <select id="selectTerms" parameterType="WkflwNodeActor" resultType="WkflwNodeActor">
+        SELECT * FROM WkflwNodeActor
+        <where>
+            <if test="nodeActorID!=null and nodeActorID!=''">and nodeActorID =#{nodeActorID}</if>
+            <if test="actorID!=null and actorID!=''">and actorID =#{actorID}</if>
+            <if test="nodeID!=null and nodeID!=''">and nodeID =#{nodeID}</if>
+            <if test="wkfActorType!=null and wkfActorType!=''">and wkfActorType =#{wkfActorType}</if>
+            <if test="contextValue!=null and contextValue!=''">and contextValue =#{contextValue}</if>
+            <if test="formActions!=null and formActions!=''">and formActions =#{formActions}</if>
+
+            and curStatus=2
+        </where>
+        order by recordTime desc
+    </select>
+
+    <select id="selectByIds" parameterType="java.lang.String" resultType="WkflwNodeActor">
+        SELECT * FROM WkflwNodeActor WHERE nodeActorID IN (${_parameter}) AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="selectById" parameterType="java.lang.String" resultType="WkflwNodeActor">
+        SELECT * FROM WkflwNodeActor WHERE nodeActorID = #{_parameter} AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="selectByNodeId" parameterType="java.lang.String" resultType="WkflwNodeActor">
+        SELECT * FROM WkflwNodeActor WHERE nodeID = #{_parameter} AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="selectListActor" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT nodeActorID FROM WkflwNodeActor WHERE nodeID = #{_parameter} AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="selectwkflwId" resultType="WkflwNodeActor">
+        select a.* from wkflwnodeactor a join workflownode n on a.nodeID=n.nodeID where n.wkflwID=#{wkflwId} and n.curStatus='2' and a.curStatus='2'
+    </select>
+</mapper>

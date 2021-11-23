@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为UserDao接口方法提供sql语句配置 -->
+<mapper namespace="com.oa.core.dao.work.WorkFlowLineDao">
+    <insert id="insert" parameterType="WorkFlowLine">
+        INSERT INTO WorkFlowLine(pathId,pathTitle,wkflwId,fromNode,toNode,isJunction,logUnitType,logUnitParams,logTypeOfByMultActor,isRebackPath,sqlFeild,judgeAfterAll,path1ToOtherTask,isAsynchPath,curStatus,recordName,recordTime,modifyName,modifyTime,deleteName,deleteTime)
+        VALUES
+        (#{pathId},#{pathTitle},#{wkflwId},#{fromNode},#{toNode},#{isJunction},#{logUnitType},#{logUnitParams},#{logTypeOfByMultActor},#{isRebackPath},#{sqlFeild},#{judgeAfterAll},#{path1ToOtherTask},#{isAsynchPath},2,#{recordName},#{recordTime},#{modifyName},#{modifyTime},#{deleteName},#{deleteTime})
+    </insert>
+
+    <delete id="delete" parameterType="WorkFlowLine">
+        UPDATE WorkFlowLine
+        <set>
+            <if test="deleteName!=null">deleteName =#{deleteName},</if>
+            <if test="deleteTime!=null">deleteTime =#{deleteTime},</if>
+            curStatus=0
+        </set>
+        WHERE fromNode=#{fromNode} OR toNode=#{toNode}
+    </delete>
+    <delete id="deleteByNode" parameterType="WorkFlowLine">
+        UPDATE WorkFlowLine
+        <set>
+            <if test="deleteName!=null">deleteName =#{deleteName},</if>
+            <if test="deleteTime!=null">deleteTime =#{deleteTime},</if>
+            curStatus=0
+        </set>
+        WHERE pathId=#{pathId}
+    </delete>
+    <delete id="deletes" parameterType="Map">
+        UPDATE WorkFlowLine
+        <set>
+            <if test="deleteName!=null">deleteName =#{deleteName},</if>
+            <if test="deleteTime!=null">deleteTime =#{deleteTime},</if>
+            curStatus=0
+        </set>
+        WHERE pathId in
+        <foreach collection="ids" item="ids" separator="," open="(" close=")">
+            #{ids}
+        </foreach>
+    </delete>
+    <update id="update" parameterType="WorkFlowLine">
+        UPDATE WorkFlowLine
+        <set>
+            <if test="pathTitle!=null and pathTitle!=''">pathTitle =#{pathTitle},</if>
+            <if test="wkflwId!=null and wkflwId!=''">wkflwId =#{wkflwId},</if>
+            <if test="fromNode!=null and fromNode!=''">fromNode =#{fromNode},</if>
+            <if test="toNode!=null and toNode!=''">toNode =#{toNode},</if>
+            <if test="isJunction!=null">isJunction =#{isJunction},</if>
+            <if test="logUnitType!=null">logUnitType =#{logUnitType},</if>
+            <if test="logUnitParams!=null">logUnitParams =#{logUnitParams},</if>
+            <if test="logTypeOfByMultActor!=null">logTypeOfByMultActor =#{logTypeOfByMultActor},</if>
+            <if test="isRebackPath!=null">isRebackPath =#{isRebackPath},</if>
+            <if test="sqlFeild!=null and sqlFeild!=''">sqlFeild =#{sqlFeild},</if>
+            <if test="judgeAfterAll!=null">judgeAfterAll =#{judgeAfterAll},</if>
+            <if test="path1ToOtherTask!=null">path1ToOtherTask =#{path1ToOtherTask},</if>
+            <if test="isAsynchPath!=null">isAsynchPath =#{isAsynchPath},</if>
+
+            <if test="modifyName!=null"> modifyName =#{modifyName},</if>
+            <if test="modifyTime!=null"> modifyTime =#{modifyTime}</if>
+        </set>
+        where pathId=#{pathId}
+    </update>
+
+    <select id="selectAll" resultType="WorkFlowLine">
+        SELECT * FROM WorkFlowLine WHERE curStatus=2 order by recordTime desc
+    </select>
+
+    <select id="selectTerms" parameterType="WorkFlowLine" resultType="WorkFlowLine">
+        SELECT * FROM WorkFlowLine
+        <where>
+            <if test="pathId!=null and pathId!=''">and pathId in (${pathId})</if>
+            <if test="pathTitle!=null and pathTitle!=''">and pathTitle like concat('%', #{pathTitle}, '%')</if>
+            <if test="wkflwId!=null and wkflwId!=''">and wkflwId =#{wkflwId}</if>
+            <if test="fromNode!=null and fromNode!=''">and fromNode =#{fromNode}</if>
+            <if test="toNode!=null and toNode!=''">and toNode =#{toNode}</if>
+            <!--<if util="isJunction!=null">and isJunction =#{isJunction}</if>-->
+            <if test="logUnitType!=null and logUnitType!=''">and logUnitType =#{logUnitType}</if>
+            <if test="logUnitParams!=null and logUnitParams!=''">and logUnitParams =#{logUnitParams}</if>
+            <!--<if util="logTypeOfByMultActor!=null">and logTypeOfByMultActor =#{logTypeOfByMultActor}</if>
+            <if util="isRebackPath!=null">and isRebackPath =#{isRebackPath}</if>-->
+            <if test="sqlFeild!=null and sqlFeild!=''">and sqlFeild =#{sqlFeild}</if>
+            <!--<if util="judgeAfterAll!=null">and judgeAfterAll =#{judgeAfterAll}</if>
+            <if util="path1ToOtherTask!=null">and path1ToOtherTask =#{path1ToOtherTask}</if>
+            <if util="isAsynchPath!=null">and isAsynchPath =#{isAsynchPath}</if>-->
+            and curStatus=2
+        </where>
+        order by recordTime desc
+    </select>
+
+    <select id="selectByIds" parameterType="java.lang.String" resultType="WorkFlowLine">
+        SELECT * FROM WorkFlowLine WHERE pathId IN (${_parameter}) AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="selectById" parameterType="java.lang.String" resultType="WorkFlowLine">
+        SELECT * FROM WorkFlowLine WHERE pathId = #{_parameter} AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="selectByWkflwId" parameterType="java.lang.String" resultType="WorkFlowLine">
+        SELECT * FROM WorkFlowLine WHERE wkflwId = #{_parameter} AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="selectByNodeId" parameterType="java.lang.String" resultType="WorkFlowLine">
+        SELECT * FROM WorkFlowLine WHERE fromNode = #{_parameter} AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="selectSN" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT toNode AS node FROM WorkFlowLine WHERE wkflwId = #{_parameter} AND fromNode='starNode' AND curStatus=2
+        union all
+        SELECT fromNode AS node FROM WorkFlowLine WHERE wkflwId = #{_parameter} AND toNode='endNode' AND curStatus=2
+    </select>
+
+    <select id="selectPathIds" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT pathId AS node FROM WorkFlowLine WHERE wkflwId = #{_parameter} AND curStatus=2
+    </select>
+
+    <select id="selectAllCount" resultType="int">
+        select count(*) from WorkFlowLine WHERE curStatus=2
+    </select>
+
+    <select id="selectTermsCount" parameterType="WorkFlowLine" resultType="int">
+        SELECT count(*) FROM WorkFlowLine
+        <where>
+            <if test="pathId!=null and pathId!=''">and pathId in (${pathId})</if>
+            <if test="pathTitle!=null and pathTitle!=''">and pathTitle like concat('%', #{pathTitle}, '%')</if>
+            <if test="wkflwId!=null and wkflwId!=''">and wkflwId =#{wkflwId}</if>
+            <if test="fromNode!=null and fromNode!=''">and fromNode =#{fromNode}</if>
+            <if test="toNode!=null and toNode!=''">and toNode =#{toNode}</if>
+            <!--<if util="isJunction!=null">and isJunction =#{isJunction}</if>-->
+            <if test="logUnitType!=null and logUnitType!=''">and logUnitType =#{logUnitType}</if>
+            <if test="logUnitParams!=null and logUnitParams!=''">and logUnitParams =#{logUnitParams}</if>
+            <!--<if util="logTypeOfByMultActor!=null">and logTypeOfByMultActor =#{logTypeOfByMultActor}</if>
+            <if util="isRebackPath!=null">and isRebackPath =#{isRebackPath}</if>-->
+            <if test="sqlFeild!=null and sqlFeild!=''">and sqlFeild =#{sqlFeild}</if>
+            <!--<if util="judgeAfterAll!=null">and judgeAfterAll =#{judgeAfterAll}</if>
+            <if util="path1ToOtherTask!=null">and path1ToOtherTask =#{path1ToOtherTask}</if>
+            <if util="isAsynchPath!=null">and isAsynchPath =#{isAsynchPath}</if>-->
+            and curStatus=2
+        </where>
+        order by recordTime desc
+    </select>
+
+    <select id="selectByIdCount" parameterType="java.lang.String" resultType="int">
+        SELECT count(*) FROM WorkFlowLine WHERE pathId IN (${pathId}) AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="selectAsynch" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT fromNode FROM WorkFlowLine WHERE toNode = #{_parameter} AND curStatus=2 order by recordTime desc
+    </select>
+</mapper>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为UserDao接口方法提供sql语句配置 -->
+<mapper namespace="com.oa.core.dao.system.AccessRightsDao">
+    <insert id="insert" parameterType="AccessRights">
+        INSERT INTO AccessRights(accessId,pageId,roleId,accessType,accessValue,curStatus,recordName,recordTime,modifyName,modifyTime,deleteName,deleteTime)
+        VALUES
+        (#{accessId},#{pageId},#{roleId},#{accessType},#{accessValue},2,#{recordName},#{recordTime},#{modifyName},#{modifyTime},#{deleteName},#{deleteTime})
+    </insert>
+
+    <delete id="delete" parameterType="String">
+        UPDATE AccessRights SET curStatus=0 WHERE accessId=#{accessId}
+    </delete>
+
+    <delete id="deleteTerms" parameterType="AccessRights">
+        UPDATE AccessRights
+        <set>
+            <if test="pageId!=null and pageId!=''">pageId =#{pageId},</if>
+            <if test="roleId!=null and roleId!=''">roleId =#{roleId},</if>
+            <if test="accessType!=null and accessType!=''">accessType =#{accessType},</if>
+            <if test="accessValue!=null and accessValue!=''">accessValue =#{accessValue},</if>
+            <if test="deleteName!=null">deleteName =#{deleteName},</if>
+            <if test="deleteTime!=null">deleteTime =#{deleteTime},</if>
+            curStatus=0
+        </set>
+        WHERE accessId=#{accessId}
+    </delete>
+
+    <delete id="deletePageid" parameterType="String">
+        UPDATE AccessRights
+        <set>
+            <if test="deleteName!=null">deleteName =#{deleteName},</if>
+            <if test="deleteTime!=null">deleteTime =#{deleteTime},</if>
+            curStatus=0
+        </set>
+        WHERE pageId=#{pageId}
+    </delete>
+
+    <update id="update" parameterType="AccessRights">
+        UPDATE AccessRights
+        <set>
+            <if test="pageId!=null and pageId!=''">pageId =#{pageId},</if>
+            <if test="roleId!=null and roleId!=''">roleId =#{roleId},</if>
+            <if test="accessType!=null and accessType!=''">accessType =#{accessType},</if>
+            <if test="accessValue!=null and accessValue!=''">accessValue =#{accessValue},</if>
+            <if test="modifyName!=null">modifyName =#{modifyName},</if>
+            <if test="modifyTime!=null">modifyTime =#{modifyTime}</if>
+        </set>
+        where accessId=#{accessId}
+    </update>
+
+    <select id="selectById" resultType="AccessRights" parameterType="java.lang.String">
+        SELECT * FROM AccessRights WHERE accessId = #{accessId} AND CURSTATUS=2
+    </select>
+
+    <select id="selectByIds" resultType="AccessRights" parameterType="java.lang.String">
+        SELECT * FROM AccessRights WHERE accessId in (${_parameter }) AND CURSTATUS=2
+    </select>
+
+    <select id="selectPageids" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT pageId FROM AccessRights WHERE roleId in (${_parameter }) AND accessType = 'info' AND CURSTATUS=2
+    </select>
+
+    <select id="selectAll" resultType="AccessRights">
+        SELECT * FROM AccessRights WHERE CURSTATUS=2 order by recordTime desc
+    </select>
+    <select id="selectTerm" resultType="AccessRights">
+        SELECT * FROM AccessRights
+        <where>
+            <if test="pageId!=null and pageId!=''">and pageId = #{pageId}</if>
+            <if test="roleId!=null and roleId!=''">and roleId in (${roleId})</if>
+            <if test="accessType!=null and accessType!=''">and accessType =  #{accessType}</if>
+            and curStatus=2
+        </where>
+        order by recordTime desc
+    </select>
+    <select id="selectTerms" parameterType="AccessRights" resultType="AccessRights">
+        SELECT * FROM AccessRights
+        <where>
+            <if test="pageId!=null and pageId!=''">and pageId like concat('%', #{pageId}, '%')</if>
+            <if test="roleId!=null and roleId!=''">and roleId like concat('%', #{roleId}, '%')</if>
+            <if test="accessType!=null">and accessType like concat('%', #{accessType}, '%')</if>
+            and curStatus=2
+        </where>
+        order by recordTime desc
+    </select>
+
+    <select id="selectAllCount" resultType="int">
+        select count(*) from AccessRights WHERE CURSTATUS=2
+    </select>
+
+    <select id="selectTermsCount" resultType="int">
+        SELECT count(*) FROM AccessRights
+        <where>
+            <if test="pageId!=null and pageId!=''">and pageId like concat('%', #{pageId}, '%')</if>
+            <if test="roleId!=null and roleId!=''">and roleId like concat('%', #{roleId}, '%')</if>
+            <if test="accessType!=null">and accessType like concat('%', #{accessType}, '%')</if>
+            and curStatus=2
+        </where>
+        order by recordTime desc
+    </select>
+
+    <select id="selectSqlMapList" parameterType="java.lang.String" resultType="java.util.HashMap">
+       SELECT a.pageid as pageid,r.userName as userName FROM
+       (select pageid,roleId from AccessRights where accessType = #{accessType} and curStatus=2 GROUP BY pageid,roleid) a
+       join roledefines r on a.roleId = r.roleId
+       where r.curStatus=2
+    </select>
+
+    <select id="selectAccess" parameterType="java.lang.String" resultType="java.util.HashMap">
+        SELECT a.pageid,m.pageTitle,a.roleid,r.roleTitle,m.menuNum,m.formType,
+        max(case accesstype when 'info' then accessId else 0 end) acc_info,
+        max(case accesstype when 'add' then accessId else 0 end) acc_add,
+        max(case accesstype when 'modi' then accessId else 0 end) acc_modi,
+        max(case accesstype when 'delete' then accessId else 0 end) acc_delete,
+        max(case accesstype when 'import' then accessId else 0 end) acc_import,
+        max(case accesstype when 'export' then accessId else 0 end) acc_export,
+        max(case accesstype when 'send' then accessId else 0 end) acc_send
+        FROM accessrights a JOIN myurlregist m ON a.pageid=m.pageId JOIN roledefines r ON a.roleId=r.roleId
+        <where>
+            <if test="_parameter!=null and _parameter!=''">(a.pageid=#{_parameter} OR m.parentId=#{_parameter})</if>
+            and a.curStatus=2
+        </where>
+        group by pageid,roleid
+        order by pageid asc
+    </select>
+
+    <select id="selectOneAccess" parameterType="java.lang.String" resultType="java.util.HashMap">
+        SELECT a.pageid,m.pageTitle,a.roleid,r.roleTitle,m.menuNum,m.formType,
+        max(case accesstype when 'info' then accessId else 0 end) acc_info,
+        max(case accesstype when 'add' then accessId else 0 end) acc_add,
+        max(case accesstype when 'modi' then accessId else 0 end) acc_modi,
+        max(case accesstype when 'delete' then accessId else 0 end) acc_delete,
+        max(case accesstype when 'import' then accessId else 0 end) acc_import,
+        max(case accesstype when 'export' then accessId else 0 end) acc_export,
+        max(case accesstype when 'send' then accessId else 0 end) acc_send
+        FROM accessrights a JOIN myurlregist m ON a.pageid=m.pageId JOIN roledefines r ON a.roleId=r.roleId
+        <where>
+            <if test="_parameter!=null and _parameter!=''">(a.pageid=#{pageid})</if>
+            and a.curStatus=2
+        </where>
+        group by pageid,roleid
+        order by pageid asc
+    </select>
+</mapper>

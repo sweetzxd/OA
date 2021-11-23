@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为UserDao接口方法提供sql语句配置 -->
+<mapper namespace="com.oa.core.dao.user.UserManagerDao">
+    <insert id="insertUser" parameterType="UserManager">
+        INSERT INTO UserManager(userName,name,password,computerIP,staffId,accountStatus,userStatus,startDate,endDate,curStatus,recordName,recordTime,modifyName,modifyTime)
+        VALUES
+        (#{userName},#{name},#{password},#{computerIP},#{staffId},1,1,#{startDate},#{endDate},2,#{recordName},#{recordTime},#{modifyName},#{modifyTime})
+    </insert>
+    <delete id="delete">
+        UPDATE UserManager SET modifyName = #{deleteName},deleteTime = #{deleteTime},curStatus=0 WHERE userName = #{userName}
+    </delete>
+    <delete id="deleteUser" parameterType="UserManager">
+        UPDATE UserManager
+        <set>
+            <if test="deleteName!=null and deleteName!=''">modifyName = #{deleteName},</if>
+            <if test="deleteTime!=null and deleteTime!=''">deleteTime = #{deleteTime},</if>
+            curStatus=0
+        </set>
+        WHERE userName = #{userName}
+    </delete>
+    <delete id="deleteAllUser" parameterType="UserManager">
+        UPDATE UserManager
+        <set>
+            <if test="deleteName!=null and deleteName!=''">modifyName = #{deleteName},</if>
+            <if test="deleteTime!=null and deleteTime!=''">deleteTime = #{deleteTime},</if>
+            curStatus=0
+        </set>
+        WHERE userName in (${userName})
+    </delete>
+    <update id="updateUser" parameterType="UserManager">
+        UPDATE UserManager
+        <set>
+            <if test="name!=null and name!=''">name =#{name},</if>
+            <if test="password!=null and password!=''">password =#{password},</if>
+            <if test="computerIP!=null and computerIP!=''">computerIP =#{computerIP},</if>
+            <if test="staffId!=null and staffId!=''">staffId =#{staffId},</if>
+            <if test="accountStatus!=null and accountStatus!=0">accountStatus =#{accountStatus},</if>
+            <if test="userStatus!=null and userStatus!=0">userStatus =#{userStatus},</if>
+            <if test="startDate!=null and startDate!=''">startDate =#{startDate},</if>
+            <if test="endDate!=null and endDate!=''">endDate =#{endDate},</if>
+            <if test="modifyName!=null and modifyName!=''">modifyName =#{modifyName},</if>
+            <if test="modifyTime!=null and modifyTime!=''">modifyTime =#{modifyTime}</if>
+        </set>
+        where userName=#{userName} and curStatus=2
+    </update>
+
+    <select id="selectUserById" resultType="UserManager" parameterType="String">
+        SELECT * FROM UserManager WHERE userName = #{userName} AND curStatus=2
+    </select>
+
+    <select id="selectUserByIds" resultType="UserManager" parameterType="String">
+        SELECT * FROM UserManager WHERE userName in (${userName}) AND curStatus=2
+    </select>
+
+    <select id="selectUser" resultType="UserManager">
+        SELECT * FROM UserManager WHERE CURSTATUS=2 order by id desc
+        <where>
+            <if test="userName!=null and userName!=''">and userName=#{userName}</if>
+            <if test="name!=null and name!=''">and name =#{name}</if>
+            <if test="password!=null and password!=''">and password =#{password}</if>
+            <if test="computerIP!=null and computerIP!=''">and computerIP =#{computerIP}</if>
+            <if test="staffId!=null and staffId!=''">and staffId =#{staffId}</if>
+            <if test="accountStatus!=null and accountStatus!=0">and accountStatus =#{accountStatus}</if>
+            <if test="userStatus!=null and userStatus!=0">and userStatus =#{userStatus}</if>
+            <if test="startDate!=null and startDate!=''">and startDate =#{startDate}</if>
+            <if test="endDate!=null and endDate!=''">and endDate =#{endDate}</if>
+            AND curStatus=2
+        </where>
+        order by recordTime desc
+        <if test="startRow>0 and endRow>0"> limit #{startRow},#{endRow}</if>
+    </select>
+
+    <select id="selectUserAll" resultType="UserManager">
+        SELECT * FROM UserManager
+        <where>
+            <if test="userName!=null and userName!=''">and userName=#{userName}</if>
+            <if test="name!=null and name!=''">and name like concat('%', #{name}, '%')</if>
+            <if test="password!=null and password!=''">and password =#{password}</if>
+            <if test="computerIP!=null and computerIP!=''">and computerIP =#{computerIP}</if>
+            <if test="staffId!=null and staffId!=''">and staffId =#{staffId}</if>
+            <if test="accountStatus!=null and accountStatus!=0">and accountStatus =#{accountStatus}</if>
+            <if test="userStatus!=null and userStatus!=0">and userStatus =#{userStatus}</if>
+            <if test="startDate!=null and startDate!=''">and startDate =#{startDate}</if>
+            <if test="endDate!=null and endDate!=''">and endDate =#{endDate}</if>
+            AND curStatus=2
+        </where>
+        order by recordTime desc
+        <if test="startRow>0 and endRow>0"> limit #{startRow},#{endRow}</if>
+    </select>
+
+    <select id="selectAll" resultType="UserManager">
+        SELECT * FROM UserManager WHERE curStatus=2 order by recordTime desc
+    </select>
+
+    <select id="selectUserCount" resultType="int">
+        select count(*) from USERMANAGER WHERE curStatus=2
+    </select>
+
+    <select id="selectUserByCount" resultType="int">
+        select count(*) from USERMANAGER
+        <where>
+            <if test="userName!=null and userName!=''">and userName=#{userName}</if>
+            <if test="name!=null and name!=''">and name like concat('%', #{name}, '%')</if>
+            <if test="password!=null and password!=''">and password =#{password}</if>
+            <if test="computerIP!=null and computerIP!=''">and computerIP =#{computerIP}</if>
+            <if test="staffId!=null and staffId!=''">and staffId =#{staffId}</if>
+            <if test="accountStatus!=null and accountStatus!=0">and accountStatus =#{accountStatus}</if>
+            <if test="userStatus!=null and userStatus!=0">and userStatus =#{userStatus}</if>
+            <if test="startDate!=null and startDate!=''">and startDate =#{startDate}</if>
+            <if test="endDate!=null and endDate!=''">and endDate =#{endDate}</if>
+            AND curStatus=2
+        </where>
+    </select>
+
+    <select id="selectUserInfo" resultType="Map">
+      select * from userinfo
+        <where>
+            <if test="userName!=null and userName!=''"> OR userName=#{userName}</if>
+            <if test="staffName!=null and staffName!=''"> OR (staffName=#{staffName} OR staffName like concat('%', #{staffName}, '%'))</if>
+            <if test="deptId!=null and deptId!=''"> OR deptId=#{deptId}</if>
+            <if test="deptName!=null and deptName!=''"> OR (deptName=#{deptName} OR deptName like concat('%', #{deptName}, '%'))</if>
+        </where>
+        <if test="startRow>=0 and endRow>0"> limit #{startRow},#{endRow}</if>
+    </select>
+
+    <select id="selectUserInfoByCount" resultType="int">
+        select count(*) from userinfo
+        <where>
+            <if test="userName!=null and userName!=''"> OR userName=#{userName}</if>
+            <if test="staffName!=null and staffName!=''"> OR (staffName=#{staffName} OR staffName like concat('%', #{staffName}, '%'))</if>
+            <if test="deptId!=null and deptId!=''"> OR deptId=#{deptId}</if>
+            <if test="deptName!=null and deptName!=''"> OR (deptName=#{deptName} OR deptName like concat('%', #{deptName}, '%'))</if>
+        </where>
+    </select>
+
+    <select id="selectUserByDept" resultType="Map">
+        select * from userinfo
+        <where>
+            <if test="deptId!=null and deptId!=''">
+                deptId in (select deptId from  department WHERE FIND_IN_SET(deptId,getChildrenOfDept(#{deptId})) AND deptId not in ('organize') AND curStatus=2)
+            </if>
+        </where>
+        <if test="startRow>=0 and endRow>0"> limit #{startRow},#{endRow}</if>
+    </select>
+    <select id="selectUserByDeptCount" resultType="int">
+        select count(*) from userinfo
+        <where>
+            <if test="deptId!=null and deptId!=''">
+            deptId in (select deptId from  department WHERE FIND_IN_SET(deptId,getChildrenOfDept(#{deptId})) AND deptId not in ('organize') AND curStatus=2)
+            </if>
+        </where>
+    </select>
+
+    <select id="getUserByName" resultType="UserManager">
+        SELECT * FROM UserManager where name=#{name}  AND curStatus=2
+    </select>
+</mapper>

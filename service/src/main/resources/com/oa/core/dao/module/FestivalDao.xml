@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oa.core.dao.module.FestivalDao" >
+    <insert id="insert">
+    INSERT INTO festival (festivalId, festivalName, type,
+      startTime, endTime, curStatus, recordName,
+      recordTime, modifyName, modifyTime,
+      deleteName, deleteTime)
+    VALUES (#{festivalId}, #{festivalName}, #{type},
+      #{startTime}, #{endTime}, 2, #{recordName},
+      #{recordTime}, #{modifyName}, #{modifyTime},
+      #{deleteName}, #{deleteTime})
+  </insert>
+    <delete id="delete">
+      UPDATE festival SET curStatus=0,deleteName=#{deleteName},deleteTime=#{deleteTime} WHERE festivalId=#{festivalId} AND curStatus=2
+  </delete>
+    <update id="update">
+        UPDATE festival
+        <set>
+            <if test="festivalName!=null and festivalName!=''">festivalName =#{festivalName},</if>
+            <if test="type!=null and type!=''">type =#{type},</if>
+            <if test="startTime!=null and startTime!=''">startTime =#{startTime},</if>
+            <if test="endTime!=null and endTime!=''">endTime =#{endTime},</if>
+            <if test="modifyName!=null and modifyName!=''">modifyName =#{modifyName},</if>
+            <if test="modifyTime!=null and modifyTime!=''">modifyTime =#{modifyTime},</if>
+        </set>
+        WHERE curStatus=2 AND festivalId=#{festivalId}
+    </update>
+    <select id="selectById" resultType="Festival">
+        SELECT * FROM festival WHERE curStatus=2 AND festivalId=#{festivalId}
+  </select>
+    <select id="selectAllTerms" parameterType="Festival" resultType="Festival">
+        SELECT * FROM festival
+        <where>
+            <if test="festivalName!=null and festivalName!=''">and festivalName like concat('%', #{festivalName}, '%')</if>
+            <if test="type!=null and type!=''">and type =#{type}</if>
+            <if test="startTime!=null and startTime!=''">and startTime =#{startTime}</if>
+            <if test="endTime!=null and endTime!=''">and endTime =#{endTime}</if>
+            AND curStatus=2
+        </where>
+        ORDER BY recordTime DESC
+        <if test="startRow>=0 and endRow>0"> limit #{startRow},#{endRow}</if>
+    </select>
+    <select id="selectAllTermsCont" parameterType="Festival" resultType="int">
+        SELECT COUNT(*) FROM festival
+        <where>
+            <if test="festivalName!=null and festivalName!=''">and festivalName like concat('%', #{festivalName}, '%')</if>
+            <if test="type!=null and type!=''">and type =#{type}</if>
+            <if test="startTime!=null and startTime!=''">and startTime =#{startTime}</if>
+            <if test="endTime!=null and endTime!=''">and endTime =#{endTime}</if>
+            AND curStatus=2
+        </where>
+    </select>
+    <delete id="deletes">
+      UPDATE festival SET curStatus=0,deleteName=#{deleteName},deleteTime=#{deleteTime} WHERE festivalId in (${festivalId}) AND curStatus=2
+    </delete>
+    <select id="getAllByYearAndMonth" resultType="map">
+        SELECT * FROM festival WHERE curStatus=2 AND (
+		YEAR (startTime) = #{year}
+		AND MONTH (startTime) = #{month}
+		OR YEAR (endTime) = #{year}
+		AND MONTH (endTime) = #{month} )
+  </select>
+
+    <select id="secountfwdep" parameterType="String" resultType="int">
+        SELECT zbdw190417001, count(*) as num FROM `fw19041000001` GROUP BY zbdw190417001
+    </select>
+
+</mapper>

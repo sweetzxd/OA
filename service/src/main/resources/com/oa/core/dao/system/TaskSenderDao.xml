@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为UserDao接口方法提供sql语句配置 -->
+<mapper namespace="com.oa.core.dao.system.TaskSenderDao">
+    <insert id="insert" parameterType="TaskSender">
+        INSERT INTO TaskSender(workOrderNO,sameOrderNO,wkflwID,procID,wkfNode,accepter,refLinkUrl,stress,msgStatus,taskTitle,linkKey,linkRecordID,remindTime,finishTime,remindPeriod,curStatus,recordName,recordTime,modifyName,modifyTime,deleteName,deleteTime)
+        VALUES
+        (#{workOrderNO},#{sameOrderNO},#{wkflwID},#{procID},#{wkfNode},#{accepter},#{refLinkUrl},#{stress},#{msgStatus},#{taskTitle},#{linkKey},#{linkRecordID},#{remindTime},#{finishTime},#{remindPeriod},2,#{recordName},#{recordTime},#{modifyName},#{modifyTime},#{deleteName},#{deleteTime})
+    </insert>
+
+    <delete id="delete" parameterType="TaskSender">
+        UPDATE TaskSender
+        <set>
+            <if test="deleteName!=null">deleteName =#{deleteName},</if>
+            <if test="deleteTime!=null">deleteTime =#{deleteTime},</if>
+            curStatus=0
+        </set>
+        WHERE workOrderNO=#{workOrderNO}
+    </delete>
+    <delete id="deletes" parameterType="TaskSender">
+        UPDATE TaskSender
+        <set>
+            curStatus=0
+        </set>
+        WHERE workOrderNO in (${workOrderNO})
+    </delete>
+    <update id="update" parameterType="TaskSender">
+        UPDATE TaskSender
+        <set>
+            <if test="sameOrderNO!=null and sameOrderNO!=''">sameOrderNO =#{sameOrderNO},</if>
+            <if test="wkflwID!=null and wkflwID!=''">wkflwID =#{wkflwID},</if>
+            <if test="procID!=null and procID!=''">procID =#{procID},</if>
+            <if test="wkfNode!=null and wkfNode!=''">wkfNode =#{wkfNode},</if>
+            <if test="accepter!=null and accepter!=''">accepter =#{accepter},</if>
+            <if test="refLinkUrl!=null and refLinkUrl!=''">refLinkUrl =#{refLinkUrl},</if>
+            <if test="stress!=null and stress!=''">stress =#{stress},</if>
+            <if test="msgStatus!=null">msgStatus =#{msgStatus},</if>
+            <if test="taskTitle!=null and taskTitle!=''">taskTitle =#{taskTitle},</if>
+            <if test="linkKey!=null and linkKey!=''">linkKey =#{linkKey},</if>
+            <if test="linkRecordID!=null and linkRecordID!=''">linkRecordID =#{linkRecordID},</if>
+            <if test="remindTime!=null">remindTime =#{remindTime},</if>
+            <if test="finishTime!=null">finishTime =#{finishTime},</if>
+            <if test="remindPeriod!=null">remindPeriod =#{remindPeriod},</if>
+
+            <if test="modifyName!=null"> modifyName =#{modifyName},</if>
+            <if test="modifyTime!=null"> modifyTime =#{modifyTime}</if>
+        </set>
+        where workOrderNO=#{workOrderNO}
+    </update>
+
+    <update id="cleanTask" parameterType="Map">
+        UPDATE TaskSender SET msgStatus=0 WHERE wkflwId =#{wkflwId} AND procId =#{procId} AND wkfNode =#{wkfNode} AND workOrderNO != #{workOrderNO}
+    </update>
+
+    <select id="selectAll" resultType="TaskSender">
+        SELECT * FROM TaskSender WHERE curStatus=2 order by recordTime desc
+    </select>
+
+    <select id="selectmsgStatus" parameterType="java.lang.Integer" resultType="TaskSender">
+        SELECT * FROM TaskSender WHERE msgStatus=#{msgStatus} curStatus=2 order by recordTime desc
+    </select>
+
+    <select id="selectUser" parameterType="java.lang.String" resultType="TaskSender">
+        SELECT * FROM TaskSender WHERE accepter IN (${_parameter}) and msgStatus &gt; 0 and msgStatus &lt; 4  and curStatus=2 order by recordTime desc
+    </select>
+
+    <select id="selectProc" parameterType="java.lang.String" resultType="TaskSender">
+        SELECT * FROM TaskSender WHERE procID = #{_parameter} and msgStatus &gt; 0 and msgStatus &lt; 4  and curStatus=2 order by recordTime desc
+    </select>
+
+    <select id="selectTerms" parameterType="TaskSender" resultType="TaskSender">
+        SELECT * FROM TaskSender
+        <where>
+            <if test="workOrderNO!=null and workOrderNO!=''">and workOrderNO =#{workOrderNO}</if>
+            <if test="sameOrderNO!=null and sameOrderNO!=''">and sameOrderNO =#{sameOrderNO}</if>
+            <if test="wkflwID!=null and wkflwID!=''">and wkflwID =#{wkflwID}</if>
+            <if test="procID!=null and procID!=''">and procID =#{procID}</if>
+            <if test="wkfNode!=null and wkfNode!=''">and wkfNode =#{wkfNode}</if>
+            <if test="accepter!=null and accepter!=''">and accepter =#{accepter}</if>
+            <if test="refLinkUrl!=null and refLinkUrl!=''">and refLinkUrl =#{refLinkUrl}</if>
+            <if test="stress!=null and stress!=''">and stress =#{stress}</if>
+            <if test="taskTitle!=null and taskTitle!=''">and taskTitle like concat('%', #{taskTitle}, '%')</if>
+            <if test="linkKey!=null and linkKey!=''">and linkKey =#{linkKey}</if>
+            <if test="linkRecordID!=null and linkRecordID!=''">and linkRecordID =#{linkRecordID}</if>
+            <if test="remindPeriod!=null">and remindPeriod =#{remindPeriod}</if>
+            and msgStatus &gt; 0 and msgStatus &lt; 4 and curStatus=2
+        </where>
+        order by recordTime desc
+        <if test="startRow>=0 and endRow>0">limit #{startRow},#{endRow}</if>
+    </select>
+
+    <select id="selectById" parameterType="java.lang.String" resultType="TaskSender">
+        SELECT * FROM TaskSender WHERE workOrderNO = #{_parameter} AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="selectAllCount" resultType="int">
+        select count(*) from TaskSender WHERE curStatus=2
+    </select>
+
+    <select id="selectTermsCount" parameterType="TaskSender" resultType="int">
+        SELECT count(*) FROM TaskSender
+        <where>
+            <if test="workOrderNO!=null and workOrderNO!=''">and workOrderNO =#{workOrderNO}</if>
+            <if test="sameOrderNO!=null and sameOrderNO!=''">and sameOrderNO =#{sameOrderNO}</if>
+            <if test="wkflwID!=null and wkflwID!=''">and wkflwID =#{wkflwID}</if>
+            <if test="procID!=null and procID!=''">and procID =#{procID}</if>
+            <if test="wkfNode!=null and wkfNode!=''">and wkfNode =#{wkfNode}</if>
+            <if test="accepter!=null and accepter!=''">and accepter =#{accepter}</if>
+            <if test="refLinkUrl!=null and refLinkUrl!=''">and refLinkUrl =#{refLinkUrl}</if>
+            <if test="stress!=null and stress!=''">and stress =#{stress}</if>
+            <if test="taskTitle!=null and taskTitle!=''">and taskTitle like concat('%', #{taskTitle}, '%')</if>
+            <if test="linkKey!=null and linkKey!=''">and linkKey =#{linkKey}</if>
+            <if test="linkRecordID!=null and linkRecordID!=''">and linkRecordID =#{linkRecordID}</if>
+            <if test="remindPeriod!=null">and remindPeriod =#{remindPeriod}</if>
+            and msgStatus &gt; 0 and msgStatus &lt; 4 and curStatus=2
+        </where>
+        order by recordTime desc
+    </select>
+
+    <select id="selectByIdCount" parameterType="java.lang.String" resultType="int">
+        SELECT count(*) FROM TaskSender WHERE workOrderNO IN (${_parameter}) AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="selectNextTask" parameterType="Map" resultType="int">
+        SELECT count(*) FROM TaskSender WHERE procID = #{procId} AND wkfNode IN (${wkfNode}) AND msgStatus &gt; 0 AND msgStatus &lt; 4 AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="select4MsgStatus" parameterType="TaskSender" resultType="TaskSender">
+        SELECT * FROM TaskSender WHERE procID = #{procID} AND wkfNode = #{wkfNode} AND msgStatus &gt; 0 AND msgStatus &lt; 4 AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+    <update id="update0MsgStatus" parameterType="TaskSender">
+        UPDATE TaskSender
+        <set>
+            msgStatus = '0',
+            <if test="modifyName!=null"> modifyName =#{modifyName},</if>
+            <if test="modifyTime!=null"> modifyTime =#{modifyTime}</if>
+        </set>
+        where procID = #{procID} AND wkfNode = #{wkfNode} AND msgStatus &gt; 0 AND msgStatus &lt; 4 AND curStatus=2
+    </update>
+
+    <select id="selectByHome" resultType="TaskSender">
+        SELECT * FROM TaskSender WHERE accepter = #{accepter} AND msgStatus &gt; 0 AND msgStatus &lt; 4 AND curStatus=2 ORDER BY recordTime DESC,finishTime DESC limit 0,5
+    </select>
+
+    <select id="selectJoblogTask" parameterType="TaskSender" resultType="TaskSender">
+        SELECT * FROM TaskSender WHERE wkflwID = #{wkflwID} AND accepter = #{accepter} AND curStatus=2
+    </select>
+</mapper>

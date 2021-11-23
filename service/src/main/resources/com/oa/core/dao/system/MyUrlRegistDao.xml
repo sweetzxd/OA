@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为UserDao接口方法提供sql语句配置 -->
+<mapper namespace="com.oa.core.dao.system.MyUrlRegistDao">
+    <insert id="insert" parameterType="MyUrlRegist">
+        INSERT INTO MyUrlRegist(pageId,parentId,pageTitle,menuNum,formId,module,formType,security,curStatus,recordName,recordTime,modifyName,modifyTime,deleteName,deleteTime,contextmenu,keepFeild)
+        VALUES
+        (#{pageId},#{parentId},#{pageTitle},#{menuNum},#{formId},#{module},#{formType},#{security},2,#{recordName},#{recordTime},#{modifyName},#{modifyTime},#{deleteName},#{deleteTime},#{contextmenu},#{keepFeild})
+    </insert>
+
+    <delete id="delete" parameterType="MyUrlRegist">
+        UPDATE MyUrlRegist
+        <set>
+            <if test="deleteName!=null">deleteName =#{deleteName},</if>
+            <if test="deleteTime!=null">deleteTime =#{deleteTime},</if>
+            curStatus=0
+        </set>
+        WHERE pageId=#{pageId} and pageid not in ('topmenu')
+    </delete>
+    <delete id="deleteAll" parameterType="MyUrlRegist">
+        UPDATE MyUrlRegist
+        <set>
+            <if test="deleteName!=null">deleteName =#{deleteName},</if>
+            <if test="deleteTime!=null">deleteTime =#{deleteTime},</if>
+            curStatus=0
+        </set>
+        WHERE pageId in (${pageId}) and pageid not in ('topmenu')
+    </delete>
+    <update id="update" parameterType="MyUrlRegist">
+        UPDATE MyUrlRegist
+        <set>
+            <if test="parentId!=null and parentId!=''">parentId =#{parentId},</if>
+            <if test="pageTitle!=null and pageTitle!=''">pageTitle =#{pageTitle},</if>
+            <if test="menuNum!=null and menuNum!=0">menuNum =#{menuNum},</if>
+            <if test="formId!=null and formId!=''">formId =#{formId},</if>
+            <if test="module!=null and module!=''">module =#{module},</if>
+            <if test="formType!=0">formType =#{formType},</if>
+            <if test="modifyName!=null">modifyName =#{modifyName},</if>
+            <if test="modifyTime!=null">modifyTime =#{modifyTime}</if>
+        </set>
+        where pageId=#{pageId} and pageid not in ('topmenu')
+    </update>
+
+    <select id="selectById" resultType="MyUrlRegist" parameterType="java.lang.String">
+        SELECT * FROM MyUrlRegist WHERE pageId = #{pageId} and pageid not in ('topmenu') and curStatus=2 order by security asc
+    </select>
+
+    <select id="selectByIds" resultType="MyUrlRegist" parameterType="java.lang.String">
+        SELECT * FROM MyUrlRegist WHERE pageId in (${_parameter }) and pageid not in ('topmenu') and menuNum !=100 and curStatus=2 order by security asc
+    </select>
+
+    <select id="selectAll" resultType="MyUrlRegist">
+        SELECT * FROM MyUrlRegist WHERE pageid not in ('topmenu') and formType!=5 and menuNum !=100 and curStatus=2 order by security asc
+    </select>
+
+    <select id="selectByFormId" parameterType="java.lang.String" resultType="MyUrlRegist">
+        SELECT pageId FROM MyUrlRegist
+        <where>
+            <if test="parentId!=null and parentId!=''">and parentId = #{parentId}</if>
+            <if test="pageTitle!=null and pageTitle!=''">and pageTitle like concat('%', #{pageTitle}, '%')</if>
+            <if test="formId!=null and formId!=''">and formId = #{formId}</if>
+            <if test="menuNum!=null and menuNum!=0">and menuNum = #{menuNum}</if>
+            <if test="module!=null">and module like concat('%', #{module}, '%')</if>
+            <if test="formType!=0">and formType =#{formType}</if>
+            and pageid not in ('topmenu') and curStatus=2
+        </where>
+        order by security asc
+        <if test="startRow>=0 and endRow>0">limit #{startRow},#{endRow}</if>
+    </select>
+
+    <select id="selectTerms" parameterType="MyUrlRegist" resultType="MyUrlRegist">
+        SELECT * FROM MyUrlRegist
+        <where>
+            <if test="pageId!=null and pageId!=''">and pageId = #{pageId}</if>
+            <if test="parentId!=null and parentId!=''">and parentId = #{parentId}</if>
+            <if test="pageTitle!=null and pageTitle!=''">and pageTitle like concat('%', #{pageTitle}, '%')</if>
+            <if test="formId!=null and formId!=''">and formId = #{formId}</if>
+            <if test="menuNum!=null and menuNum!=0">and menuNum = #{menuNum}</if>
+            <if test="module!=null">and module like concat('%', #{module}, '%')</if>
+            <if test="formType!=0">and formType =#{formType}</if>
+            <if test="formIds!=null and formIds!=''">and formId not in(${formIds}) and formId != ''</if>
+            and pageid not in ('topmenu') and curStatus=2
+        </where>
+        order by security asc
+        <if test="startRow>=0 and endRow>0">limit #{startRow},#{endRow}</if>
+    </select>
+
+    <select id="selectNodeTerms" parameterType="MyUrlRegist" resultType="MyUrlRegist">
+        SELECT * FROM MyUrlRegist
+        <where>
+            <if test="pageId!=null and pageId!=''">and pageId = #{pageId}</if>
+            <if test="parentId!=null and parentId!=''">and parentId = #{parentId}</if>
+            <if test="pageTitle!=null and pageTitle!=''">and pageTitle like concat('%', #{pageTitle}, '%')</if>
+            <if test="formId!=null and formId!=''">and formId = #{formId}</if>
+            <if test="menuNum!=null and menuNum!=0">and menuNum = #{menuNum}</if>
+            <if test="module!=null">and module like concat('%', #{module}, '%')</if>
+
+            <if test="formIds!=null and formIds!=''">and formId not in(${formIds}) and formId != ''</if>
+            and formType = 0 and pageid not in ('topmenu') and curStatus=2
+        </where>
+        order by security asc
+        <if test="startRow>=0 and endRow>0">limit #{startRow},#{endRow}</if>
+    </select>
+    <select id="selectAllCount" resultType="int">
+        select count(*) from MyUrlRegist WHERE pageid not in ('topmenu') and formType!=5 and curStatus=2
+    </select>
+
+    <select id="selectTermsCount" resultType="int">
+        SELECT count(*) FROM MyUrlRegist
+        <where>
+            <if test="pageId!=null and pageId!=''">and pageId = #{pageId}</if>
+            <if test="parentId!=null and parentId!=''">and parentId = #{parentId}</if>
+            <if test="pageTitle!=null and pageTitle!=''">and pageTitle like concat('%', #{pageTitle}, '%')</if>
+            <if test="formId!=null and formId!=''">and formId = #{formId}</if>
+            <if test="menuNum!=null and menuNum!=0">and menuNum = #{menuNum}</if>
+            <if test="module!=null">and module like concat('%', #{module}, '%')</if>
+            <if test="formType!=0">and formType =#{formType}</if>
+            and pageid not in ('topmenu') and curStatus=2
+        </where>
+        <if test="startRow>=0 and endRow>0">limit #{startRow},#{endRow}</if>
+    </select>
+
+    <select id="selectContextMenu" resultType="String">
+        SELECT contextmenu FROM MyUrlRegist WHERE pageId = #{pageId} AND pageid NOT IN ('topmenu') AND menuNum = 2  AND curStatus=2 order by security asc
+    </select>
+    <update id="updateContextMenu">
+        UPDATE MyUrlRegist SET contextmenu=#{contextmenu} WHERE pageId = #{pageId} AND pageid NOT IN ('topmenu') AND menuNum = 2 AND curStatus=2
+    </update>
+
+    <select id="getSecurity" resultType="int">
+        SELECT IFNULL(MAX(`security`) + 1, CONVERT (CONCAT((SELECT `security` FROM myurlregist WHERE pageid = #{parentId} AND curStatus = 2),'001'),SIGNED)) AS `security` FROM MyUrlRegist WHERE parentId = #{parentId} AND curStatus = 2
+    </select>
+
+    <update id="updateSecurity">
+        UPDATE myurlregist SET security = CASE pageId WHEN #{id} THEN #{num} WHEN #{sid} THEN #{snum} END WHERE pageId IN (#{id},#{sid});
+    </update>
+    <delete id="reallyDelete" parameterType="MyUrlRegist">
+        DELETE from MyUrlRegist
+        WHERE parentId=#{parentId} and formType = #{formType}
+    </delete>
+</mapper>

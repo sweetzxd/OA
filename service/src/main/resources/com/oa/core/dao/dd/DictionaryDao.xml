@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为DictionaryDao接口方法提供sql语句配置 -->
+<mapper namespace="com.oa.core.dao.dd.DictionaryDao">
+
+    <!-- FieldData表SQL语句配置-->
+    <insert id="insertField" parameterType="FieldData">
+        INSERT INTO FieldData(
+          fieldName,fieldTitle,fieldType,fieldNum,fieldDigit,optionVal,defaultVal,special,required,tableName,curStatus,recName,recTime,modName,modTime
+        )VALUES(
+          #{fieldName},#{fieldTitle},#{fieldType},#{fieldNum},#{fieldDigit},#{optionVal},#{defaultVal},#{special},#{required},#{tableName},2,#{recName},#{recTime},#{modName},#{modTime}
+        )
+    </insert>
+
+    <delete id="deleteField" parameterType="String">
+        UPDATE FieldData
+        <set>
+            delName =#{delName},
+            delTime =#{delTime},
+            curStatus=0
+        </set>
+        WHERE fieldName=#{fieldName} and (tableName != 'system' or tableName is null)
+    </delete>
+
+    <update id="updateField" parameterType="FieldData">
+        UPDATE FieldData
+        <set>
+            <if test="fieldTitle!=null and fieldTitle!=''">fieldTitle =#{fieldTitle},</if>
+            <if test="fieldType!=null and fieldType!=''">fieldType =#{fieldType},</if>
+            <if test="fieldNum!=null">fieldNum =#{fieldNum},</if>
+            <if test="fieldDigit!=null">fieldDigit =#{fieldDigit},</if>
+            <if test="optionVal!=null and optionVal!=''">optionVal =#{optionVal},</if>
+            <if test="defaultVal!=null and defaultVal!=''">defaultVal =#{defaultVal},</if>
+            <if test="special!=null and special!=''">special =#{special},</if>
+            <if test="required!=null">required =#{required},</if>
+            <if test="tableName!=null and tableName!=''">tableName =#{tableName},</if>
+            modName =#{modName},
+            modTime =#{modTime}
+        </set>
+        where fieldName=#{fieldName} and (tableName != 'system' or tableName is null)
+    </update>
+
+    <select id="selectAllField" resultType="FieldData">
+        SELECT * FROM FieldData WHERE curStatus=2 order by recTime desc
+    </select>
+
+    <select id="selectFieldName" parameterType="java.lang.String" resultType="FieldData">
+        SELECT * FROM FieldData WHERE fieldName=#{fieldName} AND CURSTATUS=2
+    </select>
+
+    <select id="selectNotFieldName" parameterType="java.util.List" resultType="FieldData">
+        SELECT * FROM FieldData WHERE fieldName not in
+        <foreach collection="list" item="field" index="index" open="(" separator="," close=")">
+            #{field}
+        </foreach>
+        AND tableName IS NULL AND CURSTATUS=2
+    </select>
+
+    <select id="selectFieldList" resultType="FieldData" parameterType="FieldData">
+        SELECT * FROM FieldData
+        <where>
+            <if test="fieldName!=null and fieldName!=''">and fieldName like concat('%', #{fieldName}, '%')</if>
+            <if test="fieldTitle!=null and fieldTitle!=''">and fieldTitle like concat('%', #{fieldTitle}, '%')</if>
+            <if test="fieldType!=null and fieldType!=''">and fieldType like concat('%', #{fieldType}, '%')</if>
+            <if test="tableName!=null and tableName!=''">AND tableName=#{tableName}</if>
+            AND curStatus=2
+        </where>
+        order by recTime desc
+        <if test="startRow>=0 and endRow>0"> limit #{startRow},#{endRow}</if>
+    </select>
+
+    <select id="selectFieldCount" resultType="int" parameterType="FieldData">
+        SELECT count(*) FROM FieldData
+        <where>
+            <if test="fieldName!=null and fieldName!=''">and fieldName like concat('%', #{fieldName}, '%')</if>
+            <if test="fieldTitle!=null and fieldTitle!=''">and fieldTitle like concat('%', #{fieldTitle}, '%')</if>
+            <if test="fieldType!=null and fieldType!=''">and fieldType like concat('%', #{fieldType}, '%')</if>
+            AND curStatus=2
+        </where>
+    </select>
+
+
+    <select id="selectFieldByTable" parameterType="java.util.List" resultType="FieldData">
+        SELECT * FROM FieldData WHERE curStatus=2
+        <if test="list!=null">
+            AND fieldName in
+            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            ORDER BY FIELD(fieldName,
+            <foreach collection="list" index="index" item="item" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="selectFieldByIds" resultType="FieldData">
+        SELECT * FROM FieldData WHERE curStatus=2
+        <if test="list!=null">
+            AND fieldName IN
+            <foreach collection="list" index="index" item="fieldName"  open="(" separator="," close=")">
+                #{fieldName}
+            </foreach>
+        </if>
+    </select>
+
+    <!-- TableData表SQL语句配置-->
+    <insert id="insertTable" parameterType="TableData">
+        INSERT INTO TableData(
+          tableName,tableTitle,tableField,curStatus,recName,recTime,modName,modTime
+        )VALUES(
+          #{tableName},#{tableTitle},#{tableField},2,#{recName},#{recTime},#{modName},#{modTime}
+        )
+    </insert>
+
+    <delete id="deleteTable" parameterType="String">
+        UPDATE TableData
+        <set>
+            delName =#{delName},
+            delTime =#{delTime},
+            curStatus=0
+        </set>
+        WHERE tableName=#{tableName}
+    </delete>
+
+    <update id="updateTable" parameterType="TableData">
+        UPDATE TableData
+        <set>
+            <if test="tableTitle!=null and tableTitle!=''">tableTitle =#{tableTitle},</if>
+            <if test="tableField!=null and tableField!=''">tableField =#{tableField},</if>
+            modName =#{modName},
+            modTime =#{modTime}
+        </set>
+        where tableName=#{tableName}
+    </update>
+
+    <select id="selectAllTable" resultType="TableData">
+        SELECT * FROM TableData WHERE curStatus=2 order by recTime desc
+    </select>
+
+    <select id="selectTableName" parameterType="java.lang.String" resultType="TableData">
+        SELECT * FROM TableData WHERE tableName=#{tableName} AND CURSTATUS=2
+    </select>
+
+    <select id="selectTableList" resultType="TableData" parameterType="TableData">
+        SELECT * FROM TableData
+        <where>
+            <if test="tableName!=null and tableName!=''">and tableName like concat('%', #{tableName}, '%')</if>
+            <if test="tableTitle!=null and tableTitle!=''">and tableTitle like concat('%', #{tableTitle}, '%')</if>
+            <if test="tableField!=null and tableField!=''">and tableField like concat('%', #{tableField}, '%')</if>
+            AND CURSTATUS=2
+        </where>
+        order by recTime desc limit #{startRow},#{endRow}
+    </select>
+
+    <select id="selectTableCount" resultType="int" parameterType="TableData">
+        SELECT count(*) FROM TableData
+        <where>
+            <if test="tableName!=null and tableName!=''">and tableName like concat('%', #{tableName}, '%')</if>
+            <if test="tableTitle!=null and tableTitle!=''">and tableTitle like concat('%', #{tableTitle}, '%')</if>
+            <if test="tableField!=null and tableField!=''">and tableField like concat('%', #{tableField}, '%')</if>
+            AND CURSTATUS=2
+        </where>
+    </select>
+
+    <select id="selectTableByIds" resultType="TableData">
+        SELECT * FROM TableData WHERE curStatus=2
+        <if test="list!=null">
+            AND tableName IN
+            <foreach collection="list" index="index" item="tableName"  open="(" separator="," close=")">
+                #{tableName}
+            </foreach>
+        </if>
+    </select>
+
+    <!-- TaskData表SQL语句配置-->
+    <insert id="insertTask" parameterType="TaskData">
+        INSERT INTO TaskData(
+          taskName,taskTitle,taskType,tableName,taskField,curStatus,recName,recTime,modName,modTime
+        )VALUES(
+          #{taskName},#{taskTitle},#{taskType},#{tableName},#{taskField},2,#{recName},#{recTime},#{modName},#{modTime}
+        )
+    </insert>
+
+    <delete id="deleteTask" parameterType="TaskData">
+        UPDATE TaskData
+        <set>
+            delName =#{delName},
+            delTime =#{delTime},
+            curStatus=0
+        </set>
+        WHERE taskName=#{taskName}
+    </delete>
+
+    <update id="updateTask" parameterType="TaskData">
+        UPDATE TaskData
+        <set>
+            <if test="taskTitle!=null and taskTitle!=''">taskTitle =#{taskTitle},</if>
+            <if test="taskType!=null  and taskType!=''">taskType =#{taskType},</if>
+            <if test="tableName!=null and tableName!=''">tableName =#{tableName},</if>
+            <if test="taskField!=null and taskField!=''">taskField =#{taskField},</if>
+            modName =#{modName},
+            modTime =#{modTime}
+        </set>
+        where taskName=#{taskName}
+    </update>
+
+    <select id="selectAllTask" resultType="TaskData">
+        SELECT * FROM TaskData WHERE curStatus=2 order by recTime desc
+    </select>
+
+    <select id="selectTaskName" parameterType="java.lang.String" resultType="TaskData">
+        SELECT * FROM TaskData WHERE taskName=#{taskName} AND curStatus=2
+    </select>
+
+    <select id="selectTaskList" resultType="TaskData" parameterType="TaskData">
+        SELECT * FROM TaskData
+        <where>
+            <if test="taskName!=null and taskName!=''">and (taskName like concat('%', #{taskName}, '%') or taskName=#{taskName})</if>
+            <if test="taskTitle!=null and taskTitle!=''">and (taskTitle like concat('%', #{taskTitle}, '%') or taskTitle=#{taskTitle})</if>
+            <if test="taskType!=null and taskType!=''">and (taskType like concat('%', #{taskType}, '%') or taskType=#{taskType})</if>
+            <if test="tableName!=null and tableName!=''">and (tableName like concat('%', #{tableName}, '%') or tableName=#{tableName})</if>
+            <if test="taskField!=null and taskField!=''">and taskField like concat('%', #{taskField}, '%')</if>
+            AND curStatus=2
+        </where>
+        <if test="startRow!=null and endRow>0">order by recTime desc limit #{startRow},#{endRow}</if>
+    </select>
+
+    <select id="selectTaskCount" resultType="int" parameterType="TaskData">
+        SELECT count(*) FROM TaskData
+        <where>
+            <if test="taskName!=null and taskName!=''">and (taskName like concat('%', #{taskName}, '%') or taskName=#{taskName})</if>
+            <if test="taskTitle!=null and taskTitle!=''">and (taskTitle like concat('%', #{taskTitle}, '%') or taskTitle=#{taskTitle})</if>
+            <if test="taskType!=null and taskType!=''">and (taskType like concat('%', #{taskType}, '%') or taskType=#{taskType})</if>
+            <if test="tableName!=null and tableName!=''">and (tableName like concat('%', #{tableName}, '%') or tableName=#{tableName})</if>
+            <if test="taskField!=null and taskField!=''">and taskField like concat('%', #{taskField}, '%')</if>
+            AND curStatus=2
+        </where>
+    </select>
+
+    <select id="selectTaskByIds" resultType="TaskData">
+        SELECT * FROM TaskData WHERE curStatus=2
+        <if test="list!=null">
+            AND taskName IN
+            <foreach collection="list" index="index" item="taskName"  open="(" separator="," close=")">
+                #{taskName}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="listTaskByFormId" resultType="TaskData">
+        SELECT t.* FROM taskdata t JOIN formpage f ON t.TaskName=f.listTask WHERE f.formcmName= #{formcmName} AND t.curStatus=2 AND f.curStatus=2
+    </select>
+
+    <select id="formTaskByFormId" resultType="TaskData">
+        SELECT t.* FROM taskdata t JOIN formpage f ON t.TaskName=f.formTask WHERE f.formcmName= #{formcmName} AND t.curStatus=2 AND f.curStatus=2
+    </select>
+
+    <select id="listTaskByPageId" resultType="TaskData">
+        select t.* from taskdata t join formpage f on t.TaskName=f.formTask join myurlregist m on f.formcmName=m.formId where m.pageId = #{pageId} AND t.curStatus=2 AND f.curStatus=2
+    </select>
+
+    <select id="formTaskByPageId" resultType="TaskData">
+        select t.* from taskdata t join formpage f on t.TaskName=f.formTask join myurlregist m on f.formcmName=m.formId where m.pageId = #{pageId} AND t.curStatus=2 AND f.curStatus=2
+    </select>
+</mapper>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为UserDao接口方法提供sql语句配置 -->
+<mapper namespace="com.oa.core.dao.work.WorkFlowProcDao">
+    <insert id="insert" parameterType="WorkFlowProc">
+        INSERT INTO WorkFlowProc(procId,wkflwID,startNodeID,originator,flowpeoples,nodespeople,wkfStatus,curNodeID,wkfResult,endNodeID,security,runLevel,curStatus,recordName,recordTime,modifyName,modifyTime,deleteName,deleteTime)
+        VALUES
+        (#{procId},#{wkflwID},#{startNodeID},#{originator},#{flowpeoples},#{nodespeople},#{wkfStatus},#{curNodeID},#{wkfResult},#{endNodeID},#{security},#{runLevel},2,#{recordName},#{recordTime},#{modifyName},#{modifyTime},#{deleteName},#{deleteTime})
+    </insert>
+
+    <delete id="delete" parameterType="WorkFlowProc">
+        UPDATE WorkFlowProc
+        <set>
+            <if test="deleteName!=null">deleteName =#{deleteName},</if>
+            <if test="deleteTime!=null">deleteTime =#{deleteTime},</if>
+            curStatus=0
+        </set>
+        WHERE procId=#{procId}  AND wkflwID =#{wkflwID}
+    </delete>
+    <delete id="deletes" parameterType="WorkFlowProc">
+        UPDATE WorkFlowProc
+        <set>
+            curStatus=0
+        </set>
+        WHERE procId in (${procIds})  AND wkflwID =#{wkflwId}
+    </delete>
+    <update id="update" parameterType="WorkFlowProc">
+        UPDATE WorkFlowProc
+        <set>
+            <if test="startNodeID!=null and startNodeID!=''">startNodeID =#{startNodeID},</if>
+            <if test="originator!=null and originator!=''">originator =#{originator},</if>
+            <if test="flowpeoples!=null and flowpeoples!=''">flowpeoples =#{flowpeoples},</if>
+            <if test="nodespeople!=null and nodespeople!=''">nodespeople =#{nodespeople},</if>
+            <if test="wkfStatus!=null">wkfStatus =#{wkfStatus},</if>
+            <if test="curNodeID!=null and curNodeID!=''">curNodeID =#{curNodeID},</if>
+            <if test="wkfResult!=null">wkfResult =#{wkfResult},</if>
+            <if test="endNodeID!=null and endNodeID!=''">endNodeID =#{endNodeID},</if>
+            <if test="security!=null">security =#{security},</if>
+            <if test="runLevel!=null">runLevel =#{runLevel},</if>
+
+            <if test="modifyName!=null"> modifyName =#{modifyName},</if>
+            <if test="modifyTime!=null"> modifyTime =#{modifyTime}</if>
+        </set>
+        where curStatus=2 AND procId=#{procId} AND wkflwID =#{wkflwID}
+    </update>
+
+    <select id="selectAll" resultType="WorkFlowProc">
+        SELECT * FROM WorkFlowProc WHERE curStatus=2 order by recordTime desc
+    </select>
+
+    <select id="selectTerms" parameterType="WorkFlowProc" resultType="WorkFlowProc">
+        SELECT * FROM WorkFlowProc
+        <where>
+            <if test="procId!=null and procId!=''">and procId =#{procId}</if>
+            <if test="wkflwID!=null and wkflwID!=''">and wkflwID =#{wkflwID}</if>
+            <if test="startNodeID!=null and startNodeID!=''">and startNodeID =#{startNodeID}</if>
+            <if test="originator!=null and originator!=''">and originator =#{originator}</if>
+            <if test="flowpeoples!=null and flowpeoples!=''">and flowpeoples like CONCAT('%',#{flowpeoples},';','%')</if>
+            <if test="curNodeID!=null and curNodeID!=''">and curNodeID =#{curNodeID}</if>
+            <if test="wkfResult!=null">and wkfResult =#{wkfResult}</if>
+            <if test="wkfStatus!=null and wkfStatus>0">and wkfStatus =#{wkfStatus}</if>
+            <if test="endNodeID!=null and endNodeID!=''">and endNodeID =#{endNodeID}</if>
+            <if test="security!=null">and security =#{security}</if>
+            <if test="runLevel!=null">and runLevel =#{runLevel}</if>
+            <if test="nodespeople!=null and nodespeople!=''">or (nodespeople like CONCAT('%',#{nodespeople},';','%') and wkfStatus =#{wkfStatus})</if>
+            and curStatus=2
+        </where>
+        order by recordTime desc limit ${startRow},${endRow}
+    </select>
+
+    <select id="selectById" parameterType="java.lang.String" resultType="WorkFlowProc">
+        SELECT * FROM WorkFlowProc WHERE procId = #{procId} AND wkflwId = #{wkflwId} AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="selectByIds" parameterType="java.lang.String" resultType="WorkFlowProc">
+        SELECT * FROM WorkFlowProc WHERE procId IN (${procId}) AND wkflwId = #{wkflwId} AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="selectByWkflwId" parameterType="java.lang.String" resultType="WorkFlowLine">
+        SELECT * FROM WorkFlowProc WHERE wkflwId = #{_parameter} AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+
+    <select id="selectAllCount" resultType="int">
+        select count(*) from WorkFlowProc WHERE curStatus=2
+    </select>
+
+    <select id="selectTermsCount" parameterType="WorkFlowProc" resultType="int">
+        SELECT count(*) FROM WorkFlowProc
+        <where>
+            <if test="procId!=null and procId!=''">and procId =#{procId}</if>
+            <if test="wkflwID!=null and wkflwID!=''">and wkflwID =#{wkflwID}</if>
+            <if test="startNodeID!=null and startNodeID!=''">and startNodeID =#{startNodeID}</if>
+            <if test="originator!=null and originator!=''">and originator =#{originator}</if>
+            <if test="flowpeoples!=null and flowpeoples!=''">and flowpeoples like CONCAT('%',#{flowpeoples},';','%')</if>
+            <if test="curNodeID!=null and curNodeID!=''">and curNodeID =#{curNodeID}</if>
+            <if test="wkfResult!=null">and wkfResult =#{wkfResult}</if>
+            <if test="endNodeID!=null and endNodeID!=''">and endNodeID =#{endNodeID}</if>
+            <if test="security!=null">and security =#{security}</if>
+            <if test="wkfStatus!=null and wkfStatus>0">and wkfStatus =#{wkfStatus}</if>
+            <if test="nodespeople!=null and nodespeople!=''">or ( nodespeople like CONCAT('%',#{nodespeople},';','%') and wkfStatus =#{wkfStatus} )</if>
+            <if test="runLevel!=null">and runLevel =#{runLevel}</if>
+            and curStatus=2
+        </where>
+        order by recordTime desc
+    </select>
+
+    <select id="selectByIdCount" parameterType="java.lang.String" resultType="int">
+        SELECT count(*) FROM WorkFlowProc WHERE procId IN (${procId}) AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="getWrkFlowProcNum" resultType="int">
+        SELECT IFNULL(COUNT(wkfStatus),0) AS COUNT FROM WorkFlowProc WHERE wkflwId = #{wkflwId}
+        <if test="starnode!=null and starnode=='true'">AND originator =#{originator}</if>
+        AND wkfStatus = 1
+        <if test="starnode!=null and starnode=='false'">AND flowpeoples like CONCAT('%',#{originator},';','%') OR ( nodespeople like CONCAT('%',#{originator},';','%') and wkfStatus = 1 )</if>
+        AND curStatus = 2
+
+        UNION ALL
+        SELECT IFNULL(COUNT(wkfStatus),0) AS COUNT FROM WorkFlowProc WHERE wkflwId = #{wkflwId}
+        <if test="starnode!=null and starnode=='true'">AND originator =#{originator}</if>
+        AND wkfStatus = 2
+        <if test="starnode!=null and starnode=='false'">AND flowpeoples like CONCAT('%',#{originator},';','%') OR ( nodespeople like CONCAT('%',#{originator},';','%') and wkfStatus = 2 AND curStatus = 2)</if>
+        AND curStatus = 2
+
+    </select>
+</mapper>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oa.core.dao.module.DepartmentDao">
+    <insert id="insert">
+        INSERT INTO department (deptId,deptName,superiorDeptId,deptHead,deputyDeptHead,superiorDeptHead,deptSort,curStatus,recordName,recordTime,modifyName,modifyTime,deleteName,deleteTime)
+        VALUES(#{deptId},#{deptName},#{superiorDeptId},#{deptHead},#{deputyDeptHead},#{superiorDeptHead},#{deptSort},2,#{recordName},#{recordTime},#{modifyName},#{modifyTime},#{deleteName},#{deleteTime})
+    </insert>
+    <delete id="delete">
+        UPDATE department SET curStatus=0,deleteName=#{deleteName},deleteTime=#{deleteTime} WHERE deptId=#{deptId} AND curStatus=2 AND deptId not in ('organize')
+    </delete>
+    <update id="update">
+        UPDATE department
+        <set>
+            <if test="deptName!=null and deptName!=''">deptName =#{deptName},</if>
+            <if test="superiorDeptId!=null and superiorDeptId!=''">superiorDeptId =#{superiorDeptId},</if>
+            <if test="deptHead!=null and deptHead!=''">deptHead =#{deptHead},</if>
+            <if test="deputyDeptHead!=null and deputyDeptHead!=''">deputyDeptHead =#{deputyDeptHead},</if>
+            <if test="superiorDeptHead!=null and superiorDeptHead!=''">superiorDeptHead =#{superiorDeptHead},</if>
+            <if test="modifyName!=null and modifyName!=''">modifyName =#{modifyName},</if>
+            <if test="modifyTime!=null and modifyTime!=''">modifyTime =#{modifyTime},</if>
+        </set>
+        WHERE curStatus=2 AND deptId=#{deptId} AND deptId not in ('organize')
+    </update>
+    <update id="updateport">
+        UPDATE department
+        <set>
+            <if test="deptSort!=null">deptSort =#{deptSort},</if>
+        </set>
+        WHERE curStatus=2 AND deptId=#{deptId} AND deptId not in ('organize')
+    </update>
+    <select id="selectAll" resultType="Department">
+        SELECT * FROM department WHERE curStatus=2 AND deptId not in ('organize') ORDER BY deptSort DESC
+        <if test="startRow>=0 and endRow>0"> limit #{startRow},#{endRow}</if>
+    </select>
+    <select id="selectById" resultType="Department">
+        SELECT * FROM department WHERE curStatus=2 AND deptId=#{deptId} AND deptId not in ('organize')
+    </select>
+    <select id="selectByIds" resultType="Department">
+        SELECT * FROM department WHERE curStatus=2 AND deptId not in ('organize')
+        <if test="deptIds!=null">
+        AND deptId IN
+            <foreach collection="deptIds" item="deptId" separator="," open="(" close=")">
+                #{deptId}
+            </foreach>
+        </if>
+        ORDER BY deptSort DESC
+    </select>
+    <select id="selectTerms" parameterType="Department" resultType="Department">
+        SELECT * FROM department
+        <where>
+            <if test="deptName!=null and deptName!=''">and deptName =#{deptName}</if>
+            <if test="superiorDeptId!=null and superiorDeptId!=''">and superiorDeptId =#{superiorDeptId}</if>
+            <if test="deptHead!=null and deptHead!=''">and deptHead =#{deptHead}</if>
+            <if test="deputyDeptHead!=null and deputyDeptHead!=''">and deputyDeptHead =#{deputyDeptHead}</if>
+            <if test="superiorDeptHead!=null and superiorDeptHead!=''">and superiorDeptHead =#{superiorDeptHead}</if>
+            AND deptId not in ('organize') and curStatus=2
+        </where>
+        ORDER BY deptSort DESC
+    </select>
+    <select id="selectAllTerms" parameterType="Department" resultType="Department">
+        SELECT * FROM department
+        <where>
+            <if test="deptName!=null and deptName!=''">and deptName =#{deptName}</if>
+            <if test="superiorDeptId!=null and superiorDeptId!=''">and superiorDeptId =#{superiorDeptId}</if>
+            <if test="deptHead!=null and deptHead!=''">and deptHead =#{deptHead}</if>
+            <if test="deputyDeptHead!=null and deputyDeptHead!=''">and deputyDeptHead =#{deputyDeptHead}</if>
+            <if test="superiorDeptHead!=null and superiorDeptHead!=''">and superiorDeptHead =#{superiorDeptHead}</if>
+            AND deptId not in ('organize') and curStatus=2
+        </where>
+        ORDER BY deptSort DESC
+        <if test="startRow>=0 and endRow>0"> limit #{startRow},#{endRow}</if>
+    </select>
+    <select id="selectAllTermsCont" parameterType="Department" resultType="int">
+        SELECT COUNT(*) FROM department
+        <where>
+            <if test="deptName!=null and deptName!=''">and deptName =#{deptName}</if>
+            <if test="superiorDeptId!=null and superiorDeptId!=''">and superiorDeptId =#{superiorDeptId}</if>
+            <if test="deptHead!=null and deptHead!=''">and deptHead =#{deptHead}</if>
+            <if test="deputyDeptHead!=null and deputyDeptHead!=''">and deputyDeptHead =#{deputyDeptHead}</if>
+            <if test="superiorDeptHead!=null and superiorDeptHead!=''">and superiorDeptHead =#{superiorDeptHead}</if>
+            AND deptId not in ('organize') AND curStatus=2
+        </where>
+    </select>
+    <update id="updateEmp">
+        <if test="staffIds!=null">
+        UPDATE employees SET department=#{department},modifyName=#{modifyName},modifyTime=#{modifyTime} WHERE curStatus=2
+            AND staffId IN
+            <foreach collection="staffIds" item="staffId" separator="," open="(" close=")">
+                #{staffId}
+            </foreach>
+        </if>
+    </update>
+    <update id="deleteEmp">
+        UPDATE employees SET department=NULL,modifyName=#{modifyName},modifyTime=#{modifyTime} WHERE curStatus=2 AND department = #{department}
+    </update>
+
+    <select id="selectDeptInput" resultType="Department">
+        select * from  department
+        <where>
+            <if test="deptId!=null and deptId!=''">AND FIND_IN_SET(deptId,getChildrenOfDept(#{deptId}))</if>
+            AND deptId not in ('organize') AND curStatus=2
+        </where>
+        <if test="startRow>=0 and endRow>0"> limit #{startRow},#{endRow}</if>
+    </select>
+    <select id="selectDeptInputByCont" resultType="int">
+        select COUNT(*) from  department
+        <where>
+            <if test="deptId!=null and deptId!=''">AND FIND_IN_SET(deptId,getChildrenOfDept(#{deptId}))</if>
+            AND deptId not in ('organize') AND curStatus=2
+        </where>
+    </select>
+    <select id="getDepartmentByDeptName" resultType="Department">
+        SELECT * FROM department WHERE curStatus=2 AND deptName=#{deptName}
+    </select>
+</mapper>

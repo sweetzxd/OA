@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为UserDao接口方法提供sql语句配置 -->
+<mapper namespace="com.oa.core.dao.work.WorkFlowLogDao">
+    <insert id="insert" parameterType="WorkFlowLog">
+        INSERT INTO WorkFlowLog(wkflogId,wkflowId,procId,nodeAction,nodeID,inParams,outParams,success,reason,addMessage,msgID,pkFeild,curStatus,recordName,recordTime,modifyName,modifyTime,deleteName,deleteTime)
+        VALUES
+        (#{wkflogId},#{wkflowId},#{procId},#{nodeAction},#{nodeID},#{inParams},#{outParams},#{success},#{reason},#{addMessage},#{msgID},#{pkFeild},2,#{recordName},#{recordTime},#{modifyName},#{modifyTime},#{deleteName},#{deleteTime})
+    </insert>
+
+    <delete id="delete" parameterType="WorkFlowLog">
+        UPDATE WorkFlowLog
+        <set>
+            <if test="deleteName!=null">deleteName =#{deleteName},</if>
+            <if test="deleteTime!=null">deleteTime =#{deleteTime},</if>
+            curStatus=0
+        </set>
+        WHERE wkflogId=#{wkflogId}
+    </delete>
+    <delete id="deletes" parameterType="WorkFlowLog">
+        UPDATE WorkFlowLog
+        <set>
+            curStatus=0
+        </set>
+        WHERE wkflogId in (${wkflogId})
+    </delete>
+    <update id="update" parameterType="WorkFlowLog">
+        UPDATE WorkFlowLog
+        <set>
+            <if test="wkflowId!=null and wkflowId!=''">wkflowId =#{wkflowId},</if>
+            <if test="procId!=null and procId!=''">procId =#{procId},</if>
+            <if test="nodeAction!=null and nodeAction!=''">nodeAction =#{nodeAction},</if>
+            <if test="nodeID!=null and nodeID!=''">nodeID =#{nodeID},</if>
+            <if test="inParams!=null and inParams!=''">inParams =#{inParams},</if>
+            <if test="outParams!=null and outParams!=''">outParams =#{outParams},</if>
+            <if test="success!=null and success!=''">success =#{success},</if>
+            <if test="reason!=null and reason!=''">reason =#{reason},</if>
+            <if test="addMessage!=null and addMessage!=''">addMessage =#{addMessage},</if>
+            <if test="msgID!=null and msgID!=''">msgID =#{msgID},</if>
+            <if test="pkFeild!=null and pkFeild!=''">pkFeild =#{pkFeild},</if>
+
+            <if test="modifyName!=null"> modifyName =#{modifyName},</if>
+            <if test="modifyTime!=null"> modifyTime =#{modifyTime}</if>
+        </set>
+        where wkflogId=#{wkflogId}
+    </update>
+
+    <select id="selectAll" resultType="WorkFlowLog">
+        SELECT * FROM WorkFlowLog WHERE curStatus=2 order by recordTime desc
+    </select>
+
+    <select id="selectTerms" parameterType="WorkFlowLog" resultType="WorkFlowLog">
+        SELECT * FROM WorkFlowLog
+        <where>
+            <if test="wkflogId!=null and wkflogId!=''">and wkflogId =#{wkflogId}</if>
+            <if test="wkflowId!=null and wkflowId!=''">and wkflowId =#{wkflowId}</if>
+            <if test="procId!=null and procId!=''">and procId =#{procId},</if>
+            <if test="nodeAction!=null and nodeAction!=''">and nodeAction =#{nodeAction}</if>
+            <if test="nodeID!=null and nodeID!=''">and nodeID =#{nodeID}</if>
+            <if test="inParams!=null and inParams!=''">and inParams like concat('%', #{wkfName}, '%')</if>
+            <if test="outParams!=null and outParams!=''">and outParams like concat('%', #{wkfName}, '%')</if>
+            <if test="success!=null and success!=''">and success =#{success}</if>
+            <if test="reason!=null and reason!=''">and reason  like concat('%', #{wkfName}, '%')</if>
+            <if test="addMessage!=null and addMessage!=''">and addMessage like concat('%', #{wkfName}, '%')</if>
+            <if test="msgID!=null and msgID!=''">and msgID =#{msgID}</if>
+            <if test="pkFeild!=null and pkFeild!=''">and pkFeild =#{pkFeild}</if>
+
+            and curStatus=2
+        </where>
+        order by recordTime desc
+    </select>
+
+    <select id="selectById" parameterType="java.lang.String" resultType="WorkFlowLog">
+        SELECT * FROM WorkFlowLog WHERE wkflogId = #{wkflogId} AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="selectByIds" resultType="WorkFlowLog">
+        SELECT * FROM WorkFlowLog WHERE wkflogId IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+        AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+
+    <select id="selectByProcId" parameterType="java.lang.String" resultType="WorkFlowLog">
+        SELECT * FROM WorkFlowLog WHERE procId = #{procId} AND wkflowId = #{wkflowId} AND nodeAction='运行节点' AND success=1 AND curStatus=2 ORDER BY recordTime ASC
+    </select>
+
+    <select id="selectAllCount" resultType="int">
+        select count(*) from WorkFlowLog WHERE curStatus=2
+    </select>
+
+    <select id="selectTermsCount" parameterType="WorkFlowLog" resultType="int">
+        SELECT count(*) FROM WorkFlowLog
+        <where>
+            <if test="wkflogId!=null and wkflogId!=''">and wkflogId =#{wkflogId}</if>
+            <if test="wkflowId!=null and wkflowId!=''">and wkflowId =#{wkflowId}</if>
+            <if test="procId!=null and procId!=''">and procId =#{procId},</if>
+            <if test="nodeAction!=null and nodeAction!=''">and nodeAction =#{nodeAction}</if>
+            <if test="nodeID!=null and nodeID!=''">and nodeID =#{nodeID}</if>
+            <if test="inParams!=null and inParams!=''">and inParams like concat('%', #{wkfName}, '%')</if>
+            <if test="outParams!=null and outParams!=''">and outParams like concat('%', #{wkfName}, '%')</if>
+            <if test="success!=null and success!=''">and success =#{success}</if>
+            <if test="reason!=null and reason!=''">and reason  like concat('%', #{wkfName}, '%')</if>
+            <if test="addMessage!=null and addMessage!=''">and addMessage like concat('%', #{wkfName}, '%')</if>
+            <if test="msgID!=null and msgID!=''">and msgID =#{msgID}</if>
+            <if test="pkFeild!=null and pkFeild!=''">and pkFeild =#{pkFeild}</if>
+            and curStatus=2
+        </where>
+        order by recordTime desc
+    </select>
+
+    <select id="selectByIdCount" parameterType="java.lang.String" resultType="int">
+        SELECT count(*) FROM WorkFlowLog WHERE wkflogId IN (${wkflogId}) AND curStatus=2 ORDER BY recordTime DESC
+    </select>
+</mapper>

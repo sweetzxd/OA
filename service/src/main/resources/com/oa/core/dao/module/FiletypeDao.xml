@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oa.core.dao.module.FiletypeDao" >
+  <insert id="insert">
+    INSERT INTO filetype (fileTypeId, fileTypeName, superiorFileTypeId,
+      roleId, curStatus, recordName,
+      recordTime, modifyName, modifyTime,
+      deleteName, deleteTime)
+    VALUES (#{fileTypeId}, #{fileTypeName}, #{superiorFileTypeId},
+      #{roleId}, 2, #{recordName},
+      #{recordTime},#{modifyName}, #{modifyTime},
+      #{deleteName},#{deleteTime})
+  </insert>
+  <delete id="delete">
+      UPDATE filetype SET curStatus=0,deleteName=#{deleteName},deleteTime=#{deleteTime} WHERE fileTypeId=#{fileTypeId} AND curStatus=2
+  </delete>
+  <update id="update">
+    UPDATE filetype
+    <set>
+      <if test="fileTypeName!=null and fileTypeName!=''">fileTypeName =#{fileTypeName},</if>
+      <if test="superiorFileTypeId!=null and superiorFileTypeId!=''">superiorFileTypeId =#{superiorFileTypeId},</if>
+      <if test="roleId!=null">roleId =#{roleId},</if>
+      <if test="modifyName!=null and modifyName!=''">modifyName =#{modifyName},</if>
+      <if test="modifyTime!=null and modifyTime!=''">modifyTime =#{modifyTime},</if>
+    </set>
+    WHERE curStatus=2 AND fileTypeId=#{fileTypeId}
+  </update>
+  <select id="selectById" resultType="Filetype">
+        SELECT * FROM filetype WHERE curStatus=2 AND fileTypeId=#{fileTypeId}
+  </select>
+  <select id="selectAllTerms" parameterType="Filetype" resultType="Filetype">
+    SELECT * FROM filetype
+    <where>
+      <if test="fileTypeName!=null and fileTypeName!=''">and fileTypeName =#{fileTypeName}</if>
+      <if test="superiorFileTypeId!=null and superiorFileTypeId!=''">and superiorFileTypeId =#{superiorFileTypeId}</if>
+      <if test="roleId!=null and roleId!=''">and roleId =#{roleId}</if>
+      <if test="list!=null and list!=''">and (roleId like concat('%', 'allemployees;', '%')
+        <foreach item="item" index="key" collection="list" separator=" ">
+          OR roleId like concat('%', #{item}, '%')
+        </foreach>
+        )
+      </if>
+      AND curStatus=2
+    </where>
+    ORDER BY recordTime DESC
+    <if test="startRow>=0 and endRow>0"> limit #{startRow},#{endRow}</if>
+  </select>
+  <select id="selectAllTermsCont" parameterType="Filetype" resultType="int">
+    SELECT COUNT(*) FROM filetype
+    <where>
+      <if test="fileTypeName!=null and fileTypeName!=''">and fileTypeName =#{fileTypeName}</if>
+      <if test="superiorFileTypeId!=null and superiorFileTypeId!=''">and superiorFileTypeId =#{superiorFileTypeId}</if>
+      <if test="roleId!=null and roleId!=''">and roleId =#{roleId}</if>
+      AND curStatus=2
+    </where>
+  </select>
+  <select id="getFiletypesByRoleId" resultType="Filetype" parameterType="java.util.List">
+      SELECT * FROM filetype WHERE (roleId like concat('%', 'allemployees;', '%')
+    <foreach item="item" index="key" collection="list" separator=" " >
+      OR roleId like concat('%', #{item}, '%')
+    </foreach>
+    )AND curStatus=2
+  </select>
+</mapper>

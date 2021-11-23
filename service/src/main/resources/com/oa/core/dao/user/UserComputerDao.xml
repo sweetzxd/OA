@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为UserDao接口方法提供sql语句配置 -->
+<mapper namespace="com.oa.core.dao.user.UserComputerDao">
+    <insert id="insert" parameterType="UserComputer">
+        INSERT INTO UserComputer(computerId,userName,logInfoMsg,userMenu,backupMenu,curStatus,recordName,recordTime,modifyName,modifyTime,deleteName,deleteTime)
+        VALUES
+        (#{computerId},#{userName},#{logInfoMsg},#{userMenu},#{backupMenu},2,#{recordName},#{recordTime},#{modifyName},#{modifyTime},#{deleteName},#{deleteTime})
+    </insert>
+
+    <delete id="delete">
+         UPDATE UserComputer
+        <set>
+            <if test="deleteName!=null and deleteName!=''">deleteName =#{deleteName},</if>
+            <if test="deleteTime!=null and deleteTime!=''">deleteTime =#{deleteTime},</if>
+            curStatus=0
+        </set>
+          WHERE computerId=#{computerId}
+    </delete>
+    <update id="update" parameterType="UserComputer">
+        UPDATE UserComputer
+        <set>
+            <if test="userName!=null and userName!=''">userName =#{userName},</if>
+            <if test="logInfoMsg!=null and logInfoMsg!=''">logInfoMsg =#{logInfoMsg},</if>
+            <if test="userMenu!=null and userMenu!=''">userMenu =#{userMenu},</if>
+            <if test="backupMenu!=null and backupMenu!=''">backupMenu =#{backupMenu},</if>
+            <if test="modifyName!=null"> modifyName =#{modifyName},</if>
+            <if test="modifyTime!=null"> modifyTime =#{modifyTime}</if>
+        </set>
+        where computerId=#{computerId}
+    </update>
+
+    <select id="selectById" resultType="UserComputer" parameterType="String">
+        SELECT * FROM UserComputer WHERE userName = #{userName} AND CURSTATUS=2
+    </select>
+
+    <select id="selectAll" resultType="UserComputer">
+        SELECT * FROM UserComputer WHERE CURSTATUS=2 order by recordTime desc
+    </select>
+
+    <select id="selectTerms" parameterType="UserComputer" resultType="UserComputer">
+        SELECT * FROM UserComputer
+        <where>
+            <if test="userName!=null and userName!=''">and userName = #{userName}</if>
+            <if test="logInfoMsg!=null and logInfoMsg!=''">and logInfoMsg like concat('%', #{logInfoMsg}, '%')</if>
+            <if test="userMenu!=null">and userMenu like concat('%', #{userMenu}, '%')</if>
+            <if test="backupMenu!=null">and backupMenu like concat('%', #{backupMenu}, '%')</if>
+            and curStatus=2
+        </where>
+        order by recordTime desc
+    </select>
+
+    <select id="selectAllCount" resultType="int">
+        select count(*) from UserComputer WHERE CURSTATUS=2
+    </select>
+
+    <select id="selectTermsCount" resultType="int">
+        SELECT count(*) FROM UserComputer
+        <where>
+            <if test="userName!=null and userName!=''">and userName = #{userName}</if>
+            <if test="logInfoMsg!=null and logInfoMsg!=''">and logInfoMsg like concat('%', #{logInfoMsg}, '%')</if>
+            <if test="userMenu!=null">and userMenu like concat('%', #{userMenu}, '%')</if>
+            <if test="backupMenu!=null">and backupMenu like concat('%', #{backupMenu}, '%')</if>
+            and curStatus=2
+        </where>
+        order by recordTime desc
+    </select>
+    <select id="selectUserName" resultType="UserComputer">
+        select * from UserComputer WHERE curStatus=2 and userName = #{userName}
+    </select>
+</mapper>

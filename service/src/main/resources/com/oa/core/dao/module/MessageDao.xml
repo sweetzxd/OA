@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oa.core.dao.module.MessageDao">
+    <insert id="insert">
+        INSERT INTO Message (msgId,msgTitle,msgSendUser,msgRecUser,msgText,msgType,msgUrl,msgLevel,msgSendTime,msgEndTime,msgStatus,curStatus,recordName,recordTime,modifyName,modifyTime,deleteName,deleteTime,msgFile)
+        VALUES(#{msgId},#{msgTitle},#{msgSendUser},#{msgRecUser},#{msgText},#{msgType},#{msgUrl},#{msgLevel},#{msgSendTime},#{msgEndTime},#{msgStatus},2,#{recordName},#{recordTime},#{modifyName},#{modifyTime},#{deleteName},#{deleteTime},#{msgFile})
+    </insert>
+    <delete id="delete">
+        UPDATE Message SET curStatus=0,deleteName=#{deleteName},deleteTime=#{deleteTime} WHERE msgId=#{msgId} AND curStatus=2
+    </delete>
+    <update id="update">
+        UPDATE Message
+        <set>
+            <if test="msgTitle!=null and msgTitle!=''">msgTitle =#{msgTitle},</if>
+            <if test="msgSendUser!=null and msgSendUser!=''">msgSendUser =#{msgSendUser},</if>
+            <if test="msgRecUser!=null and msgRecUser!=''">msgRecUser =#{msgRecUser},</if>
+            <if test="msgText!=null and msgText!=''">msgText =#{msgText},</if>
+            <if test="msgType!=null and msgType!=''">msgType =#{msgType},</if>
+            <if test="msgUrl!=null and msgUrl!=''">msgUrl =#{msgUrl},</if>
+            <if test="msgLevel!=null and msgLevel>0">msgLevel =#{msgLevel},</if>
+            <if test="msgSendTime!=null and msgSendTime!=''">msgSendTime =#{msgSendTime},</if>
+            <if test="msgEndTime!=null and msgEndTime!=''">msgEndTime =#{msgEndTime},</if>
+            <if test="msgStatus!=null and msgStatus>=0">msgStatus =#{msgStatus},</if>
+        </set>
+        WHERE curStatus=2 AND msgId=#{msgId}
+    </update>
+    <select id="selectAll" resultType="Message">
+        SELECT * FROM Message WHERE curStatus=2
+        ORDER BY msgLevel DESC, msgSendTime ASC
+    </select>
+    <select id="selectById" resultType="Message">
+        SELECT * FROM Message WHERE curStatus=2 AND msgId=#{msgId}
+    </select>
+
+    <select id="selectBySendUser" resultType="Message">
+        SELECT * FROM Message WHERE curStatus=2 AND msgSendUser=#{msgSendUser}
+        ORDER BY msgLevel DESC, msgSendTime ASC
+    </select>
+
+    <select id="selectBySendUserCont" resultType="int">
+        SELECT COUNT(*) FROM Message WHERE curStatus=2 AND msgSendUser=#{msgSendUser}
+    </select>
+
+    <select id="selectByRecUser" resultType="Message">
+        SELECT * FROM Message WHERE curStatus=2 AND msgRecUser=#{msgRecUser}
+        ORDER BY msgLevel DESC, msgSendTime ASC
+    </select>
+
+    <select id="selectByRecUserCont" resultType="int">
+        SELECT COUNT(*) FROM Message WHERE curStatus=2 AND msgRecUser=#{msgRecUser}
+    </select>
+    
+    <select id="selectTerms" parameterType="Message" resultType="Message">
+        SELECT * FROM Message
+        <where>
+            <if test="msgId!=null and msgId!=''">and msgId =#{msgId}</if>
+            <if test="msgTitle!=null and msgTitle!=''">and msgTitle =#{msgTitle}</if>
+            <if test="msgSendUser!=null and msgSendUser!=''">and msgSendUser =#{msgSendUser}</if>
+            <if test="msgRecUser!=null and msgRecUser!=''">and msgRecUser =#{msgRecUser}</if>
+            <if test="msgText!=null and msgText!=''">and msgText =#{msgText}</if>
+            <if test="msgUrl!=null and msgUrl!=''">and msgUrl =#{msgUrl}</if>
+            <if test="msgSendTime!=null and msgSendTime!=''">and msgSendTime =#{msgSendTime}</if>
+            <if test="msgEndTime!=null and msgEndTime!=''">and msgEndTime =#{msgEndTime}</if>
+            <if test="msgStatus!=null and msgStatus>=0">and msgStatus =#{msgStatus}</if>
+            and curStatus=2
+        </where>
+        ORDER BY msgLevel DESC, msgSendTime ASC
+    </select>
+    <select id="selectAllTerms" parameterType="Message" resultType="Message">
+        SELECT * FROM Message
+        <where>
+            <if test="msgId!=null and msgId!=''">and msgId =#{msgId}</if>
+            <if test="msgTitle!=null and msgTitle!=''">and msgTitle like concat('%', #{msgTitle}, '%')</if>
+            <if test="msgSendUser!=null and msgSendUser!=''">and msgSendUser =#{msgSendUser}</if>
+            <if test="msgRecUser!=null and msgRecUser!=''">and msgRecUser =#{msgRecUser}</if>
+            <if test="msgText!=null and msgText!=''">and msgText =#{msgText}</if>
+            <if test="msgUrl!=null and msgUrl!=''">and msgUrl =#{msgUrl}</if>
+            <if test="msgSendTime!=null and msgSendTime!=''">and msgSendTime =#{msgSendTime}</if>
+            <if test="msgEndTime!=null and msgEndTime!=''">and msgEndTime =#{msgEndTime}</if>
+            <if test="msgStatus!=null and msgStatus>=0">and msgStatus =#{msgStatus}</if>
+            and curStatus=2
+        </where>
+        ORDER BY msgLevel DESC, msgSendTime ASC
+    </select>
+    <select id="selectAllTermsCont" parameterType="Message" resultType="int">
+        SELECT COUNT(*) FROM Message
+        <where>
+            <if test="msgId!=null and msgId!=''">and msgId =#{msgId}</if>
+            <if test="msgTitle!=null and msgTitle!=''">and msgTitle like concat('%', #{msgTitle}, '%')</if>
+            <if test="msgSendUser!=null and msgSendUser!=''">and msgSendUser =#{msgSendUser}</if>
+            <if test="msgRecUser!=null and msgRecUser!=''">and msgRecUser =#{msgRecUser}</if>
+            <if test="msgText!=null and msgText!=''">and msgText =#{msgText}</if>
+            <if test="msgUrl!=null and msgUrl!=''">and msgUrl =#{msgUrl}</if>
+            <if test="msgSendTime!=null and msgSendTime!=''">and msgSendTime =#{msgSendTime}</if>
+            <if test="msgEndTime!=null and msgEndTime!=''">and msgEndTime =#{msgEndTime}</if>
+            <if test="msgStatus!=null and msgStatus>=0">and msgStatus =#{msgStatus}</if>
+            AND curStatus=2
+        </where>
+    </select>
+
+    <select id="selectAllMsgCont" resultType="Map">
+        SELECT msgRecUser,COUNT(msgRecUser) as num FROM Message WHERE msgStatus=1 GROUP BY msgRecUser
+    </select>
+    <delete id="deleteMessage">
+        UPDATE Message SET msgStatus=0,deleteName=#{deleteName},deleteTime=#{deleteTime} WHERE msgId in (${msgId}) AND curStatus=2
+    </delete>
+    <insert id="insertList" useGeneratedKeys="true" parameterType="java.util.Map">
+        INSERT INTO Message (msgId,msgTitle,msgSendUser,msgRecUser,msgText,msgType,msgUrl,msgLevel,msgSendTime,msgEndTime,msgStatus,curStatus,recordName,recordTime,modifyName,modifyTime,deleteName,deleteTime,msgFile)
+        VALUES
+        <foreach item="item" index="key" collection="messageMap.entrySet()" separator="," >
+            (#{item.msgId},#{item.msgTitle},#{item.msgSendUser},#{item.msgRecUser},#{item.msgText},#{item.msgType},#{item.msgUrl},#{item.msgLevel},#{item.msgSendTime},#{item.msgEndTime},#{item.msgStatus},2,#{item.recordName},#{item.recordTime},#{item.modifyName},#{item.modifyTime},#{item.deleteName},#{item.deleteTime},#{item.msgFile})
+        </foreach>
+    </insert>
+</mapper>

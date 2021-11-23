@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为TableMaxIdDao接口方法提供sql语句配置 -->
+<mapper namespace="com.oa.core.dao.system.FormCustomMadeDao">
+
+    <insert id="insertFormCM" parameterType="FormCustomMade">
+        INSERT INTO formpage(
+          formcmName,formcmTitle,formTask,listTask,editPage,pageRelease,formType,curStatus,recordName,recordTime,modifyName,modifyTime,module
+        )VALUES(
+          #{formcmName},#{formcmTitle},#{formTask},#{listTask},#{editPage},0,#{formType},2,#{recordName},#{recordTime},#{modifyName},#{modifyTime},#{module}
+        )
+    </insert>
+
+    <delete id="deleteFormCM" parameterType="FormCustomMade">
+        UPDATE formpage
+        <set>
+            deleteName =#{deleteName},
+            deleteTime =#{deleteTime},
+            curStatus=0
+        </set>
+        WHERE formcmName=#{formcmName}
+    </delete>
+
+    <update id="updateFormCM" parameterType="FormCustomMade">
+        UPDATE formpage
+        <set>
+            <if test="formcmTitle!=null and formcmTitle!=''">formcmTitle =#{formcmTitle},</if>
+            <if test="formTask!=null and formTask!=''">formTask =#{formTask},</if>
+            <if test="listTask!=null and listTask!=''">listTask =#{listTask},</if>
+            <if test="editPage!=null and editPage!=''">editPage =#{editPage},</if>
+            <if test="pageRelease!=null">pageRelease =#{pageRelease},</if>
+            modifyName =#{modifyName},
+            modifyTime =#{modifyTime},
+            <if test="module!=null and module!=''">module =#{module}</if>
+        </set>
+        where formcmName=#{formcmName}
+    </update>
+
+    <select id="selectAllFormCM" resultType="FormCustomMade" parameterType="FormCustomMade">
+        SELECT * FROM formpage
+        <where>
+            <if test="formcmName!=null and formcmName!=''">and formcmName like concat('%', #{formcmName}, '%')</if>
+            <if test="formcmTitle!=null and formcmTitle!=''">and formcmTitle like concat('%', #{formcmTitle}, '%')</if>
+            <if test="formTask!=null and formTask!=''">and formTask like concat('%', #{formTask}, '%')</if>
+            <if test="listTask!=null and listTask!=''">and listTask like concat('%', #{listTask}, '%')</if>
+            <if test="module!=null and module!=''">and module =#{module}</if>
+            <if test="recordName!=null and recordName!=''">and recordName like concat('%', #{recordName}, '%')</if>
+            <if test="modifyName!=null and modifyName!=''">and modifyName like concat('%', #{modifyName}, '%')</if>
+            <if test="formType!=null and formType>0">AND formType = #{formType}</if>
+            <if test="formType==null or formType==0">AND (formType = 1 OR formType = 3) </if>
+            AND curStatus=2
+        </where>
+        order by recordTime desc
+        <if test="startRow>=0 and endRow>0">limit #{startRow},#{endRow}</if>
+    </select>
+    <select id="selectAllFormPage" resultType="FormCustomMade" parameterType="FormCustomMade">
+        SELECT * FROM formpage WHERE formcmName in (SELECT formId FROM myurlregist WHERE (pageId=#{pageId} OR parentId=#{pageId}) AND curStatus=2)
+        <if test="formType!=null and formType!='' and formType!=0 and formType!='0'">AND formType = #{formType}</if>
+        <if test="formType==null or formType=='' or formType==0 or formType=='0'">AND (formType = 1 OR formType = 3) </if>
+        AND curStatus=2
+    </select>
+    <select id="selectCountFormCM" resultType="int" parameterType="FormCustomMade">
+        SELECT count(*) FROM formpage
+        <where>
+            <if test="formcmName!=null and formcmName!=''">and formcmName like concat('%', #{formcmName}, '%')</if>
+            <if test="formcmTitle!=null and formcmTitle!=''">and formcmTitle like concat('%', #{formcmTitle}, '%')</if>
+            <if test="formTask!=null and formTask!=''">and formTask like concat('%', #{formTask}, '%')</if>
+            <if test="listTask!=null and listTask!=''">and listTask like concat('%', #{listTask}, '%')</if>
+            <if test="recordName!=null and recordName!=''">and recordName like concat('%', #{recordName}, '%')</if>
+            <if test="modifyName!=null and modifyName!=''">and modifyName like concat('%', #{modifyName}, '%')</if>
+            <if test="formType!=null and formType!='' and formType!=0 and formType!='0'">AND formType = #{formType}</if>
+            <if test="formType==null or formType=='' or formType==0 or formType=='0'">AND (formType = 1 OR formType = 3) </if>
+            AND curStatus=2
+        </where>
+        order by recordTime desc
+        <if test="startRow>=0 and endRow>0">limit #{startRow},#{endRow}</if>
+    </select>
+    <select id="selectCountFormPage" resultType="int" parameterType="FormCustomMade">
+        SELECT count(*) FROM formpage WHERE formcmName in (SELECT formId FROM myurlregist WHERE (pageId=#{pageId} OR parentId=#{pageId}) AND curStatus=2) AND formType = 1 AND curStatus=2
+    </select>
+    <select id="selectFormCM" resultType="FormCustomMade" parameterType="FormCustomMade">
+        SELECT * FROM formpage
+        <where>
+            <if test="formcmName!=null and formcmName!=''">and formcmName =#{formcmName}</if>
+            <if test="formcmTitle!=null and formcmTitle!=''">and formcmTitle =#{formcmTitle}</if>
+            <if test="formTask!=null and formTask!=''">and formTask =#{formTask}</if>
+            <if test="listTask!=null and listTask!=''">and listTask =#{listTask}</if>
+            <if test="recordName!=null and recordName!=''">and recordName =#{recordName}</if>
+            <if test="modifyName!=null and modifyName!=''">and modifyName =#{modifyName}</if>
+            <if test="formType!=null and formType!='' and formType!=0 and formType!='0'">AND formType = #{formType}</if>
+            <if test="formType==null or formType=='' or formType==0 or formType=='0'">AND (formType = 1 OR formType = 3) </if>
+            AND curStatus=2
+        </where>
+        order by recordTime desc
+        <if test="startRow>=0 and endRow>0">limit #{startRow},#{endRow}</if>
+    </select>
+
+    <select id="selectFormCMByID" resultType="FormCustomMade" parameterType="java.lang.String">
+        SELECT * FROM formpage
+        <where>
+            and formcmName =#{formcmName} and curStatus=2
+        </where>
+        order by recordTime desc
+    </select>
+
+    <select id="selectFormCMByPageRelease" resultType="FormCustomMade" parameterType="java.lang.String">
+        SELECT * FROM formpage
+        <where>
+            and pageRelease = ${PageRelease} and curStatus=2
+        </where>
+        order by recordTime desc
+    </select>
+
+    <select id="selectFormCMByIds" resultType="FormCustomMade">
+        SELECT * FROM formpage WHERE curStatus=2
+        <if test="list!=null">
+            AND formcmName IN
+            <foreach collection="list" index="index" item="formcmName"  open="(" separator="," close=")">
+                #{formcmName}
+            </foreach>
+        </if>
+    </select>
+</mapper>

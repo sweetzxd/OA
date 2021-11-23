@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oa.core.dao.module.FileDao" >
+  <insert id="insert">
+    INSERT INTO commonfiles (fileId, fileName, fileTypeId,
+      uploadTime, intro, fileAdd,
+      remark, curStatus, recordName,
+      recordTime, modifyName, modifyTime,
+      deleteName, deleteTime)
+    VALUES (#{fileId}, #{fileName}, #{fileTypeId},
+      #{uploadTime}, #{intro}, #{fileAdd},
+      #{remark}, 2, #{recordName},
+      #{recordTime}, #{modifyName}, #{modifyTime},
+      #{deleteName}, #{deleteTime})
+  </insert>
+  <delete id="delete">
+      UPDATE commonfiles SET curStatus=0,deleteName=#{deleteName},deleteTime=#{deleteTime} WHERE fileId=#{fileId} AND curStatus=2
+  </delete>
+  <update id="update">
+    UPDATE commonfiles
+    <set>
+      <if test="fileName!=null and fileName!=''">fileName =#{fileName},</if>
+      <if test="fileTypeId!=null and fileTypeId!=''">fileTypeId =#{fileTypeId},</if>
+      <if test="uploadTime!=null and uploadTime!=''">uploadTime =#{uploadTime},</if>
+      <if test="intro!=null and intro!=''">intro =#{intro},</if>
+      <if test="fileAdd!=null and fileAdd!=''">fileAdd =#{fileAdd},</if>
+      <if test="remark!=null and remark!=''">remark =#{remark},</if>
+      <if test="modifyName!=null and modifyName!=''">modifyName =#{modifyName},</if>
+      <if test="modifyTime!=null and modifyTime!=''">modifyTime =#{modifyTime},</if>
+    </set>
+    WHERE curStatus=2 AND fileId=#{fileId}
+  </update>
+  <select id="selectById" resultType="File">
+        SELECT * FROM commonfiles WHERE curStatus=2 AND fileId=#{fileId}
+  </select>
+  <select id="selectAllTerms" parameterType="File" resultType="File">
+    SELECT * FROM commonfiles
+    <where>
+      <if test="fileName!=null and fileName!=''">and fileName like concat('%', #{fileName}, '%')</if>
+      <if test="fileTypeId!=null and fileTypeId!=''">and fileTypeId =#{fileTypeId}</if>
+      <if test="uploadTime!=null and uploadTime!=''">and uploadTime =#{uploadTime}</if>
+      <if test="intro!=null and intro!=''">and intro =#{intro}</if>
+      <if test="fileAdd!=null and fileAdd!=''">and fileAdd =#{fileAdd}</if>
+      <if test="remark!=null and remark!=''">and remark =#{remark}</if>
+      <if test="list!=null and list!=''">and (fileTypeId like concat('%', 'allemployees;', '%')
+        <foreach item="item" index="key" collection="list" separator=" ">
+          OR fileTypeId = #{item}
+        </foreach>
+        )
+      </if>
+      AND curStatus=2
+    </where>
+    ORDER BY recordTime DESC
+    <if test="startRow>=0 and endRow>0"> limit #{startRow},#{endRow}</if>
+  </select>
+  <select id="selectAllTermsCont" parameterType="File" resultType="int">
+    SELECT COUNT(*) FROM commonfiles
+    <where>
+      <if test="fileName!=null and fileName!=''">and fileName like concat('%', #{fileName}, '%')</if>
+      <if test="fileTypeId!=null and fileTypeId!=''">and fileTypeId =#{fileTypeId}</if>
+      <if test="uploadTime!=null and uploadTime!=''">and uploadTime =#{uploadTime}</if>
+      <if test="intro!=null and intro!=''">and intro =#{intro}</if>
+      <if test="fileAdd!=null and fileAdd!=''">and fileAdd =#{fileAdd}</if>
+      <if test="remark!=null and remark!=''">and remark =#{remark}</if>
+      <if test="list!=null and list!=''">and (fileTypeId like concat('%', 'allemployees;', '%')
+        <foreach item="item" index="key" collection="list" separator=" ">
+          OR fileTypeId = #{item}
+        </foreach>
+        )
+      </if>
+      AND curStatus=2
+    </where>
+  </select>
+  <delete id="deletes">
+      UPDATE commonfiles SET curStatus=0,deleteName=#{deleteName},deleteTime=#{deleteTime} WHERE fileId in (${fileId}) AND curStatus=2
+  </delete>
+
+</mapper>
