@@ -75,11 +75,11 @@ public class StringToHtmlUtil {
                     }
                 }
                 if (record) {
-                    listHtml += "<th lay-data=\"{field:'" + tableId + "_recordName', unresize:true, sort: true, templet:function(d){return oa.decipher('user',d." + tableId + "_recordName);}}\">创建人</th>";
+                    listHtml += "<th lay-data=\"{field:'" + tableId + "_recordName_name', unresize:true, sort: true}\">创建人</th>";
                     listHtml += "<th lay-data=\"{field:'" + tableId + "_recordTime', unresize:true, sort: true, templet:function(d){return oa.formatdate('datetime',d." + tableId + "_recordTime);}}\">创建时间</th>";
                 }
                 if (modify) {
-                    listHtml += "<th lay-data=\"{field:'" + tableId + "_modifyName', unresize:true, sort: true, templet:function(d){return oa.decipher('user',d." + tableId + "_modifyName);}}\">修改人</th>";
+                    listHtml += "<th lay-data=\"{field:'" + tableId + "_modifyName_name', unresize:true, sort: true}\">修改人</th>";
                     listHtml += "<th lay-data=\"{field:'" + tableId + "_modifyTime', unresize:true, sort: true, templet:function(d){return oa.formatdate('datetime',d." + tableId + "_modifyTime);}}\">修改时间</th>";
                 }
                 return listHtml;

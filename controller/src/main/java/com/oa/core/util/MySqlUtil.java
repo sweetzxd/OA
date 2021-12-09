@@ -180,7 +180,7 @@ public class MySqlUtil {
                 wheres += " and " + w + " ";
             }
         }
-        String sql = "select (@i:=@i+1) num,recorderNO, " + fields + " reserveField,linkRecorderNO,recordName,recordTime,modifyName,modifyTime from " + table + ",(SELECT @i:=" + startRow + ") as i where curStatus=2 " + wheres + " " + order + " " + limit;
+        String sql = "select (@i:=@i+1) num,recorderNO, " + fields + " reserveField,linkRecorderNO,recordName,useridtoname(recordName) as recordName_name,recordTime,modifyName,useridtoname(modifyName) as modifyName_name,modifyTime from " + table + ",(SELECT @i:=" + startRow + ") as i where curStatus=2 " + wheres + " " + order + " " + limit;
         LogUtil.sysLog("SQL:" + sql);
         return sql;
     }
@@ -424,7 +424,7 @@ public class MySqlUtil {
             }
         }
 
-        String sql = "select (@i:=@i+1) num ,recorderNO," + fields + " reserveField,linkRecorderNO,recordName,recordTime,modifyName,modifyTime from " + table + ",(SELECT @i:=0) as i where curStatus=2 " + wheres + " " + orders + " " + limit;
+        String sql = "select (@i:=@i+1) num ,recorderNO," + fields + " reserveField,linkRecorderNO,recordName,useridtoname(recordName) as recordName_name,recordTime,modifyName,useridtoname(modifyName) as modifyName_name,modifyTime from " + table + ",(SELECT @i:=0) as i where curStatus=2 " + wheres + " " + orders + " " + limit;
         return sql;
     }
 
@@ -444,7 +444,7 @@ public class MySqlUtil {
         if (pkid != null && !pkid.equals("")) {
             pkid = pkid + " , ";
         }
-        String sql = "select (@i:=@i+1) num ," + pkid + fields + " reserveField,linkRecorderNO,recordName,recordTime,modifyName,modifyTime from " + table + ",(SELECT @i:=0) as i where curStatus=2 " + wheres + " " + orders + " " + limit;
+        String sql = "select (@i:=@i+1) num ," + pkid + fields + " reserveField,linkRecorderNO,recordName,useridtoname(recordName) as recordName_name,recordTime,modifyName,useridtoname(modifyName) as modifyName_name,modifyTime from " + table + ",(SELECT @i:=0) as i where curStatus=2 " + wheres + " " + orders + " " + limit;
         return sql;
     }
 
@@ -520,7 +520,7 @@ public class MySqlUtil {
                 wheres += " and " + w + " ";
             }
         }
-        String sql = "select recorderNO AS " + table + "_recorderNO ,(@i:=@i+1) " + table + "_num" + fields + ",reserveField AS " + table + "_reserveField,linkRecorderNO AS " + table + "_linkRecorderNO, recordName AS " + table + "_recordName,recordTime AS " + table + "_recordTime,modifyName AS " + table + "_modifyName,modifyTime AS " + table + "_modifyTime from " + table + ",(SELECT @i:=" + startRow + ") as i where curStatus=2 " + wheres;
+        String sql = "select recorderNO AS " + table + "_recorderNO ,(@i:=@i+1) " + table + "_num" + fields + ",reserveField AS " + table + "_reserveField,linkRecorderNO AS " + table + "_linkRecorderNO, recordName AS " + table + "_recordName,useridtoname(recordName) AS " + table + "_recordName_name,recordTime AS " + table + "_recordTime,modifyName AS " + table + "_modifyName,useridtoname(modifyName) AS " + table + "_modifyName_name,modifyTime AS " + table + "_modifyTime from " + table + ",(SELECT @i:=" + startRow + ") as i where curStatus=2 " + wheres;
         if (order != null && order.length() > 1) {
             sql += " order by " + order;
         }
