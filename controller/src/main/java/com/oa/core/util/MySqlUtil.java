@@ -511,10 +511,20 @@ public class MySqlUtil {
         if (field != null && field.size() > 0) {
             for (int i = 0; i < field.size(); i++) {
                 fields += ", " + field.get(i) + " AS " + table + "_" + field.get(i);
+                switch (hm.get(field.get(i))){
+                    case "user":
+                    case "users":
+                        fields += ", useridstoname(" + field.get(i) + ") AS " + table + "_" + field.get(i)+"_name";
+                        break;
+                    case "dept":
+                    case "depts":
+                        fields += ", deptidstoname(" + field.get(i) + ") AS " + table + "_" + field.get(i)+"_name";
+                        break;
+                    default:
+                }
             }
         }
         String wheres = "";
-        System.out.println(where + "3333");
         if (where != null || !where.equals("")) {
             for (String w : where) {
                 wheres += " and " + w + " ";

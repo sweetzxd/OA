@@ -70,6 +70,10 @@ public class StringToHtmlUtil {
                             templet = ",templet: function (d){ return selectTool(d,'"+tableId + "_" + fields[i]+"','"+fieldTpye+"');}";
                         }
                         listHtml += "<th lay-data=\"{field:'" + tableId + "_" + fields[i] + "', unresize:true " + templet + "}\">" + fieldData.getFieldTitle() + "</th>";
+                    } else if (fieldTpye != null && (fieldTpye.equals("user") || fieldTpye.equals("users"))) {
+                        listHtml += "<th lay-data=\"{field:'" + tableId + "_" + fields[i] + "_name', unresize:true }\">" + fieldData.getFieldTitle() + "</th>";
+                    } else if (fieldTpye != null && (fieldTpye.equals("dept") || fieldTpye.equals("depts"))) {
+                        listHtml += "<th lay-data=\"{field:'" + tableId + "_" + fields[i] + "_name', unresize:true }\">" + fieldData.getFieldTitle() + "</th>";
                     } else {
                         listHtml += "<th lay-data=\"{field:'" + tableId + "_" + fields[i] + "', unresize:true, sort: true " + templet + "}\">" + fieldData.getFieldTitle() + "</th>";
                     }
