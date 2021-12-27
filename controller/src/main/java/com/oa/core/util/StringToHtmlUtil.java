@@ -63,6 +63,7 @@ public class StringToHtmlUtil {
                     } else if (fieldTpye != null && (fieldTpye.equals("int") || fieldTpye.equals("decimal") || fieldTpye.equals("text"))) {
                         if(finance){
                             //edit = ",templet: function (d){ return textTool(d,'"+tableId + "_" + fields[i]+"','"+fieldTpye+"');}";
+
                         }
                         listHtml += "<th lay-data=\"{field:'" + tableId + "_" + fields[i] + "', unresize:true " + edit + "}\">" + fieldData.getFieldTitle() + "</th>";
                     } else if (fieldTpye != null && (fieldTpye.equals("select") || fieldTpye.equals("selects"))) {
