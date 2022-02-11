@@ -113,7 +113,8 @@ public class EmpSubjectController {
         String avatar = (String) map.get("avatar");
         String photo_ids = (String) map.get("photo_ids");
         JSONObject json = new JSONObject();
-        json.put("subject_type", Integer.parseInt(subject_type));//如果subject_type不等于0，必须要指定start_time，end_time
+        //如果subject_type不等于0，必须要指定start_time，end_time
+        json.put("subject_type", Integer.parseInt(subject_type));
         json.put("name", UserDict.getName(name));
         json.put("job_number", name);
         if (!"0".equals(subject_type)) {
