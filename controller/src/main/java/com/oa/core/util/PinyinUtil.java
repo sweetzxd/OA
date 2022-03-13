@@ -137,8 +137,4 @@ public class PinyinUtil {
         chines = matcher.replaceAll("").trim();
         return chines;
     }
-    @Test
-    public void text1() {
-        LogUtil.sysLog("========================>"+ getPingYin(cleanChar("首字段"))+"<======================");
-    }
 }
