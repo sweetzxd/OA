@@ -291,7 +291,7 @@ public class FieldTypeUtil {
             validate = " laterTo='" + tableId + "_" + ht.get("laterTo") + "_Value' ";
         } else if (ht.get("toLater") != null && !(ht.get("toLater")).equals("")) {
             validate = " toLater='" + tableId + "_" + ht.get("toLater") + "_Value' ";
-        } else if (special != null && special.equals("[thisdate]")){
+        } else if (special != null && special.equals("[thisdate]")) {
             validate = " thisdate ";
         }
         String fieldHtml = "";
@@ -341,7 +341,7 @@ public class FieldTypeUtil {
             validate = " laterTo='" + tableId + "_" + ht.get("laterTo") + "_Value' ";
         } else if (ht.get("toLater") != null && !(ht.get("toLater")).equals("")) {
             validate = " toLater='" + tableId + "_" + ht.get("toLater") + "_Value' ";
-        }else if (special != null && special.equals("[thisdate]")){
+        } else if (special != null && special.equals("[thisdate]")) {
             validate = " thisdate='newdate' ";
         }
 
@@ -381,10 +381,10 @@ public class FieldTypeUtil {
 
 
         String formula = "";
-        StringBuffer sql = new StringBuffer("SELECT recorderNO FROM DesignFormulas WHERE curStatus=2 AND tableName ='"+tableId+"'");
-        TableService tableService = (TableService)SpringContextUtil.getBean("tableService");
+        StringBuffer sql = new StringBuffer("SELECT recorderNO FROM DesignFormulas WHERE curStatus=2 AND tableName ='" + tableId + "'");
+        TableService tableService = (TableService) SpringContextUtil.getBean("tableService");
         List<Map<String, Object>> list = tableService.selectSqlMapList(sql.toString());
-        if(list.size()>0){
+        if (list.size() > 0) {
             formula = " formula ";
         }
 
@@ -421,7 +421,7 @@ public class FieldTypeUtil {
     public static String fieldDecimal(String tableId, FieldData fieldData, BigDecimal fieldValue) {
         String special = fieldData.getSpecial();
         Hashtable ht = getSpecial(special);
-        String jsgs = (String)ht.get("formula");
+        String jsgs = (String) ht.get("formula");
         String value = valueOf(fieldValue);
         String fieldName = fieldData.getFieldName();
 
@@ -786,11 +786,11 @@ public class FieldTypeUtil {
         fileName = fileName.substring(fileName.indexOf("-") + 1);
         String ext = ext(fileName);
         fieldHtml += StringHelper.Space("k1");
-        if(ext.equals("DOC") || ext.equals("DOCX") || ext.equals("XLS") || ext.equals("XLSX")){
-            fieldHtml += "<a onclick=\"openseeoffice('" + fieldValue + "')\" title='点击查看 " + fileName + "'>"+ fileName + "</a>";
-        }else if(ext.equals("PDF")){
-            fieldHtml += "<a onclick=\"openseepdf('" + fieldValue + "')\" title='点击查看 " + fileName + "'>"+ fileName + "</a>";
-        }else{
+        if (ext.equals("DOC") || ext.equals("DOCX") || ext.equals("XLS") || ext.equals("XLSX")) {
+            fieldHtml += "<a onclick=\"openseeoffice('" + fieldValue + "')\" title='点击查看 " + fileName + "'>" + fileName + "</a>";
+        } else if (ext.equals("PDF")) {
+            fieldHtml += "<a onclick=\"openseepdf('" + fieldValue + "')\" title='点击查看 " + fileName + "'>" + fileName + "</a>";
+        } else {
             fieldHtml += "<a href='/" + fieldValue + "' data-value='" + fieldValue + "' download='" + fileName + "' title='点击下载 " + fileName + "'>" + fileName + "</a>";
         }
 
@@ -841,7 +841,7 @@ public class FieldTypeUtil {
                 File file = new File(files[0]);
                 long size = 0L;
                 try {
-                    FileInputStream fis = new FileInputStream(catPath+file);
+                    FileInputStream fis = new FileInputStream(catPath + file);
                     FileChannel fc = fis.getChannel();
                     size = fc.size();
                 } catch (FileNotFoundException e) {
@@ -853,11 +853,11 @@ public class FieldTypeUtil {
                 fileName = fileName.substring(fileName.indexOf("-") + 1);
                 String ext = ext(file.getName());
                 fieldHtml += "<tr id='upload-" + i + "'><td>";
-                if(ext.equals("DOC") || ext.equals("DOCX") || ext.equals("XLS") || ext.equals("XLSX")){
-                    fieldHtml += "<a onclick=\"openseeoffice('" + val + "')\" title='点击查看 " + fileName + "'>"+ fileName + "</a>";
-                }else if(ext.equals("PDF")){
-                    fieldHtml += "<a onclick=\"openseepdf('" + val + "')\" title='点击查看 " + fileName + "'>"+ fileName + "</a>";
-                }else{
+                if (ext.equals("DOC") || ext.equals("DOCX") || ext.equals("XLS") || ext.equals("XLSX")) {
+                    fieldHtml += "<a onclick=\"openseeoffice('" + val + "')\" title='点击查看 " + fileName + "'>" + fileName + "</a>";
+                } else if (ext.equals("PDF")) {
+                    fieldHtml += "<a onclick=\"openseepdf('" + val + "')\" title='点击查看 " + fileName + "'>" + fileName + "</a>";
+                } else {
                     fieldHtml += "<a href='/" + files[0] + "' data-value='" + files[0] + "' download='" + fileName + "' title='点击下载 " + fileName + "'>" + fileName + "</a>";
                 }
                 fieldHtml += "<a href='/" + files[0] + "' data-value='" + files[0] + "' download='" + fileName + "' title='点击下载 " + fileName + "'>" + fileName + "</a></td>";
@@ -992,11 +992,11 @@ public class FieldTypeUtil {
                     String ext = ext(file.getName());
                     String name = file.getName();
                     name = name.substring(name.indexOf("-") + 1);
-                    if(ext.equals("DOC") || ext.equals("DOCX") || ext.equals("XLS") || ext.equals("XLSX")){
+                    if (ext.equals("DOC") || ext.equals("DOCX") || ext.equals("XLS") || ext.equals("XLSX")) {
                         value += "<a onclick=\"openseeoffice('" + val + "')\" title='点击查看 " + file.getName() + "'>";
-                    }else if(ext.equals("PDF")){
+                    } else if (ext.equals("PDF")) {
                         value += "<a onclick=\"openseepdf('" + val + "')\" title='点击查看 " + file.getName() + "'>";
-                    }else{
+                    } else {
                         value = "<a href='/" + value + "' download='" + file.getName() + "' title='点击下载 " + file.getName() + "'>";
                     }
                     value += "<div class='oa-file'>";
@@ -1015,11 +1015,11 @@ public class FieldTypeUtil {
                         String ext = ext(file.getName());
                         String name = file.getName();
                         name = name.substring(name.indexOf("-") + 1);
-                        if(ext.equals("DOC") || ext.equals("DOCX") || ext.equals("XLS") || ext.equals("XLSX")){
+                        if (ext.equals("DOC") || ext.equals("DOCX") || ext.equals("XLS") || ext.equals("XLSX")) {
                             value += "<a onclick=\"openseeoffice('" + files[i] + "')\" title='点击查看 " + file.getName() + "'>";
-                        }else if(ext.equals("PDF")){
+                        } else if (ext.equals("PDF")) {
                             value += "<a onclick=\"openseepdf('" + files[i] + "')\" title='点击查看 " + file.getName() + "'>";
-                        }else{
+                        } else {
                             value += "<a href='/" + files[i] + "' download='" + file.getName() + "' title='点击下载 " + file.getName() + "'>";
                         }
                         value += "<div class='oa-file'>";
@@ -1045,19 +1045,20 @@ public class FieldTypeUtil {
     public static Hashtable getSpecial(String special) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         Loginer loginer = (Loginer) request.getSession().getAttribute("loginer");
-        if(loginer == null){
+        if (loginer == null) {
             try {
                 String userid = request.getParameter("userid");
                 return getSpecial(userid, special);
-            }catch (Exception e){
+            } catch (Exception e) {
                 return new Hashtable();
             }
-        }else{
-            return getSpecial(loginer.getId(),special);
+        } else {
+            return getSpecial(loginer.getId(), special);
         }
 
     }
-    public static Hashtable getSpecial(String userid,String special) {
+
+    public static Hashtable getSpecial(String userid, String special) {
         Hashtable val = new Hashtable();
         if (special != null) {
             try {
