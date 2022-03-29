@@ -1202,4 +1202,14 @@ public class FieldTypeUtil {
         String result = filename.substring(index + 1);
         return result.toUpperCase();
     }
+
+    public static String ftp(String filename){
+        int index = filename.lastIndexOf(".");
+
+        if (index == -1) {
+            return "";
+        }
+        String result = filename.substring(index + 1);
+        return result.toUpperCase();
+    }
 }
