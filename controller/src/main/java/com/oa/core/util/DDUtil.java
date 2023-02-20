@@ -157,7 +157,6 @@ public class DDUtil {
 
     }
 
-
     public static JSONObject getDept(JSONObject jsonObject, int num) {
         JSONObject group = new JSONObject();
         group.put("groupname", jsonObject.getString("name"));

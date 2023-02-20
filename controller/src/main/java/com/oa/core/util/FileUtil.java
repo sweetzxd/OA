@@ -24,6 +24,7 @@ import java.util.Map;
  */
 public class FileUtil {
 
+
     //文件类型树
     public static String getMenu(List<Filetype> filetypeList, boolean spread){
         String menu = "";

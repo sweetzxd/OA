@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import java.util.List;
 
 public class TreeUtil {
+	
     private static MyUrlRegistService myUrlRegistService = (MyUrlRegistService) SpringContextUtil.getBean("myUrlRegistService");
     public static JSONArray getTree(){
         JSONArray jsonArray = getChildren("topmenu");

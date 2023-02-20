@@ -99,12 +99,6 @@ public class WeatherUtil {
         return img;
     }
 
-    @Test
-    public void test() {
-        JSONObject jsonObject = tianqiJSON(Const.LOCATION);
-        System.out.println(jsonObject);
-    }
-
     // 获取天气预报
     public static JSONObject getWeatherByHttp(String city) {
         String url = "http://wthrcdn.etouch.cn/weather_mini?city=" + city;

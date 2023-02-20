@@ -20,11 +20,13 @@ import java.util.Map;
  * @Explain
  */
 public class DeptUtil {
+	
     static EmployeesService employeesService = (EmployeesService) SpringContextUtil.getBean("employeesService");
     static DepartmentService departmentService = (DepartmentService) SpringContextUtil.getBean("departmentService");
     public static String getMenu(List<Department> deptlist,boolean spread){
         return getMenu(deptlist,spread,false,false);
     }
+	
     public static String getMenu(List<Department> deptlist,boolean spread,boolean empname,boolean empnum){
         String menu = "";
         if (deptlist != null) {

@@ -118,8 +118,6 @@ public class MenuUtil {
         }
     }
 
-
-
     public JSONArray getMenuByJson(String user){
         UserComputerService ucservice = (UserComputerService) SpringContextUtil.getBean("userComputerService");
         UserComputer uc = ucservice.selectById(user);

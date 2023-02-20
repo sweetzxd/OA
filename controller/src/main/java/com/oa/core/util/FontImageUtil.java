@@ -63,4 +63,5 @@ public class FontImageUtil {
         // 输出png图片
         ImageIO.write(image, "png", outFile);
     }
+	
 }
