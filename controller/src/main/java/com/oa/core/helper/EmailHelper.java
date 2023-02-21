@@ -31,6 +31,7 @@ public class EmailHelper {
     private static final String password = bundle.getString("mail_password");
 
     public static void sendEmail(String someone, String subject, String content){
+		
         Properties props = new Properties();
         props.setProperty("mail.smtp.auth","true");
         props.setProperty("mail.smtp.host",adress);
@@ -94,5 +95,6 @@ public class EmailHelper {
         String a = bundle.getString("mail_remind");
         System.out.println("========================>"+a+"<======================");
     }
+	
 }
 

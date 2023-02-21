@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
  * @author zxd
  */
 public class StringHelper {
+	
     /**
      * 将带标记的字符串转换成Vector
      *
@@ -74,6 +75,7 @@ public class StringHelper {
         String split = ",";
         return list2String(strSource, split);
     }
+	
     /**
      * 将ArrayList转换成带标记的字符串
      *
