@@ -50,6 +50,7 @@ import java.util.*;
 @Controller
 @RequestMapping("/myurl")
 public class MyUrlController {
+	
     @Autowired
     MyUrlRegistService myUrlRegistService;
     @Autowired

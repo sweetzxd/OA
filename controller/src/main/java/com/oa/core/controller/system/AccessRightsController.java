@@ -32,6 +32,7 @@ import java.util.*;
 @Controller
 @RequestMapping("/access")
 public class AccessRightsController {
+	
     @Autowired
     MyUrlRegistService myUrlRegistService;
     @Autowired

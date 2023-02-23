@@ -39,6 +39,7 @@ import java.util.regex.Pattern;
 @Controller
 @RequestMapping("/userpage")
 public class FormPageSkipController {
+	
     @Autowired
     MyUrlRegistService myUrlRegistService;
     @Autowired

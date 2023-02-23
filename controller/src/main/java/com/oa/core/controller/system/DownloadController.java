@@ -145,6 +145,6 @@ public class DownloadController {
             LOGGER.info("断开连接出错！");
             ex.printStackTrace();
         }
-
     }
+	
 }
