@@ -35,6 +35,7 @@ import java.util.*;
  * @description: 方法说明
  */
 public class JPushAllService {
+	
     private static String key = "bb007199fece9fd9d0316a45";
     private static String secret = "0355577ba2145a6dd10d55de";
 

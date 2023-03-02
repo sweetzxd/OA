@@ -21,7 +21,6 @@ import java.util.List;
  * @Explain 添加定时预警任务
  */
 public class WarningSystem {
-
     private Logger log = Logger.getLogger(WarningSystem.class);
     @Autowired
     WarningService warningService;
@@ -33,6 +32,7 @@ public class WarningSystem {
             log.info("没有需要添加的预警任务");
             return;
         }
+		
         try {
             Scheduler scheduler = getScheduler();
             for (Warning w : warningList) {

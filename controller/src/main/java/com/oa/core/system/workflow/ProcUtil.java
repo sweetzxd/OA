@@ -36,6 +36,7 @@ import java.util.*;
  * @Explain 流程发出方法
  */
 public class ProcUtil {
+	
     private TableService tableService = (TableService) SpringContextUtil.getBean("tableService");
     private TaskSenderService taskSenderService = (TaskSenderService) SpringContextUtil.getBean("taskSenderService");
     private FormCustomMadeService formCustomMadeService = (FormCustomMadeService) SpringContextUtil.getBean("formCustomMadeService");

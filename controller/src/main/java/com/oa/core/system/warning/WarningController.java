@@ -9,4 +9,5 @@ package com.oa.core.system.warning;
  * @Explain
  */
 public class WarningController {
+	
 }

@@ -20,6 +20,7 @@ import java.util.*;
  * @Explain
  */
 public class AccountUtil {
+	
     private TableService tableService = (TableService) SpringContextUtil.getBean("tableService");
     private WkflwFieldMapService wkflwFieldMapService = (WkflwFieldMapService) SpringContextUtil.getBean("wkflwFieldMapService");
     private PostPosition id;

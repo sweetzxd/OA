@@ -38,4 +38,5 @@ public class NodeUtil {
     public boolean getNodeBoolean(WorkFlowNode currentNode){
         return false;
     }
+
 }
