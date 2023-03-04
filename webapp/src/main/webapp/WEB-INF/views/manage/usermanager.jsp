@@ -18,7 +18,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <jsp:include page="/common/css.jsp"></jsp:include>
-    <script type="text/javascript" src="/resources/js/system/system.js"></script>
+    <script type="text/javascript" src="/resources/js/system/system.js"></script> 
 </head>
 <body>
 <c:if test="${type=='list'}">

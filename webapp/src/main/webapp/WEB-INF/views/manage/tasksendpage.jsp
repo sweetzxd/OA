@@ -21,7 +21,6 @@
     <jsp:include page="/common/js.jsp"></jsp:include>
     <script type="text/javascript" src="/resources/js/system/system.js"></script>
     <script type="text/javascript">
-
     </script>
 </head>
 <body height="95%">

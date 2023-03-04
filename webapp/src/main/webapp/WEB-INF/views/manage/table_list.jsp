@@ -46,6 +46,7 @@
             color:#1E9FFF;
         }
     </style>
+	
 </head>
 <body>
 <c:if test="${type=='list'}">

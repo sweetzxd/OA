@@ -19,6 +19,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <jsp:include page="/common/css.jsp"></jsp:include>
     <script type="text/javascript" src="/resources/js/system/system.js"></script>
+	
 </head>
 <body class="layui-layout-body">
 <c:if test="${type=='list'}">

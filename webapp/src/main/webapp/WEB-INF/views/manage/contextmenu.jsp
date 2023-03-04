@@ -19,6 +19,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <jsp:include page="/common/css.jsp"></jsp:include>
     <jsp:include page="/common/js.jsp"></jsp:include>
+	
 </head>
 <body>
 <div class="layui-container" style="height:95%;">

@@ -20,6 +20,7 @@
     <jsp:include page="/common/css.jsp"></jsp:include>
     <jsp:include page="/common/js.jsp"></jsp:include>
     <script src="/resources/js/system/system.js" charset="utf-8"></script>
+	
 </head>
 
 <body>
