@@ -8,6 +8,7 @@ import com.oa.core.util.SpringContextUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * @ClassName:WorkFlowNodeUtil
  * @author:zxd
@@ -16,6 +17,7 @@ import java.util.List;
  * @Version V1.0
  * @Explain 获取下一节点
  */
+
 public class NodeUtil {
 
     public List<String> getNextNode(WorkFlowNode currentNode,String procId,String workOrderNO){
