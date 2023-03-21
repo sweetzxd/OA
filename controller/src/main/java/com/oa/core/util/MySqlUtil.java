@@ -546,6 +546,7 @@ public class MySqlUtil {
         String name = "asdf_asdfffffff1$asd";
         LogUtil.sysLog("========================>" + name.substring(name.indexOf("_") + 1, name.indexOf("$")) + "<======================");
     }
+	
 
     public static String getItem(String field, String type, String value) {
         String item = null;

@@ -29,7 +29,7 @@ public class WeatherUtil {
     private static HashMap<String,JSONObject> hm = new HashMap();
 
     public JSONObject getWeather(String city) {
-        JSONObject weather = hm.get(city);
+        /*JSONObject weather = hm.get(city);
         if (weather == null) {
             weather = tianqiJSON(city);
             if (weather == null) {
@@ -40,7 +40,13 @@ public class WeatherUtil {
                 weather.put("tem2", "30");
                 weather.put("img", "/upload/tianqi/晴.png");
             }
-        }
+        }*/
+        JSONObject weather = new JSONObject();
+        weather.put("cityname", city);
+        weather.put("stateDetailed", "晴");
+        weather.put("tem1", "0");
+        weather.put("tem2", "30");
+        weather.put("img", "/upload/tianqi/晴.png");
         return weather;
     }
 

@@ -21,6 +21,7 @@ import java.util.*;
  * @Explain
  */
 public class ScheduleUtil {
+	
     private static DictionaryService dictionaryService = (DictionaryService)SpringContextUtil.getBean("dictionaryService");
     private static TableService tableService = (TableService)SpringContextUtil.getBean("tableService");
     public static String getSql (String taskId,List<String> where){

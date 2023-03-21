@@ -24,7 +24,6 @@ import java.util.*;
  * @Version V1.0
  * @Explain 页面生成
  */
-
 public class StringToHtmlUtil {
 
     private DictionaryService d = (DictionaryService) SpringContextUtil.getBean("dictionaryService");
